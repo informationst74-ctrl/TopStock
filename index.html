@@ -1013,9 +1013,9 @@
         </div>
         <div id="deptFilterRow" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
           <button id="deptBtn-all" onclick="filterByDept('all')" style="padding:6px 16px; border-radius:20px; border:1.5px solid var(--primary); background:var(--primary); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">ทั้งหมด</button>
-          <button id="deptBtn-dry" onclick="filterByDept('031')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #e67e22; background:transparent; color:#e67e22; font-weight:700; font-size:13px; cursor:pointer;">DryFood</button>
-          <button id="deptBtn-non" onclick="filterByDept('032')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #8e44ad; background:transparent; color:#8e44ad; font-weight:700; font-size:13px; cursor:pointer;">NonFood</button>
-          <button id="deptBtn-fresh" onclick="filterByDept('033')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #27ae60; background:transparent; color:#27ae60; font-weight:700; font-size:13px; cursor:pointer;">FreshFood</button>
+          <button id="deptBtn-dry" onclick="filterByDept('DryFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #e67e22; background:transparent; color:#e67e22; font-weight:700; font-size:13px; cursor:pointer;">DryFood</button>
+          <button id="deptBtn-non" onclick="filterByDept('NonFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #8e44ad; background:transparent; color:#8e44ad; font-weight:700; font-size:13px; cursor:pointer;">NonFood</button>
+          <button id="deptBtn-fresh" onclick="filterByDept('FreshFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #27ae60; background:transparent; color:#27ae60; font-weight:700; font-size:13px; cursor:pointer;">FreshFood</button>
         </div>
         <div id="movementListContainer"></div>
       </div>
@@ -1407,10 +1407,10 @@
       currentDeptFilter = dept;
       // Update button styles
       const deptMap = {
-        'all':   { id: 'deptBtn-all',   color: 'var(--primary)' },
-        '031':   { id: 'deptBtn-dry',   color: '#e67e22' },
-        '032':   { id: 'deptBtn-non',   color: '#8e44ad' },
-        '033':   { id: 'deptBtn-fresh', color: '#27ae60' },
+        'all':       { id: 'deptBtn-all',   color: 'var(--primary)' },
+        'DryFood':   { id: 'deptBtn-dry',   color: '#e67e22' },
+        'NonFood':   { id: 'deptBtn-non',   color: '#8e44ad' },
+        'FreshFood': { id: 'deptBtn-fresh', color: '#27ae60' },
       };
       Object.entries(deptMap).forEach(([key, val]) => {
         const btn = document.getElementById(val.id);
@@ -2931,6 +2931,11 @@
     let allMovements = [];
     
     async function loadMovement() {
+      if (locationsData.length === 0) {
+        // ต้องโหลด locationsData มาก่อนเพื่อดึงชื่อแผนกมาใช้กรอง
+        await loadLocations();
+      }
+
       showLoader('กำลังโหลดประวัติ...');
       const { data, error } = await db.from('movement').select('*').order('created_at', { ascending: false }).limit(100);
       hideLoader();
@@ -2943,15 +2948,23 @@
     function filterMovement() {
       const q = document.getElementById('movementSearch').value.toLowerCase();
       const filtered = allMovements.filter(m => {
-        const loc = String(m.location || '');
-        // กรองแผนก
-        if (currentDeptFilter !== 'all' && !loc.startsWith(currentDeptFilter)) return false;
+        const locId = String(m.location || '');
+        
+        // กรองแผนก โดยดูชื่อแผนกจาก locationsData
+        if (currentDeptFilter !== 'all') {
+          const locObj = locationsData.find(l => l.id === locId);
+          const locDeptName = locObj ? (locObj.name || '').trim() : '';
+          if (locDeptName !== currentDeptFilter) {
+            return false;
+          }
+        }
+        
         // กรองคำค้นหา
         if (q) {
           return (
             String(m.item_no).toLowerCase().includes(q) ||
             String(m.description || '').toLowerCase().includes(q) ||
-            loc.toLowerCase().includes(q)
+            locId.toLowerCase().includes(q)
           );
         }
         return true;
