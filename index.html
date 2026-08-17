@@ -1007,9 +1007,15 @@
           <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
           <h2 class="subpage-title">ประวัติทำรายการ</h2>
         </div>
-        <div class="search-box" style="margin-bottom:16px;">
+        <div class="search-box" style="margin-bottom:10px;">
           <i class="fa-solid fa-search"></i>
           <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..." oninput="filterMovement()">
+        </div>
+        <div id="deptFilterRow" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+          <button id="deptBtn-all" onclick="filterByDept('all')" style="padding:6px 16px; border-radius:20px; border:1.5px solid var(--primary); background:var(--primary); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">ทั้งหมด</button>
+          <button id="deptBtn-dry" onclick="filterByDept('031')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #e67e22; background:transparent; color:#e67e22; font-weight:700; font-size:13px; cursor:pointer;">DryFood</button>
+          <button id="deptBtn-non" onclick="filterByDept('032')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #8e44ad; background:transparent; color:#8e44ad; font-weight:700; font-size:13px; cursor:pointer;">NonFood</button>
+          <button id="deptBtn-fresh" onclick="filterByDept('033')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #27ae60; background:transparent; color:#27ae60; font-weight:700; font-size:13px; cursor:pointer;">FreshFood</button>
         </div>
         <div id="movementListContainer"></div>
       </div>
@@ -1395,6 +1401,30 @@
     let currentBayId = null;
     let itemToDelete = null;
     let isDarkMode = localStorage.getItem('theme') === 'dark';
+    let currentDeptFilter = 'all';
+
+    function filterByDept(dept) {
+      currentDeptFilter = dept;
+      // Update button styles
+      const deptMap = {
+        'all':   { id: 'deptBtn-all',   color: 'var(--primary)' },
+        '031':   { id: 'deptBtn-dry',   color: '#e67e22' },
+        '032':   { id: 'deptBtn-non',   color: '#8e44ad' },
+        '033':   { id: 'deptBtn-fresh', color: '#27ae60' },
+      };
+      Object.entries(deptMap).forEach(([key, val]) => {
+        const btn = document.getElementById(val.id);
+        if (!btn) return;
+        if (key === dept) {
+          btn.style.background = val.color;
+          btn.style.color = '#fff';
+        } else {
+          btn.style.background = 'transparent';
+          btn.style.color = val.color;
+        }
+      });
+      filterMovement();
+    }
 
     // Config Colors for Depts
     const DEPT_COLORS = {
@@ -2086,7 +2116,7 @@
         });
       }
 
-      html += `</tbody></table></div></body></html>`;
+      html += `</tbody></table></body></html>`;
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) return showToast('Pop-up ถูกบล็อก อนุญาต Pop-up ด้วยครับ');
@@ -2912,11 +2942,20 @@
     
     function filterMovement() {
       const q = document.getElementById('movementSearch').value.toLowerCase();
-      const filtered = allMovements.filter(m => 
-        String(m.item_no).toLowerCase().includes(q) ||
-        String(m.description || '').toLowerCase().includes(q) ||
-        String(m.location || '').toLowerCase().includes(q)
-      );
+      const filtered = allMovements.filter(m => {
+        const loc = String(m.location || '');
+        // กรองแผนก
+        if (currentDeptFilter !== 'all' && !loc.startsWith(currentDeptFilter)) return false;
+        // กรองคำค้นหา
+        if (q) {
+          return (
+            String(m.item_no).toLowerCase().includes(q) ||
+            String(m.description || '').toLowerCase().includes(q) ||
+            loc.toLowerCase().includes(q)
+          );
+        }
+        return true;
+      });
       renderMovements(filtered);
     }
     
