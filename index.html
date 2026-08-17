@@ -1308,9 +1308,20 @@
       <h3 class="modal-title">ยืนยันลบสินค้า</h3>
       <p id="delItemDesc" class="font-bold" style="color:var(--text-dark);"></p>
       <div class="input-group">
+        <label>จำนวนที่ต้องการลบ</label>
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button class="btn btn-outline" style="width:40px;height:40px;padding:0;font-size:20px;border-radius:10px;" onclick="adjustDeleteQty(-1)">−</button>
+          <input type="number" id="deleteQty" min="1" value="1" style="width:70px;text-align:center;font-size:18px;font-weight:bold;border-radius:10px;border:1.5px solid var(--border);padding:8px;">
+          <button class="btn btn-outline" style="width:40px;height:40px;padding:0;font-size:20px;border-radius:10px;" onclick="adjustDeleteQty(1)">+</button>
+          <span style="color:var(--text-muted);font-size:14px;">/ <span id="deleteMaxQty">1</span> ชิ้น</span>
+        </div>
+      </div>
+      <div class="input-group">
         <label>เหตุผล</label>
         <select id="deleteReason">
           <option value="เติมหน้าบ้าน">เติมหน้าบ้าน</option>
+          <option value="ออเดอร์ลูกค้า">ออเดอร์ลูกค้า</option>
+          <option value="ย้าย Bay">ย้าย Bay</option>
           <option value="สินค้าชำรุด">สินค้าชำรุด</option>
           <option value="อื่นๆ">อื่นๆ</option>
         </select>
@@ -1884,9 +1895,22 @@
     }
 
     // Delete Item Flow
+    let deleteMaxQty = 1;
+    function adjustDeleteQty(delta) {
+      const inp = document.getElementById('deleteQty');
+      let v = parseInt(inp.value) + delta;
+      if (v < 1) v = 1;
+      if (v > deleteMaxQty) v = deleteMaxQty;
+      inp.value = v;
+    }
     function openDeleteModal(itemNo, desc, qty) {
       itemToDelete = itemNo;
+      deleteMaxQty = qty || 1;
       document.getElementById('delItemDesc').textContent = desc || '-';
+      document.getElementById('deleteQty').value = deleteMaxQty;
+      document.getElementById('deleteQty').max = deleteMaxQty;
+      document.getElementById('deleteMaxQty').textContent = deleteMaxQty;
+      document.getElementById('deleteReason').selectedIndex = 0;
       document.getElementById('modal-delete-item').classList.remove('hidden');
     }
 
@@ -1894,6 +1918,9 @@
       if (!itemToDelete) return;
       const reason = document.getElementById('deleteReason').value;
       const desc = document.getElementById('delItemDesc').textContent;
+      let deleteQty = parseInt(document.getElementById('deleteQty').value) || 1;
+      if (deleteQty < 1) deleteQty = 1;
+      if (deleteQty > deleteMaxQty) deleteQty = deleteMaxQty;
 
       showLoader('กำลังลบ...');
       closeModal('modal-delete-item');
@@ -1912,7 +1939,7 @@
           location: currentBayId,
           item_no: itemToDelete,
           description: desc,
-          qty: stockData.qty,
+          qty: deleteQty,
           reason: reason,
           user_id: currentUser.id
         });
@@ -1922,23 +1949,35 @@
           item_no: itemToDelete,
           description: desc,
           location: currentBayId,
-          qty: stockData.qty,
+          qty: deleteQty,
           reason: reason,
           user_id: currentUser.id
         });
 
-        // 3. Delete from stock
-        const { error } = await db
-          .from('stock')
-          .delete()
-          .eq('aisle_bay', currentBayId)
-          .eq('item_no', itemToDelete);
+        // 3. Delete or Update stock based on quantity
+        const remainingQty = stockData.qty - deleteQty;
+        let error;
+        if (remainingQty <= 0) {
+          // ลบทั้งหมด
+          ({ error } = await db
+            .from('stock')
+            .delete()
+            .eq('aisle_bay', currentBayId)
+            .eq('item_no', itemToDelete));
+        } else {
+          // ลบบางส่วน → อัปเดตจำนวนที่เหลือ
+          ({ error } = await db
+            .from('stock')
+            .update({ qty: remainingQty })
+            .eq('aisle_bay', currentBayId)
+            .eq('item_no', itemToDelete));
+        }
 
         hideLoader();
         if (error) {
           showToast('ลบไม่สำเร็จ: ' + error.message);
         } else {
-          showToast('ลบสำเร็จ');
+          showToast(`ลบสำเร็จ ${deleteQty} ชิ้น`);
           loadBayDetails(currentBayId, false);
           locationsData = [];
         }
