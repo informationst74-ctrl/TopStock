@@ -1,0 +1,2929 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Makro Top Stock</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* ==== CSS VARIABLES ==== */
+    :root {
+      --makro-red: #E3000F;
+      --makro-red-dark: #b3000b;
+      --makro-red-light: #ffebec;
+
+      --bg-color: #f8fafc;
+      --card-bg: #ffffff;
+      --text-dark: #0f172a;
+      --text-light: #64748b;
+      --border: #e2e8f0;
+      --nav-bg: #ffffff;
+
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+
+      --pastel-blue: #eff6ff;
+      --text-blue: #3b82f6;
+      --pastel-green: #f0fdf4;
+      --text-green: #22c55e;
+      --pastel-purple: #faf5ff;
+      --text-purple: #a855f7;
+      --pastel-orange: #fff7ed;
+      --text-orange: #f97316;
+      --pastel-red: #fef2f2;
+      --text-red: #ef4444;
+    }
+
+    /* DARK MODE OVERRIDES */
+    body.dark-mode {
+      --bg-color: #0f172a;
+      --card-bg: #1e293b;
+      --text-dark: #f8fafc;
+      --text-light: #94a3b8;
+      --border: #334155;
+      --nav-bg: #1e293b;
+
+      --pastel-blue: rgba(59, 130, 246, 0.2);
+      --pastel-green: rgba(34, 197, 94, 0.2);
+      --pastel-purple: rgba(168, 85, 247, 0.2);
+      --pastel-orange: rgba(249, 115, 22, 0.2);
+      --pastel-red: rgba(239, 68, 68, 0.2);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Kanit', sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-dark);
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.3s, color 0.3s;
+      padding-bottom: 70px;
+      /* space for bottom nav */
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .font-bold {
+      font-weight: 700;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      font-size: 16px;
+      font-weight: 500;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      width: 100%;
+      color: white;
+    }
+
+    .btn-red {
+      background: var(--makro-red);
+    }
+
+    .btn-red:hover {
+      background: var(--makro-red-dark);
+      box-shadow: 0 4px 12px rgba(227, 0, 15, 0.2);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 2px solid var(--border);
+      color: var(--text-dark);
+    }
+
+    /* Inputs */
+    .input-group {
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      font-size: 16px;
+      transition: border 0.2s;
+      background: var(--card-bg);
+      color: var(--text-dark);
+    }
+
+    .input-group input:focus,
+    .input-group select:focus {
+      outline: none;
+      border-color: var(--makro-red);
+      box-shadow: 0 0 0 3px var(--makro-red-light);
+    }
+
+    .input-group input[readonly] {
+      opacity: 0.7;
+    }
+
+    .app-container {
+      max-width: 600px;
+      margin: 0 auto;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP HEADER */
+    .header {
+      background: var(--card-bg);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      transition: background 0.3s;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-dark);
+    }
+
+    .header-logo i {
+      color: white;
+      background: #3b82f6;
+      padding: 6px;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .theme-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--pastel-blue);
+      color: var(--text-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+    }
+
+    .logout-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--pastel-red);
+      color: var(--text-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 16px;
+      border: none;
+    }
+
+    .content {
+      padding: 20px;
+      flex: 1;
+    }
+
+    /* HOME: Greeting & Clock */
+    .home-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .greeting {
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .greeting span {
+      color: var(--text-blue);
+    }
+
+    .clock-widget {
+      text-align: right;
+    }
+
+    .clock-time {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text-blue);
+      line-height: 1;
+      letter-spacing: -1px;
+    }
+
+    .clock-date {
+      font-size: 12px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      border-radius: 16px;
+      padding: 16px 10px;
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card.blue {
+      background: linear-gradient(135deg, #3b82f6, #4f46e5);
+    }
+
+    .stat-card.green {
+      background: linear-gradient(135deg, #10b981, #059669);
+    }
+
+    .stat-card.red {
+      background: linear-gradient(135deg, #ef4444, #be123c);
+    }
+
+    .stat-title {
+      font-size: 11px;
+      font-weight: 600;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .stat-icon {
+      position: absolute;
+      right: 5px;
+      bottom: -5px;
+      font-size: 45px;
+      opacity: 0.2;
+    }
+
+    /* Cute Menu Grid */
+    .cute-menu-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .cute-menu-card {
+      background: var(--card-bg);
+      border-radius: 20px;
+      padding: 20px 16px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--border);
+      transition: transform 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cute-menu-card:active {
+      transform: scale(0.95);
+    }
+
+    .cute-menu-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin-bottom: 12px;
+    }
+
+    .cute-menu-card .title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .cute-menu-card .subtitle {
+      font-size: 11px;
+      color: var(--text-light);
+    }
+
+    /* ADMIN PAGE STYLES */
+    .admin-profile {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .admin-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: #1e293b;
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 55px;
+      margin-bottom: 12px;
+      border: 4px solid var(--pastel-blue);
+    }
+
+    .admin-title {
+      font-size: 24px;
+      font-weight: 800;
+      margin: 0;
+      color: var(--text-dark);
+    }
+
+    .admin-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .admin-banner {
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 20px;
+      padding: 20px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      cursor: pointer;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 25px rgba(99, 102, 241, 0.2);
+    }
+
+    .admin-banner i {
+      font-size: 32px;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 12px;
+      border-radius: 16px;
+    }
+
+    .admin-banner-text {
+      flex: 1;
+    }
+
+    .admin-banner-text h3 {
+      margin: 0 0 4px 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .admin-banner-text p {
+      margin: 0;
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .admin-card-green {
+      background: #ecfdf5;
+      border: 1px solid #a7f3d0;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    body.dark-mode .admin-card-green {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+
+    .admin-card-green h3 {
+      margin: 0 0 16px 0;
+      font-size: 16px;
+      color: #059669;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    body.dark-mode .admin-card-green h3 {
+      color: #34d399;
+    }
+
+    .admin-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .btn-template {
+      background: white;
+      color: #059669;
+      border: 1px solid #059669;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    body.dark-mode .btn-template {
+      background: var(--card-bg);
+    }
+
+    .btn-upload {
+      background: #10b981;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      font-weight: 700;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    /* Locations & Bay List */
+    .subpage-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .back-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: var(--text-dark);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .subpage-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin: 0;
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      cursor: pointer;
+      color: var(--text-dark);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    }
+
+    .btn-icon.red {
+      color: var(--makro-red);
+      border-color: var(--makro-red-light);
+    }
+
+    .search-box {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 16px;
+      top: 14px;
+      color: var(--text-light);
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border: 1px solid var(--makro-red-light);
+      border-radius: 30px;
+      font-size: 15px;
+      background: var(--card-bg);
+      color: var(--text-dark);
+    }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 10px;
+    }
+
+    .filter-tabs::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filter-tab {
+      padding: 6px 16px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      color: var(--text-light);
+    }
+
+    .filter-tab.active {
+      background: var(--makro-red-light);
+      color: var(--makro-red);
+      border-color: var(--makro-red);
+      font-weight: 600;
+    }
+
+    .loc-list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      background: var(--card-bg);
+      border-radius: 16px;
+      margin-bottom: 12px;
+      border: 1px solid var(--border);
+      border-left: 6px solid var(--text-blue);
+    }
+
+    .loc-list-body {
+      padding: 16px;
+      flex: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .loc-info {
+      flex: 1;
+    }
+
+    .loc-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--text-dark);
+      margin-bottom: 2px;
+    }
+
+    .loc-dept {
+      font-size: 13px;
+      color: var(--text-light);
+      margin-bottom: 2px;
+    }
+
+    .loc-right {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-left: 1px dashed var(--border);
+    }
+
+    .loc-badge {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .loc-badge.active {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .loc-badge.inactive {
+      background: #f1f5f9;
+      color: #64748b;
+    }
+
+    .loc-items-badge {
+      background: var(--pastel-blue);
+      color: var(--text-blue);
+      font-size: 12px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 8px;
+    }
+
+    .loc-delete-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: var(--pastel-red);
+      color: var(--text-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    /* Bay Items */
+    .bay-item {
+      border-bottom: 1px solid var(--border);
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .bay-item:last-child {
+      border-bottom: none;
+    }
+
+    .bay-item-code {
+      font-weight: 800;
+      color: var(--makro-red);
+      margin-bottom: 4px;
+      font-size: 16px;
+    }
+
+    .bay-item-desc {
+      font-size: 14px;
+      color: var(--text-dark);
+      font-weight: 500;
+    }
+
+    .bay-item-qty {
+      font-size: 24px;
+      font-weight: 800;
+      text-align: right;
+      color: var(--text-blue);
+    }
+
+    .bay-item-qty span {
+      display: block;
+      font-size: 11px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .delete-item-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: var(--pastel-red);
+      color: var(--text-red);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      margin-left: 12px;
+      font-size: 16px;
+    }
+
+    /* BOTTOM NAVIGATION */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 70px;
+      background: var(--nav-bg);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 100;
+      padding-bottom: env(safe-area-inset-bottom);
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.03);
+      max-width: 600px;
+      margin: 0 auto;
+      transition: background 0.3s;
+    }
+
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-light);
+      cursor: pointer;
+      flex: 1;
+      padding: 8px 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .nav-item.active {
+      color: var(--text-blue);
+    }
+
+    .nav-item i {
+      font-size: 20px;
+      transition: transform 0.2s;
+    }
+
+    .nav-item.active i {
+      transform: translateY(-2px);
+    }
+
+    .nav-item span {
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(2px);
+    }
+
+    .spinner {
+      border: 4px solid var(--border);
+      border-top: 4px solid var(--text-blue);
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Modals */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      backdrop-filter: blur(2px);
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 400px;
+      padding: 24px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+      font-weight: 800;
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text-dark);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- GLOBAL LOADER -->
+  <div id="loader">
+    <div class="spinner"></div>
+    <div id="loaderText" style="font-weight:700; color:white; font-size:16px;">กำลังโหลด...</div>
+  </div>
+
+  <!-- VIEW: LOGIN -->
+  <div id="view-login" class="app-container" style="justify-content:center; align-items:center;">
+    <div style="font-size: 60px; margin-bottom: 10px;">📦</div>
+    <div
+      style="font-size: 28px; font-weight: 800; margin-bottom: 30px; color: var(--text-dark); letter-spacing: -0.5px;">
+      MAKRO TOP STOCK</div>
+    <div style="width: 100%; max-width: 320px;">
+      <div class="input-group">
+        <label>รหัสพนักงาน (User ID)</label>
+        <input type="text" id="loginUser" placeholder="เช่น 00015942" inputmode="numeric">
+      </div>
+      <div class="input-group">
+        <label>รหัสผ่าน (Password)</label>
+        <input type="password" id="loginPass" placeholder="รหัสผ่านของคุณ">
+      </div>
+      <button class="btn btn-red" onclick="doLogin()" style="margin-top:10px; font-size:18px;">เข้าสู่ระบบ</button>
+    </div>
+  </div>
+
+  <!-- APP WRAPPER -->
+  <div id="app-wrapper" class="app-container hidden">
+
+    <!-- Header -->
+    <div class="header" id="mainHeader">
+      <div class="header-logo">
+        <i class="fa-solid fa-boxes-stacked"></i> Top Stock
+      </div>
+      <div class="header-actions">
+        <button class="theme-toggle" onclick="navTo('item-search')" style="margin-right:5px; color:var(--text-blue); background:var(--pastel-blue);"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="btnThemeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content">
+
+      <!-- VIEW: HOME DASHBOARD -->
+      <div id="view-home" class="hidden">
+        <div class="home-top">
+          <div class="greeting">สวัสดี,<br><span id="displayUserName">Admin User</span></div>
+          <div class="clock-widget">
+            <div class="clock-time" id="realtimeClock">00:00:00</div>
+            <div class="clock-date" id="realtimeDate">วัน...ที่...</div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card blue">
+            <div class="stat-title">LOCATION</div>
+            <div class="stat-value" id="dashTotalLoc">-</div>
+            <i class="fa-solid fa-map-location-dot stat-icon"></i>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-title">BAY ใช้งาน</div>
+            <div class="stat-value" id="dashActiveBay">-</div>
+            <i class="fa-solid fa-box-open stat-icon"></i>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-title">รวม (ชิ้น)</div>
+            <div class="stat-value" id="dashTotalItems">-</div>
+            <i class="fa-solid fa-boxes-packing stat-icon"></i>
+          </div>
+        </div>
+
+        <div class="cute-menu-grid">
+          <div class="cute-menu-card" onclick="navTo('receive')">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_receive.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">รับเข้า</div>
+            <div class="subtitle">สแกนเพิ่มสินค้าเข้าระบบ</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('locations')">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_search.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">ค้นหา/จัดการ</div>
+            <div class="subtitle">ค้นหาและแก้ไขจำนวน</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('move-bay')">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_move_bay.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">ย้ายทั้ง Bay</div>
+            <div class="subtitle">ย้ายหรือลบทีละหลาย Bay</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('movement')">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_movement.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">Movement</div>
+            <div class="subtitle">เช็คประวัติทำรายการ</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('empty-bays')">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_empty_bay.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">เช็ค Bay ว่าง</div>
+            <div class="subtitle">ตรวจสอบพื้นที่ว่างอยู่</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('admin')" id="dashBtnAdmin">
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_admin.png" style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="title">Admin Zone</div>
+            <div class="subtitle">จัดการระบบหลังบ้าน</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: LOCATIONS LIST -->
+      <div id="view-locations" class="hidden">
+        <div class="subpage-header">
+          <h2 class="subpage-title">รายการ Location</h2>
+          <div style="margin-left:auto;">
+            <div class="btn-icon" onclick="loadLocations(true)"><i class="fa-solid fa-rotate-right"></i></div>
+          </div>
+        </div>
+        <div class="search-box">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" id="locSearch" placeholder="ค้นหา Location ID, ชื่อ..." onkeyup="filterLocations()">
+        </div>
+        <div class="filter-tabs" id="locFilters"></div>
+        <div id="locationsListContainer"></div>
+      </div>
+
+      <!-- VIEW: BAY DETAILS -->
+      <div id="view-bay-details" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('locations')" style="display:flex;"><i
+              class="fa-solid fa-arrow-left"></i></div>
+          <div>
+            <h2 class="subpage-title" id="bayDetailTitle" style="color:var(--text-blue);">Bay ID</h2>
+            <div style="font-size:12px; color:var(--text-light); font-weight:500;" id="bayDetailName">Location Name
+            </div>
+          </div>
+          <div style="margin-left:auto; display:flex; gap:8px;">
+            <div class="btn-icon red" onclick="exportBayPrint()"><i class="fa-solid fa-print"></i></div>
+            <div class="btn-icon" onclick="loadBayDetails(currentBayId, true)"><i class="fa-solid fa-rotate-right"></i>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn btn-red" style="margin-bottom:20px;" onclick="openAddItemModal()">
+          <i class="fa-solid fa-plus"></i> เพิ่มสินค้าเข้า Bay
+        </button>
+
+        <div style="background:var(--card-bg); border-radius:16px; border:1px solid var(--border); padding:0 20px;">
+          <div id="bayItemsContainer">
+            <!-- JS will populate -->
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW: MOVEMENT -->
+      <div id="view-movement" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
+          <h2 class="subpage-title">ประวัติทำรายการ</h2>
+        </div>
+        <div class="search-box" style="margin-bottom:16px;">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..." oninput="filterMovement()">
+        </div>
+        <div id="movementListContainer"></div>
+      </div>
+
+      <!-- VIEW: ITEM SEARCH (Global) -->
+      <div id="view-item-search" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
+          <h2 class="subpage-title">ค้นหาสินค้าว่าอยู่ไหน?</h2>
+        </div>
+        <div class="search-box">
+          <i class="fa-solid fa-search"></i>
+          <input type="text" id="globalItemSearch" placeholder="พิมพ์ รหัสสินค้า, บาร์โค้ด หรือชื่อ..." oninput="searchGlobalItem()">
+        </div>
+        <div id="globalSearchResult" style="margin-top:20px;">
+          <div class="text-center" style="padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:10px; color:var(--border);"></i><br/>พิมพ์เพื่อค้นหาสินค้าว่าถูกเก็บอยู่ที่ Bay ไหนบ้าง</div>
+        </div>
+      </div>
+
+      <!-- VIEW: RECEIVE -->
+      <div id="view-receive" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <h2 class="subpage-title">รับเข้าสินค้า</h2>
+        </div>
+
+        <div style="background:var(--card-bg); padding:20px; border-radius:20px; border:1px solid var(--border);">
+          <div id="recv-scanner-area" style="width:100%; max-width:400px; margin:0 auto 16px auto; border-radius:16px; overflow:hidden; position:relative;">
+            <video id="recv-camera-preview" style="width:100%; display:none; border-radius:16px;"></video>
+          </div>
+          <button class="btn btn-outline" style="margin-bottom:20px; width:100%; border-color:var(--text-blue); color:var(--text-blue);" onclick="startRecvScanner()" id="btnStartScan"><i class="fa-solid fa-camera"></i> เปิดกล้องสแกน</button>
+          <button class="btn btn-outline hidden" style="margin-bottom:20px; width:100%; color:var(--text-red); border-color:var(--text-red);" onclick="stopRecvScanner()" id="btnStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
+
+          <div class="input-group">
+            <label>Item No หรือ Barcode</label>
+            <input type="text" id="recvItemCode" placeholder="สแกนหรือพิมพ์รหัส" oninput="onInputRecvItem()">
+          </div>
+          <div class="input-group">
+            <label>ชื่อสินค้า</label>
+            <input type="text" id="recvItemDesc" readonly placeholder="ข้อมูลจะขึ้นอัตโนมัติ">
+          </div>
+          <div class="input-group">
+            <label>เก็บที่ Bay ID</label>
+            <input type="text" id="recvBayId" placeholder="ระบุเลข Bay (เช่น B-01)">
+          </div>
+          <div class="input-group">
+            <label>จำนวน (ชิ้น)</label>
+            <input type="number" id="recvQty" value="1" min="1">
+          </div>
+          <button class="btn btn-red" onclick="saveReceiveItem()" id="btnSaveRecv" disabled>บันทึกรับเข้า</button>
+        </div>
+      </div>
+
+      <!-- VIEW: MOVE BAY -->
+      <div id="view-move-bay" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <h2 class="subpage-title">ย้ายทั้ง Bay</h2>
+        </div>
+
+        <div style="background:var(--card-bg); padding:20px; border-radius:20px; border:1px solid var(--border);">
+          <div class="input-group">
+            <label>Bay ต้นทาง</label>
+            <input type="text" id="moveSrcBay" placeholder="เช่น B-01">
+          </div>
+          <div class="text-center" style="color:var(--text-light); margin:10px 0;"><i class="fa-solid fa-arrow-down"
+              style="font-size:24px;"></i></div>
+          <div class="input-group">
+            <label>Bay ปลายทาง</label>
+            <input type="text" id="moveDestBay" placeholder="เช่น B-02">
+          </div>
+          <button class="btn btn-red" style="margin-top:20px;" onclick="confirmMoveBay()">ยืนยันการย้าย</button>
+        </div>
+      </div>
+
+      <!-- VIEW: EMPTY BAYS -->
+      <div id="view-empty-bays" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <h2 class="subpage-title">เช็ค Bay ว่าง</h2>
+          <div style="margin-left:auto;">
+            <div class="btn-icon" onclick="loadEmptyBays()"><i class="fa-solid fa-rotate-right"></i></div>
+          </div>
+        </div>
+        <div id="emptyBaysContainer" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;"></div>
+      </div>
+
+      <!-- VIEW: MANAGE USERS -->
+      <div id="view-manage-users" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
+          </div>
+          <h2 class="subpage-title">จัดการผู้ใช้งาน</h2>
+          <div style="margin-left:auto; display:flex; gap:10px;">
+            <div class="btn-icon" style="background:var(--text-blue); color:white;" onclick="document.getElementById('csvUploadInputUsers').click()" title="อัปโหลด Users CSV"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="btn-icon" onclick="openAddUserModal()"><i class="fa-solid fa-plus"></i></div>
+            <input type="file" id="csvUploadInputUsers" class="hidden" accept=".csv" onchange="handleUserCSVUpload(event)">
+          </div>
+        </div>
+        <div id="usersListContainer"></div>
+      </div>
+
+      <!-- VIEW: MASTER DATA -->
+      <div id="view-master-data" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
+          <h2 class="subpage-title">Master Data</h2>
+        </div>
+
+        <!-- Tabs -->
+        <div style="display:flex; gap:0; margin-bottom:20px; border-radius:12px; overflow:hidden; border:2px solid var(--text-blue);">
+          <div id="masterTabItems" onclick="switchMasterTab('items')" style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--text-blue); color:white;">จัดการสินค้า (Items)</div>
+          <div id="masterTabBays" onclick="switchMasterTab('bays')" style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--card-bg); color:var(--text-blue);">จัดการตำแหน่ง (Bays)</div>
+        </div>
+
+        <!-- Items Tab Content -->
+        <div id="masterItemsContent">
+          <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
+            <button class="btn btn-red" style="flex:1; min-width:120px;" onclick="openAddMasterItemModal()"><i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่</button>
+            <button class="btn btn-outline" style="flex:1; min-width:120px; border-color:var(--text-blue); color:var(--text-blue);" onclick="document.getElementById('csvUploadInputMaster').click()"><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลด CSV</button>
+            <button class="btn btn-outline" style="flex:1; min-width:120px; border-color:var(--text-green); color:var(--text-green);" onclick="downloadCSVTemplate()"><i class="fa-solid fa-download"></i> โหลด Template</button>
+            <input type="file" id="csvUploadInputMaster" class="hidden" accept=".csv" onchange="handleCSVUpload(event)">
+          </div>
+          <div class="search-box" style="margin-bottom:16px;">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="masterItemSearch" placeholder="ค้นหา รหัสสินค้า, ชื่อ, Barcode..." oninput="searchMasterItems()">
+          </div>
+          <div id="masterItemsList"></div>
+        </div>
+
+        <!-- Bays Tab Content -->
+        <div id="masterBaysContent" class="hidden">
+          <div style="display:flex; gap:8px; margin-bottom:16px;">
+            <button class="btn btn-red" style="flex:1;" onclick="openAddBayModal()"><i class="fa-solid fa-plus"></i> เพิ่ม Location ใหม่</button>
+          </div>
+          <div class="search-box" style="margin-bottom:16px;">
+            <i class="fa-solid fa-search"></i>
+            <input type="text" id="masterBaySearch" placeholder="ค้นหา Location ID..." oninput="searchMasterBays()">
+          </div>
+          <div id="masterBaysList"></div>
+        </div>
+      </div>
+
+      <!-- VIEW: ADMIN -->
+      <div id="view-admin" class="hidden">
+        <div class="admin-profile">
+          <div class="admin-avatar"><i class="fa-solid fa-user-shield"></i></div>
+          <h1 class="admin-title">Admin Control</h1>
+          <div class="admin-subtitle">จัดการระบบหลังบ้าน</div>
+        </div>
+
+        <div class="admin-banner" onclick="navTo('movement')">
+          <i class="fa-solid fa-clipboard-list"></i>
+          <div class="admin-banner-text">
+            <h3>ประวัติการทำรายการ</h3>
+            <p>ตรวจสอบ (Audit Log) ย้อนหลัง</p>
+          </div>
+          <i class="fa-solid fa-chevron-right" style="background:none; font-size:20px;"></i>
+        </div>
+
+        <div class="admin-card-green">
+          <h3><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสินค้า (CSV)</h3>
+          <p style="font-size:12px; color:var(--text-light); margin-top:-10px; margin-bottom:12px;">อัปเดตข้อมูล Master
+            Item ผ่านไฟล์ .csv</p>
+          <div class="admin-btn-grid">
+            <div class="btn-template" onclick="downloadCSVTemplate()">
+              <div style="font-size:24px; margin-bottom:4px;">📄</div>โหลด Template
+            </div>
+            <div class="btn-upload" onclick="document.getElementById('csvUploadInput').click()">
+              <div style="font-size:24px; margin-bottom:4px;">📤</div>เลือกไฟล์ Upload
+            </div>
+            <input type="file" id="csvUploadInput" class="hidden" accept=".csv" onchange="handleCSVUpload(event)">
+          </div>
+        </div>
+
+        <div class="cute-menu-grid">
+          <div class="cute-menu-card" onclick="navTo('master-data')">
+            <div class="text-center" style="font-size:32px; margin-bottom:8px;">📋</div>
+            <div class="title text-center">เพิ่มฐานข้อมูล</div>
+            <div class="subtitle text-center">เพิ่มข้อมูล Master ใหม่</div>
+          </div>
+          <div class="cute-menu-card"
+            onclick="Swal.fire({icon:'info', title:'Comming Soon', text:'ระบบออนไลน์จะมาในอัปเดตถัดไป!'})">
+            <div class="text-center" style="font-size:32px; margin-bottom:8px;">🟢</div>
+            <div class="title text-center">User ออนไลน์</div>
+          </div>
+          <div class="cute-menu-card" onclick="navTo('manage-users')">
+            <div class="text-center" style="font-size:32px; margin-bottom:8px;">👥</div>
+            <div class="title text-center">จัดการผู้ใช้งาน</div>
+          </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM NAVIGATION -->
+    <div class="bottom-nav" id="bottomNav">
+      <div class="nav-item" id="nav-home" onclick="navTo('home')">
+        <i class="fa-solid fa-house"></i><span>หน้าแรก</span>
+      </div>
+      <div class="nav-item" id="nav-locations" onclick="navTo('locations')">
+        <i class="fa-solid fa-magnifying-glass"></i><span>ค้นหา</span>
+      </div>
+      <div class="nav-item" id="nav-movement" onclick="navTo('movement')">
+        <i class="fa-solid fa-chart-line"></i><span>Movement</span>
+      </div>
+      <div class="nav-item" id="nav-admin" onclick="navTo('admin')" style="display:none;">
+        <i class="fa-solid fa-user-shield"></i><span>Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD ITEM -->
+  <div id="modal-add-item" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">เพิ่มสินค้าเข้า Location</h3>
+
+      <!-- Scanner ใน Modal -->
+      <div id="modal-scanner-area" style="width:100%; margin:0 auto 12px auto; border-radius:12px; overflow:hidden;">
+        <video id="modal-camera-preview" style="width:100%; display:none; border-radius:12px;"></video>
+      </div>
+      <button class="btn btn-outline" style="margin-bottom:16px; border-color:var(--text-blue); color:var(--text-blue);" onclick="startModalScanner()" id="btnModalStartScan"><i class="fa-solid fa-camera"></i> สแกน Barcode</button>
+      <button class="btn btn-outline hidden" style="margin-bottom:16px; color:var(--text-red); border-color:var(--text-red);" onclick="stopModalScanner()" id="btnModalStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
+
+      <div class="input-group">
+        <label>Item No หรือ Barcode</label>
+        <input type="text" id="inputItemCode" placeholder="คีย์รหัสสินค้าที่นี่" oninput="onInputItemCode()">
+      </div>
+
+      <div class="input-group">
+        <label>ชื่อสินค้า</label>
+        <input type="text" id="inputItemDesc" readonly placeholder="พิมพ์รหัสด้านบน แล้วชื่อจะขึ้นเอง">
+      </div>
+
+      <div class="input-group">
+        <label>จำนวน (ชิ้น)</label>
+        <input type="number" id="inputQty" value="1" min="1">
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeAddItemModal()">ยกเลิก</button>
+        <button class="btn btn-red" onclick="saveItemToBay()" id="btnSaveItem" disabled>บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD MASTER ITEM -->
+  <div id="modal-add-master-item" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">เพิ่มสินค้าใหม่ใน Master</h3>
+      <div class="input-group">
+        <label>Item No (รหัสสินค้า)</label>
+        <input type="text" id="addMasterItemNo">
+      </div>
+      <div class="input-group">
+        <label>Barcode</label>
+        <input type="text" id="addMasterBarcode">
+      </div>
+      <div class="input-group">
+        <label>ชื่อสินค้า (Description)</label>
+        <input type="text" id="addMasterDesc">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-master-item')">ยกเลิก</button>
+        <button class="btn btn-red" onclick="saveMasterItem()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD BAY -->
+  <div id="modal-add-bay" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">เพิ่ม Location ใหม่</h3>
+      <div class="input-group">
+        <label>Location ID</label>
+        <input type="text" id="addBayId" placeholder="เช่น 001-017">
+      </div>
+      <div class="input-group">
+        <label>ชื่อ Location</label>
+        <input type="text" id="addBayName" placeholder="เช่น NonFood, DryFood">
+      </div>
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-bay')">ยกเลิก</button>
+        <button class="btn btn-red" onclick="saveMasterBay()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: DELETE ITEM CONFIRM -->
+  <div id="modal-delete-item" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">ยืนยันลบสินค้า</h3>
+      <p id="delItemDesc" class="font-bold" style="color:var(--text-dark);"></p>
+      <div class="input-group">
+        <label>เหตุผล</label>
+        <select id="deleteReason">
+          <option value="เติมหน้าบ้าน">เติมหน้าบ้าน</option>
+          <option value="สินค้าชำรุด">สินค้าชำรุด</option>
+          <option value="อื่นๆ">อื่นๆ</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeModal('modal-delete-item')">ยกเลิก</button>
+        <button class="btn btn-red" onclick="confirmDeleteItem()">ยืนยันการลบ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD USER -->
+  <div id="modal-add-user" class="modal-overlay hidden">
+    <div class="modal-content">
+      <h3 class="modal-title">เพิ่มผู้ใช้งานใหม่</h3>
+      <div class="input-group">
+        <label>รหัสพนักงาน (User ID)</label>
+        <input type="text" id="addUserCode">
+      </div>
+      <div class="input-group">
+        <label>รหัสผ่าน</label>
+        <input type="password" id="addUserPass">
+      </div>
+      <div class="input-group">
+        <label>ชื่อ-นามสกุล</label>
+        <input type="text" id="addUserName">
+      </div>
+      <div class="input-group">
+        <label>แผนก/ตำแหน่ง</label>
+        <input type="text" id="addUserPos" value="Staff">
+      </div>
+      <div class="input-group">
+        <label>สิทธิ์ (Role)</label>
+        <select id="addUserRole">
+          <option value="user">User ทั่วไป</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <div style="display:flex; gap:10px; margin-top:24px;">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-user')">ยกเลิก</button>
+        <button class="btn btn-red" onclick="saveNewUser()">บันทึก</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SweetAlert2 & HTML5-QRCode -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
+  <!-- Supabase SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    window.onerror = function (msg, url, lineNo, columnNo, error) {
+      alert('JS Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo);
+      return false;
+    };
+  </script>
+  <script>
+    // Supabase Config
+    const SUPABASE_URL = 'https://ifchytaodfvfptzsdtev.supabase.co';
+    const SUPABASE_KEY = 'sb_publishable_3EfY_1vw5SfbGhWsTBvccA_QR-rZD9a';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+      auth: { detectSessionInUrl: false } // ป้องกัน Error ตอนเปิดไฟล์จากเครื่อง (file:///)
+    });
+
+    // State
+    let currentUser = null;
+    let isAdmin = false;
+    let locationsData = [];
+    let currentLocFilter = 'All';
+    let currentBayId = null;
+    let itemToDelete = null;
+    let isDarkMode = localStorage.getItem('theme') === 'dark';
+
+    // Config Colors for Depts
+    const DEPT_COLORS = {
+      'DryFood': '#f59e0b',
+      'NonFood': '#3b82f6',
+      'FreshFood': '#10b981'
+    };
+    function getDeptColor(deptName) {
+      if (!deptName) return '#94a3b8';
+      for (let k in DEPT_COLORS) {
+        if (deptName.toLowerCase().includes(k.toLowerCase())) return DEPT_COLORS[k];
+      }
+      return '#8b5cf6'; // default purple
+    }
+
+    // Init
+    (function () {
+      applyTheme();
+      startClock();
+      const savedUser = localStorage.getItem('topstock_user');
+      if (savedUser) {
+        currentUser = JSON.parse(savedUser);
+        isAdmin = String(currentUser.role).toLowerCase() === 'admin';
+        setupUserUI();
+        document.getElementById('view-login').classList.add('hidden');
+        document.getElementById('app-wrapper').classList.remove('hidden');
+        navTo('home');
+      }
+
+      // Hide global loader after init
+      setTimeout(() => hideLoader(), 500);
+    })();
+
+    // UI Tools
+    function showLoader(txt = 'กำลังโหลด...') { document.getElementById('loaderText').textContent = txt; document.getElementById('loader').classList.remove('hidden'); }
+    function hideLoader() { document.getElementById('loader').classList.add('hidden'); }
+    function showToast(msg, type = 'info') {
+      let icon = type;
+      if (msg.includes('สำเร็จ') || msg.includes('เรียบร้อย')) icon = 'success';
+      if (msg.includes('ล้มเหลว') || msg.includes('ไม่ถูกต้อง') || msg.includes('Error') || msg.includes('ผิดพลาด')) icon = 'error';
+      Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: icon,
+        title: msg,
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+      });
+    }
+
+    // Navigation
+    function navTo(viewId) {
+      ['login', 'home', 'locations', 'bay-details', 'movement', 'admin', 'receive', 'move-bay', 'empty-bays', 'manage-users', 'master-data', 'item-search'].forEach(v => {
+        const el = document.getElementById('view-' + v);
+        if (el) el.classList.add('hidden');
+      });
+      document.getElementById('view-' + viewId).classList.remove('hidden');
+
+      // Update Bottom Nav
+      document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+      let activeId = viewId === 'bay-details' ? 'locations' : viewId;
+      if (activeId === 'item-search') activeId = 'home';
+      const activeNav = document.getElementById('nav-' + activeId);
+      if (activeNav) activeNav.classList.add('active');
+
+      if (viewId === 'home') loadDashboard();
+      if (viewId === 'locations') loadLocations();
+      if (viewId === 'empty-bays') loadEmptyBays();
+      if (viewId === 'manage-users') loadUsers();
+      if (viewId === 'master-data') loadMasterItems();
+      if (viewId === 'movement') loadMovement();
+    }
+
+    // Theme & Clock
+    function applyTheme() {
+      if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('btnThemeToggle').innerHTML = '<i class="fa-solid fa-sun"></i>';
+      } else {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('btnThemeToggle').innerHTML = '<i class="fa-solid fa-moon"></i>';
+      }
+    }
+    function toggleTheme() {
+      isDarkMode = !isDarkMode;
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+      applyTheme();
+    }
+
+    function startClock() {
+      const timeEl = document.getElementById('realtimeClock');
+      const dateEl = document.getElementById('realtimeDate');
+      const days = ['อาทิตย์', 'จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์'];
+      const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+
+      setInterval(() => {
+        const d = new Date();
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        const ss = String(d.getSeconds()).padStart(2, '0');
+        timeEl.textContent = `${hh}:${mm}:${ss}`;
+
+        const yearTh = d.getFullYear() + 543;
+        dateEl.textContent = `วัน${days[d.getDay()]}ที่ ${d.getDate()} ${months[d.getMonth()]} ${yearTh}`;
+      }, 1000);
+    }
+
+    // Auth
+    async function doLogin() {
+      const user = document.getElementById('loginUser').value.trim();
+      const pass = document.getElementById('loginPass').value.trim();
+      if (!user || !pass) return showToast('กรอกข้อมูลให้ครบถ้วน');
+
+      showLoader('กำลังตรวจสอบ...');
+
+      const { data, error } = await db
+        .from('users')
+        .select('*')
+        .eq('user_id', user)
+        .eq('password', pass)
+        .single();
+
+      hideLoader();
+
+      if (error || !data) {
+        return showToast('รหัสพนักงานหรือรหัสผ่านไม่ถูกต้อง');
+      }
+
+      currentUser = { id: data.user_id, name: data.name, role: data.role, position: data.position };
+      isAdmin = String(currentUser.role).toLowerCase() === 'admin';
+      localStorage.setItem('topstock_user', JSON.stringify(currentUser));
+      setupUserUI();
+      document.getElementById('view-login').classList.add('hidden');
+      document.getElementById('app-wrapper').classList.remove('hidden');
+      navTo('home');
+    }
+
+    function doLogout() {
+      localStorage.removeItem('topstock_user');
+      currentUser = null; isAdmin = false;
+      document.getElementById('app-wrapper').classList.add('hidden');
+      document.getElementById('view-login').classList.remove('hidden');
+    }
+
+    function setupUserUI() {
+      const roleStr = isAdmin ? 'Admin' : 'User';
+      document.getElementById('displayUserName').innerHTML = `${currentUser.name} <br><span style="font-size:12px; color:var(--text-light);">(${roleStr})</span>`;
+
+      const adminElems = [document.getElementById('dashBtnAdmin'), document.getElementById('nav-admin')];
+      adminElems.forEach(el => { if (el) el.style.display = isAdmin ? 'flex' : 'none'; });
+    }
+
+    // Dashboard & Locations
+        async function fetchAll(table, select = '*', options = {}) {
+      let allData = [];
+      let from = 0;
+      const step = 1000;
+      while (true) {
+        let query = db.from(table).select(select).range(from, from + step - 1);
+        if (options.orderCol) query = query.order(options.orderCol);
+        if (options.gtCol) query = query.gt(options.gtCol, options.gtVal);
+        const { data, error } = await query;
+        if (error) return { data: null, error };
+        if (!data || data.length === 0) break;
+        allData = allData.concat(data);
+        if (data.length < step) break;
+        from += step;
+      }
+      return { data: allData, error: null };
+    }
+    async function loadDashboard() {
+      // Get location count
+      const { count: locCount } = await db.from('locations').select('*', { count: 'exact', head: true });
+
+      // Get active bays (unique locations in stock where qty > 0)
+      const { data: stockData } = await fetchAll('stock', 'aisle_bay, qty', { gtCol: 'qty', gtVal: 0 });
+
+      let activeBays = 0;
+      let totalItems = 0;
+
+      if (stockData) {
+        const bays = new Set(stockData.map(s => s.aisle_bay));
+        activeBays = bays.size;
+        totalItems = stockData.reduce((sum, item) => sum + item.qty, 0);
+      }
+
+      document.getElementById('dashTotalLoc').textContent = locCount || 0;
+      document.getElementById('dashActiveBay').textContent = activeBays;
+      document.getElementById('dashTotalItems').textContent = totalItems;
+    }
+
+    async function loadLocations(force = false) {
+      if (!force && locationsData.length > 0) return filterLocations();
+      showLoader('กำลังโหลดรายการ...');
+
+      const { data: locs, error: locError } = await fetchAll('locations', '*', { orderCol: 'location_id' });
+      const { data: stocks, error: stockError } = await fetchAll('stock', 'aisle_bay, qty', { gtCol: 'qty', gtVal: 0 });
+
+      hideLoader();
+
+      if (locError) return showToast('โหลดข้อมูลล้มเหลว: ' + locError.message);
+
+      const bayStats = {};
+      if (stocks) {
+        stocks.forEach(r => {
+          if (!bayStats[r.aisle_bay]) bayStats[r.aisle_bay] = 0;
+          bayStats[r.aisle_bay] += r.qty;
+        });
+      }
+
+      locationsData = (locs || []).map(loc => ({
+        id: loc.location_id,
+        name: loc.location_name,
+        status: loc.status,
+        itemCount: bayStats[loc.location_id] || 0,
+        updated: loc.last_updated
+      }));
+
+      renderLocationFilters();
+      filterLocations();
+    }
+
+    function renderLocationFilters() {
+      const container = document.getElementById('locFilters');
+      const cats = new Set();
+      locationsData.forEach(l => { if (l.name) cats.add(l.name.trim()); });
+      const uniqueCats = Array.from(cats).sort();
+
+      let html = `<div class="filter-tab ${currentLocFilter === 'All' ? 'active' : ''}" onclick="setLocFilter('All', this)">ทั้งหมด</div>`;
+      uniqueCats.forEach(c => {
+        html += `<div class="filter-tab ${currentLocFilter === c ? 'active' : ''}" onclick="setLocFilter('${c}', this)">${c}</div>`;
+      });
+      html += `<div class="filter-tab ${currentLocFilter === 'Active' ? 'active' : ''}" onclick="setLocFilter('Active', this)" style="border-color:var(--makro-blue); color:var(--makro-blue);">Active</div>`;
+      html += `<div class="filter-tab ${currentLocFilter === 'Inactive' ? 'active' : ''}" onclick="setLocFilter('Inactive', this)" style="border-color:#64748b; color:#64748b;">Inactive</div>`;
+      container.innerHTML = html;
+    }
+
+    function setLocFilter(f, el) {
+      currentLocFilter = f;
+      document.querySelectorAll('#locFilters .filter-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      filterLocations();
+    }
+
+    function filterLocations() {
+      const q = document.getElementById('locSearch').value.toLowerCase();
+      let filtered = locationsData.filter(l => String(l.id).toLowerCase().includes(q) || String(l.name).toLowerCase().includes(q));
+      if (currentLocFilter === 'Active') {
+        filtered = filtered.filter(l => l.itemCount > 0);
+      } else if (currentLocFilter === 'Inactive') {
+        filtered = filtered.filter(l => l.itemCount === 0);
+      } else if (currentLocFilter !== 'All') {
+        filtered = filtered.filter(l => String(l.name).trim() === currentLocFilter);
+      }
+
+      const c = document.getElementById('locationsListContainer');
+      if (!filtered.length) { c.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>'; return; }
+
+      let html = '';
+      filtered.forEach(loc => {
+        const isActive = loc.itemCount > 0;
+        const color = getDeptColor(loc.name);
+
+        let delBtn = '';
+        if (isAdmin) {
+          delBtn = `<div class="loc-delete-btn" onclick="event.stopPropagation(); deleteLocation('${loc.id}')" title="ลบ Location"><i class="fa-solid fa-trash-can"></i></div>`;
+        }
+
+        html += `
+          <div class="loc-list-item" style="border-left-color: ${color};">
+            <div class="loc-list-body" onclick="openBay('${loc.id}', '${loc.name}')">
+              <div style="width:36px; height:36px; border-radius:10px; background:${color}20; display:flex; align-items:center; justify-content:center;"><i class="fa-solid fa-location-dot" style="color:${color}; font-size:18px;"></i></div>
+              <div class="loc-info">
+                <div class="loc-title">${loc.id}</div>
+                <div class="loc-dept">${loc.name || '-'}</div>
+              </div>
+            </div>
+            <div class="loc-right">
+              <div class="loc-badge ${isActive ? 'active' : 'inactive'}">${isActive ? 'ACTIVE' : 'INACTIVE'}</div>
+              <div class="loc-items-badge">${loc.itemCount} Items</div>
+              ${delBtn}
+            </div>
+          </div>
+        `;
+      });
+      c.innerHTML = html;
+    }
+
+    async function deleteLocation(bayId) {
+      const { isConfirmed } = await Swal.fire({
+        title: 'ยืนยันการลบ Location',
+        text: `ยืนยันการลบ Location: ${bayId} ออกจากระบบ?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E3000F',
+        confirmButtonText: 'ลบทิ้ง'
+      });
+
+      if (!isConfirmed) return;
+
+      showLoader('กำลังลบ Location...');
+      const { error } = await db.from('locations').delete().eq('location_id', bayId);
+      hideLoader();
+
+      if (error) {
+        showToast('ลบไม่สำเร็จ: ' + error.message);
+      } else {
+        showToast('ลบ Location สำเร็จ');
+        locationsData = [];
+        loadLocations(true);
+      }
+    }
+
+    // Bay Details
+    function openBay(bayId, bayName) {
+      currentBayId = bayId;
+      document.getElementById('bayDetailTitle').textContent = bayId;
+      document.getElementById('bayDetailName').textContent = bayName || 'Location';
+      navTo('bay-details');
+      loadBayDetails(bayId);
+    }
+
+    async function loadBayDetails(bayId, showLd = true) {
+      if (showLd) showLoader('กำลังโหลดสินค้า...');
+
+      // ดึงข้อมูล Stock (แบบไม่ใช้ Join เพื่อป้องกันปัญหา Foreign Key)
+      const { data: stockData, error: stockErr } = await db
+        .from('stock')
+        .select('item_no, qty, last_updated')
+        .eq('aisle_bay', bayId)
+        .gt('qty', 0);
+
+      if (stockErr) {
+        if (showLd) hideLoader();
+        return showToast('โหลดข้อมูลล้มเหลว: ' + stockErr.message);
+      }
+
+      const items = [];
+      if (stockData && stockData.length > 0) {
+        const itemNos = stockData.map(r => r.item_no);
+        const { data: masterData } = await db
+          .from('item_master')
+          .select('item_no, description')
+          .in('item_no', itemNos);
+          
+        const masterMap = {};
+        if (masterData) {
+          masterData.forEach(m => masterMap[m.item_no] = m.description);
+        }
+        
+        stockData.forEach(r => {
+          items.push({
+            itemNo: r.item_no,
+            description: masterMap[r.item_no] || '(ไม่พบข้อมูลใน Master)',
+            qty: r.qty
+          });
+        });
+      }
+
+      if (showLd) hideLoader();
+
+      renderBayItems(items);
+    }
+
+    function renderBayItems(items) {
+      const container = document.getElementById('bayItemsContainer');
+      if (items.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px 0; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:40px; color:var(--border); margin-bottom:10px;"></i><br/>ไม่มีสินค้าใน Bay นี้</div>`;
+        return;
+      }
+
+      let html = '';
+      items.forEach(it => {
+        const safeDesc = it.description ? it.description.replace(/'/g, "\\'") : '';
+        html += `
+          <div class="bay-item">
+            <div style="flex:1; min-width:0; margin-right:10px;">
+              <div class="bay-item-code">${it.itemNo}</div>
+              <div class="bay-item-desc" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${it.description}</div>
+            </div>
+            <div style="display:flex; align-items:center;">
+              <div class="bay-item-qty">${it.qty}<span>ชิ้น</span></div>
+              <div class="delete-item-btn" onclick="openDeleteModal('${it.itemNo}', '${safeDesc}', '${it.qty}')"><i class="fa-solid fa-trash-can"></i></div>
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    // Add Item Flow (Modal)
+    function openAddItemModal() {
+      document.getElementById('inputItemCode').value = '';
+      document.getElementById('inputItemDesc').value = '';
+      document.getElementById('inputQty').value = '1';
+      document.getElementById('btnSaveItem').disabled = true;
+      document.getElementById('modal-add-item').classList.remove('hidden');
+      setTimeout(() => document.getElementById('inputItemCode').focus(), 100);
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    let lookupTimeout = null;
+    function onInputItemCode() {
+      clearTimeout(lookupTimeout);
+      const code = document.getElementById('inputItemCode').value.trim();
+      if (!code) {
+        document.getElementById('inputItemDesc').value = '';
+        document.getElementById('btnSaveItem').disabled = true;
+        return;
+      }
+
+      document.getElementById('inputItemDesc').value = 'กำลังค้นหา...';
+      document.getElementById('btnSaveItem').disabled = true;
+
+      lookupTimeout = setTimeout(async () => {
+        const { data, error } = await db
+          .from('item_master')
+          .select('*')
+          .or(`item_no.eq.${code},barcode.eq.${code}`)
+          .limit(1)
+          .maybeSingle();
+
+        if (data) {
+          document.getElementById('inputItemCode').value = data.item_no;
+          document.getElementById('inputItemDesc').value = data.description;
+          document.getElementById('btnSaveItem').disabled = false;
+        } else {
+          document.getElementById('inputItemDesc').value = 'ไม่พบสินค้า (เช็ค ItemMaster)';
+        }
+      }, 700);
+    }
+
+    async function saveItemToBay() {
+      const itemNo = document.getElementById('inputItemCode').value.trim();
+      const qty = parseInt(document.getElementById('inputQty').value);
+      const desc = document.getElementById('inputItemDesc').value;
+      if (!itemNo || qty <= 0) return showToast('ข้อมูลไม่ถูกต้อง');
+
+      showLoader('กำลังบันทึก...');
+      document.getElementById('btnSaveItem').disabled = true;
+
+      // 1. Check existing stock
+      const { data: existingStock } = await db
+        .from('stock')
+        .select('*')
+        .eq('aisle_bay', currentBayId)
+        .eq('item_no', itemNo)
+        .maybeSingle();
+
+      let newQty = qty;
+      if (existingStock) {
+        newQty = existingStock.qty + qty;
+      }
+
+      // 2. Upsert stock
+      const { error: stockError } = await db
+        .from('stock')
+        .upsert({
+          item_no: itemNo,
+          aisle_bay: currentBayId,
+          qty: newQty,
+          last_updated: new Date().toISOString(),
+          updated_by: currentUser.id
+        }, { onConflict: 'item_no,aisle_bay' });
+
+      if (stockError) {
+        hideLoader();
+        document.getElementById('btnSaveItem').disabled = false;
+        return showToast('บันทึกผิดพลาด: ' + stockError.message);
+      }
+
+      // 3. Update location timestamp
+      await db.from('locations').update({
+        last_updated: new Date().toISOString(),
+        updated_by: currentUser.id
+      }).eq('location_id', currentBayId);
+
+      // 4. Insert Movement log
+      await db.from('movement').insert({
+        type: 'IN',
+        item_no: itemNo,
+        description: desc,
+        location: currentBayId,
+        qty: qty,
+        reason: 'เพิ่มสินค้าเข้า Location',
+        user_id: currentUser.id
+      });
+
+      hideLoader();
+      showToast('เพิ่มสินค้าเรียบร้อย');
+      closeModal('modal-add-item');
+      loadBayDetails(currentBayId, false);
+      locationsData = []; // invalidate cache
+    }
+
+    // Delete Item Flow
+    function openDeleteModal(itemNo, desc, qty) {
+      itemToDelete = itemNo;
+      document.getElementById('delItemDesc').textContent = desc || '-';
+      document.getElementById('modal-delete-item').classList.remove('hidden');
+    }
+
+    async function confirmDeleteItem() {
+      if (!itemToDelete) return;
+      const reason = document.getElementById('deleteReason').value;
+      const desc = document.getElementById('delItemDesc').textContent;
+
+      showLoader('กำลังลบ...');
+      closeModal('modal-delete-item');
+
+      // 1. Get current qty before deleting
+      const { data: stockData } = await db
+        .from('stock')
+        .select('qty')
+        .eq('aisle_bay', currentBayId)
+        .eq('item_no', itemToDelete)
+        .single();
+
+      if (stockData) {
+        // 2. Insert Delete Log & Movement
+        await db.from('delete_log').insert({
+          location: currentBayId,
+          item_no: itemToDelete,
+          description: desc,
+          qty: stockData.qty,
+          reason: reason,
+          user_id: currentUser.id
+        });
+
+        await db.from('movement').insert({
+          type: 'OUT',
+          item_no: itemToDelete,
+          description: desc,
+          location: currentBayId,
+          qty: stockData.qty,
+          reason: reason,
+          user_id: currentUser.id
+        });
+
+        // 3. Delete from stock
+        const { error } = await db
+          .from('stock')
+          .delete()
+          .eq('aisle_bay', currentBayId)
+          .eq('item_no', itemToDelete);
+
+        hideLoader();
+        if (error) {
+          showToast('ลบไม่สำเร็จ: ' + error.message);
+        } else {
+          showToast('ลบสำเร็จ');
+          loadBayDetails(currentBayId, false);
+          locationsData = [];
+        }
+      } else {
+        hideLoader();
+        showToast('ไม่พบสินค้านี้ในระบบ');
+      }
+    }
+
+    // PDF Export
+    async function exportBayPrint() {
+      if (!currentBayId) return;
+      showLoader('สร้างไฟล์พิมพ์ A3...');
+
+      // ดึงข้อมูลแบบเดียวกับ loadBayDetails
+      const { data: stockData, error: stockErr } = await db
+        .from('stock')
+        .select('item_no, qty')
+        .eq('aisle_bay', currentBayId)
+        .gt('qty', 0);
+
+      if (stockErr) {
+        hideLoader();
+        return showToast('Error: ' + stockErr.message);
+      }
+
+      const stock = [];
+      if (stockData && stockData.length > 0) {
+        const itemNos = stockData.map(r => r.item_no);
+        const { data: masterData } = await db
+          .from('item_master')
+          .select('item_no, description')
+          .in('item_no', itemNos);
+          
+        const masterMap = {};
+        if (masterData) {
+          masterData.forEach(m => masterMap[m.item_no] = m.description);
+        }
+        
+        stockData.forEach(r => {
+          stock.push({
+            itemNo: r.item_no,
+            description: masterMap[r.item_no] || '-',
+            qty: r.qty
+          });
+        });
+      }
+      hideLoader();
+
+      const dateStr = new Date().toLocaleString('th-TH');
+      let html = `
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <meta charset="utf-8">
+            <title>Print Bay - ${currentBayId}</title>
+            <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;700;800&display=swap" rel="stylesheet">
+            <style>
+              @page { size: A3 portrait; margin: 0; }
+              body { font-family: 'Kanit', sans-serif; margin: 0; padding: 0; background: white; color: black; }
+              .page-container { width: 297mm; height: 420mm; padding: 20mm; box-sizing: border-box; display: flex; flex-direction: column; }
+              .header { text-align: center; border-bottom: 4px solid #E3000F; padding-bottom: 15px; margin-bottom: 20px; }
+              .bay-title { font-size: 80px; font-weight: 800; margin: 0; color: #E3000F; line-height: 1; }
+              .meta { font-size: 12px; color: #666; margin-top: 10px; }
+              table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+              th, td { border: 1.5px solid #000; padding: 12.5px; text-align: left; font-size: 55px; }
+              th { background-color: #f8f9fa; font-weight: 800; border-bottom: 2.5px solid #000; }
+              .qty { text-align: center; font-weight: 800; font-size: 65px; color: #E3000F; }
+              .item-no { font-weight: 700; white-space: nowrap; }
+              .desc { font-weight: 700; line-height: 1.3; }
+              @media print { .no-print { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+            </style>
+          </head>
+          <body>
+            <div class="no-print" style="text-align:center; padding:20px; background:#f1f5f9; margin-bottom:20px;">
+              <button onclick="window.print()" style="padding:15px 30px; font-size:24px; background:#E3000F; color:white; border:none; border-radius:10px; cursor:pointer; font-weight:bold; font-family:'Kanit'">🖨️ พิมพ์หน้านี้ (A3)</button>
+              <p style="font-size:18px; margin-top:10px;">กรุณาตั้งค่าเครื่องพิมพ์เป็นกระดาษ A3</p>
+            </div>
+            <div class="container">
+              <div class="header">
+                <h1 class="bay-title">${currentBayId}</h1>
+                <div class="meta">อัปเดตล่าสุด: ${dateStr}</div>
+              </div>
+              <table>
+                <thead>
+                  <tr>
+                    <th width="25%">Item No</th>
+                    <th width="60%">รายละเอียด (Description)</th>
+                    <th width="15%" style="text-align:center;">Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+      `;
+
+      if (stock.length === 0) {
+        html += `<tr><td colspan="3" style="text-align:center;">ไม่มีสินค้าใน Location นี้</td></tr>`;
+      } else {
+        stock.forEach(item => {
+          html += `
+            <tr>
+              <td class="item-no">${item.itemNo}</td>
+              <td class="desc">${item.description}</td>
+              <td class="qty">${item.qty}</td>
+            </tr>
+          `;
+        });
+      }
+
+      html += `</tbody></table></div></body></html>`;
+
+      const printWindow = window.open('', '_blank');
+      if (!printWindow) return showToast('Pop-up ถูกบล็อก อนุญาต Pop-up ด้วยครับ');
+      printWindow.document.write(html);
+      printWindow.document.close();
+    }
+
+    // Admin CSV Upload
+    function downloadCSVTemplate() {
+      const csv = "item_no,barcode,description\n10001,885000000001,สินค้าทดสอบ 1\n";
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = "ItemMaster_Template.csv";
+      link.click();
+    }
+
+    async function handleCSVUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      e.target.value = ''; // reset
+
+      const reader = new FileReader();
+      reader.onload = async function (evt) {
+        const text = evt.target.result;
+        showLoader('กำลังอัปโหลด CSV...');
+
+        // Simple CSV Parser
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length < 2) {
+          hideLoader();
+          return showToast('ไฟล์ไม่มีข้อมูล');
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const idxItemNo = headers.findIndex(h => h === 'item no' || h === 'itemno' || h === 'item_no');
+        const idxDesc = headers.findIndex(h => h === 'description' || h === 'desc' || h === 'ชื่อสินค้า');
+        const idxBarcode = headers.findIndex(h => h === 'barcode');
+
+        if (idxItemNo === -1 || idxDesc === -1) {
+          hideLoader();
+          return showToast('CSV ต้องมีคอลัมน์ "item_no" และ "description"');
+        }
+
+        const insertsMap = new Map();
+        for (let i = 1; i < lines.length; i++) {
+          // Note: This basic split doesn't handle commas inside quotes properly.
+          const row = lines[i].split(',');
+          if (!row[idxItemNo]) continue;
+          
+          const itemNo = row[idxItemNo].trim();
+          if (!itemNo) continue;
+
+          insertsMap.set(itemNo, {
+            item_no: itemNo,
+            description: row[idxDesc] ? row[idxDesc].trim() : '',
+            barcode: (idxBarcode !== -1 && row[idxBarcode]) ? row[idxBarcode].trim() : null
+          });
+        }
+        
+        const inserts = Array.from(insertsMap.values());
+
+        // Upsert items in batches of 1000
+        let successCount = 0;
+        for (let i = 0; i < inserts.length; i += 1000) {
+          const batch = inserts.slice(i, i + 1000);
+          const { error } = await db.from('item_master').upsert(batch, { onConflict: 'item_no' });
+          if (error) {
+            hideLoader();
+            return showToast('Error ที่แถว ' + i + ': ' + error.message);
+          }
+          successCount += batch.length;
+        }
+
+        hideLoader();
+        showToast(`อัปโหลดสำเร็จ ${successCount} รายการ`, 'success');
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    async function handleUserCSVUpload(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      e.target.value = '';
+
+      const reader = new FileReader();
+      reader.onload = async function (evt) {
+        const text = evt.target.result;
+        showLoader('กำลังอัปโหลด Users CSV...');
+
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length < 2) {
+          hideLoader();
+          return showToast('ไฟล์ไม่มีข้อมูล');
+        }
+
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const idIdx = headers.findIndex(h => h === 'user_id');
+        const passIdx = headers.findIndex(h => h === 'password');
+        const nameIdx = headers.findIndex(h => h === 'name');
+        const posIdx = headers.findIndex(h => h === 'position');
+        const roleIdx = headers.findIndex(h => h === 'role');
+
+        if (idIdx === -1 || nameIdx === -1) {
+          hideLoader();
+          return showToast('CSV ต้องมีคอลัมน์ "user_id" และ "name"');
+        }
+
+        const insertsMap = new Map();
+        for (let i = 1; i < lines.length; i++) {
+          let inQuote = false;
+          let currentVal = '';
+          const row = [];
+          for (let j = 0; j < lines[i].length; j++) {
+            const char = lines[i][j];
+            if (char === '"' && lines[i][j+1] === '"') {
+              currentVal += '"';
+              j++;
+            } else if (char === '"') {
+              inQuote = !inQuote;
+            } else if (char === ',' && !inQuote) {
+              row.push(currentVal);
+              currentVal = '';
+            } else {
+              currentVal += char;
+            }
+          }
+          row.push(currentVal);
+
+          if (!row[idIdx]) continue;
+          let userId = row[idIdx].trim();
+          if (!userId) continue;
+
+          // แก้ปัญหา Excel ลบเลข 0 ด้านหน้า
+          userId = String(userId).padStart(8, '0');
+
+          insertsMap.set(userId, {
+            user_id: userId,
+            password: (passIdx !== -1 && row[passIdx]) ? row[passIdx].trim() : 'Makro#100',
+            name: row[nameIdx] ? row[nameIdx].trim() : '-',
+            position: (posIdx !== -1 && row[posIdx]) ? row[posIdx].trim() : '-',
+            role: (roleIdx !== -1 && row[roleIdx]) ? row[roleIdx].trim() : 'User'
+          });
+        }
+        
+        const inserts = Array.from(insertsMap.values());
+        let successCount = 0;
+        for (let i = 0; i < inserts.length; i += 1000) {
+          const batch = inserts.slice(i, i + 1000);
+          const { error } = await db.from('users').upsert(batch, { onConflict: 'user_id' });
+          if (error) {
+            hideLoader();
+            return showToast('Error: ' + error.message);
+          }
+          successCount += batch.length;
+        }
+
+        hideLoader();
+        loadUsers();
+        showToast(`อัปโหลดสำเร็จ ${successCount} รายการ`, 'success');
+      };
+      reader.readAsText(file, 'utf-8');
+    }
+
+    // ==== NEW FUNCTIONS (PHASE 2) ====
+
+    // 1. Scanner (using Html5Qrcode directly for back camera)
+    let recvScanner = null;
+    let modalScanner = null;
+
+    // === Receive Page Scanner ===
+    async function startRecvScanner() {
+      document.getElementById('btnStartScan').classList.add('hidden');
+      document.getElementById('btnStopScan').classList.remove('hidden');
+      const videoEl = document.getElementById('recv-camera-preview');
+      videoEl.style.display = 'block';
+      try {
+        if (!recvScanner) recvScanner = new Html5Qrcode('recv-scanner-area');
+        await recvScanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            document.getElementById('recvItemCode').value = decodedText;
+            stopRecvScanner();
+            onInputRecvItem();
+            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'สแกนสำเร็จ: ' + decodedText, showConfirmButton: false, timer: 2000 });
+          },
+          () => {}
+        );
+      } catch (err) {
+        showToast('เปิดกล้องไม่ได้: ' + err);
+        stopRecvScanner();
+      }
+    }
+
+    async function stopRecvScanner() {
+      document.getElementById('btnStartScan').classList.remove('hidden');
+      document.getElementById('btnStopScan').classList.add('hidden');
+      document.getElementById('recv-camera-preview').style.display = 'none';
+      if (recvScanner) {
+        try { await recvScanner.stop(); } catch(e) {}
+      }
+    }
+
+    // === Modal (Add Item) Scanner ===
+    async function startModalScanner() {
+      document.getElementById('btnModalStartScan').classList.add('hidden');
+      document.getElementById('btnModalStopScan').classList.remove('hidden');
+      const videoEl = document.getElementById('modal-camera-preview');
+      videoEl.style.display = 'block';
+      try {
+        if (!modalScanner) modalScanner = new Html5Qrcode('modal-scanner-area');
+        await modalScanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          (decodedText) => {
+            document.getElementById('inputItemCode').value = decodedText;
+            stopModalScanner();
+            onInputItemCode();
+            Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'สแกนสำเร็จ: ' + decodedText, showConfirmButton: false, timer: 2000 });
+          },
+          () => {}
+        );
+      } catch (err) {
+        showToast('เปิดกล้องไม่ได้: ' + err);
+        stopModalScanner();
+      }
+    }
+
+    async function stopModalScanner() {
+      document.getElementById('btnModalStartScan').classList.remove('hidden');
+      document.getElementById('btnModalStopScan').classList.add('hidden');
+      document.getElementById('modal-camera-preview').style.display = 'none';
+      if (modalScanner) {
+        try { await modalScanner.stop(); } catch(e) {}
+      }
+    }
+
+    function closeAddItemModal() {
+      stopModalScanner();
+      closeModal('modal-add-item');
+    }
+
+    let recvLookupTimeout = null;
+    function onInputRecvItem() {
+      clearTimeout(recvLookupTimeout);
+      const code = document.getElementById('recvItemCode').value.trim();
+      if (!code) {
+        document.getElementById('recvItemDesc').value = '';
+        document.getElementById('btnSaveRecv').disabled = true;
+        return;
+      }
+      document.getElementById('recvItemDesc').value = 'กำลังค้นหา...';
+      document.getElementById('btnSaveRecv').disabled = true;
+
+      recvLookupTimeout = setTimeout(async () => {
+        const { data, error } = await db
+          .from('item_master')
+          .select('*')
+          .or(`item_no.eq.${code},barcode.eq.${code}`)
+          .limit(1)
+          .maybeSingle();
+
+        if (data) {
+          document.getElementById('recvItemCode').value = data.item_no;
+          document.getElementById('recvItemDesc').value = data.description;
+          document.getElementById('btnSaveRecv').disabled = false;
+        } else {
+          document.getElementById('recvItemDesc').value = 'ไม่พบสินค้าในระบบ';
+        }
+      }, 700);
+    }
+
+    async function saveReceiveItem() {
+      const itemNo = document.getElementById('recvItemCode').value.trim();
+      const desc = document.getElementById('recvItemDesc').value;
+      const bayId = document.getElementById('recvBayId').value.trim().toUpperCase();
+      const qty = parseInt(document.getElementById('recvQty').value);
+
+      if (!itemNo || !bayId || qty <= 0) return showToast('กรุณากรอกข้อมูลให้ครบถ้วน');
+
+      showLoader('กำลังบันทึกรับเข้า...');
+
+      // 1. Get existing stock
+      const { data: existingStock } = await db.from('stock').select('*').eq('aisle_bay', bayId).eq('item_no', itemNo).maybeSingle();
+
+      let newQty = qty;
+      if (existingStock) {
+        newQty = existingStock.qty + qty;
+      }
+
+      // 2. Check if loc exists
+      const { data: loc } = await db.from('locations').select('*').eq('location_id', bayId).maybeSingle();
+      if (!loc) {
+        await db.from('locations').insert({ location_id: bayId, location_name: 'New Bay', status: 'ACTIVE' });
+      }
+
+      // 3. Upsert stock
+      const { error: stockError } = await db.from('stock').upsert({
+        item_no: itemNo,
+        aisle_bay: bayId,
+        qty: newQty,
+        last_updated: new Date().toISOString(),
+        updated_by: currentUser.id
+      }, { onConflict: 'item_no,aisle_bay' });
+
+      if (stockError) {
+        hideLoader();
+        return showToast('บันทึกผิดพลาด: ' + stockError.message);
+      }
+
+      await db.from('locations').update({ last_updated: new Date().toISOString(), updated_by: currentUser.id }).eq('location_id', bayId);
+
+      await db.from('movement').insert({
+        type: 'IN',
+        item_no: itemNo,
+        description: desc,
+        location: bayId,
+        qty: qty,
+        reason: 'รับเข้าสินค้า (Receive)',
+        user_id: currentUser.id
+      });
+
+      hideLoader();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'รับเข้าสำเร็จ',
+        text: `รับเข้า ${itemNo} จำนวน ${qty} ชิ้น ไปที่ ${bayId}`,
+        confirmButtonText: 'ตกลง',
+        confirmButtonColor: '#E3000F'
+      });
+
+      document.getElementById('recvItemCode').value = '';
+      document.getElementById('recvItemDesc').value = '';
+      document.getElementById('recvQty').value = '1';
+      document.getElementById('btnSaveRecv').disabled = true;
+      document.getElementById('recvItemCode').focus();
+    }
+
+    // 2. Move Bay
+    async function confirmMoveBay() {
+      const src = document.getElementById('moveSrcBay').value.trim().toUpperCase();
+      const dest = document.getElementById('moveDestBay').value.trim().toUpperCase();
+      if (!src || !dest || src === dest) return showToast('กรุณาระบุ Bay ต้นทางและปลายทางให้ถูกต้อง');
+
+      const { isConfirmed } = await Swal.fire({
+        title: 'ยืนยันการย้าย Bay?',
+        text: `คุณต้องการย้ายสินค้าทั้งหมดจาก ${src} ไปยัง ${dest} ใช่หรือไม่?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E3000F',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'ยืนยันการย้าย',
+        cancelButtonText: 'ยกเลิก'
+      });
+
+      if (!isConfirmed) return;
+
+      showLoader('กำลังย้ายสินค้า...');
+
+      const { data: srcStock } = await db.from('stock').select('*').eq('aisle_bay', src).gt('qty', 0);
+      if (!srcStock || srcStock.length === 0) {
+        hideLoader();
+        return showToast(`ไม่พบสินค้าใน Bay: ${src}`);
+      }
+
+      const { data: loc } = await db.from('locations').select('*').eq('location_id', dest).maybeSingle();
+      if (!loc) {
+        await db.from('locations').insert({ location_id: dest, location_name: 'Moved Bay', status: 'ACTIVE' });
+      }
+
+      for (let item of srcStock) {
+        const { data: destItem } = await db.from('stock').select('*').eq('aisle_bay', dest).eq('item_no', item.item_no).maybeSingle();
+        let newQty = item.qty;
+        if (destItem) newQty += destItem.qty;
+
+        await db.from('stock').upsert({
+          item_no: item.item_no,
+          aisle_bay: dest,
+          qty: newQty,
+          last_updated: new Date().toISOString(),
+          updated_by: currentUser.id
+        }, { onConflict: 'item_no,aisle_bay' });
+
+        await db.from('movement').insert({
+          type: 'IN', item_no: item.item_no, description: `ย้ายมาจาก ${src}`, location: dest, qty: item.qty, reason: 'ย้าย Bay', user_id: currentUser.id
+        });
+
+        await db.from('movement').insert({
+          type: 'OUT', item_no: item.item_no, description: `ย้ายไป ${dest}`, location: src, qty: item.qty, reason: 'ย้าย Bay', user_id: currentUser.id
+        });
+      }
+
+      await db.from('stock').delete().eq('aisle_bay', src);
+
+      hideLoader();
+
+      Swal.fire({
+        icon: 'success',
+        title: 'ย้ายสำเร็จ!',
+        text: `ย้ายสินค้า ${srcStock.length} รายการ จาก ${src} ไป ${dest} เรียบร้อย`,
+        confirmButtonColor: '#10b981'
+      });
+
+      document.getElementById('moveSrcBay').value = '';
+      document.getElementById('moveDestBay').value = '';
+    }
+
+    // 3. Empty Bays
+    async function loadEmptyBays() {
+      showLoader('กำลังค้นหา Bay ว่าง...');
+
+      const { data: allLocs } = await fetchAll('locations', 'location_id');
+      const { data: activeStock } = await fetchAll('stock', 'aisle_bay', { gtCol: 'qty', gtVal: 0 });
+
+      hideLoader();
+      if (!allLocs) return showToast('โหลดข้อมูลล้มเหลว');
+
+      const activeBays = new Set(activeStock ? activeStock.map(s => s.aisle_bay) : []);
+      const emptyBays = allLocs.filter(l => !activeBays.has(l.location_id)).map(l => l.location_id).sort();
+
+      const container = document.getElementById('emptyBaysContainer');
+      if (emptyBays.length === 0) {
+        container.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:30px; color:var(--text-light);">ไม่มี Bay ว่างในระบบ (ทุก Location มีสินค้า)</div>';
+        return;
+      }
+
+      let html = '';
+      emptyBays.forEach(bay => {
+        html += `<div style="background:var(--card-bg); border:1px solid var(--border); border-radius:12px; padding:16px; text-align:center; font-weight:800; font-size:18px; color:var(--text-green); box-shadow:0 2px 4px rgba(0,0,0,0.02);"><i class="fa-solid fa-box-open" style="margin-right:8px; opacity:0.5;"></i>${bay}</div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    // 4. Manage Users
+    async function loadUsers() {
+      showLoader('กำลังโหลดรายชื่อ...');
+      const { data, error } = await db.from('users').select('*').order('user_id');
+      hideLoader();
+
+      if (error) return showToast('Error: ' + error.message);
+
+      const container = document.getElementById('usersListContainer');
+      let html = '';
+      data.forEach(u => {
+        const roleColor = u.role.toLowerCase() === 'admin' ? 'var(--text-purple)' : 'var(--text-blue)';
+        let delBtn = '';
+        if (u.user_id !== currentUser.id) {
+          delBtn = `<div onclick="deleteUser('${u.user_id}')" style="width:36px; height:36px; border-radius:8px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></div>`;
+        }
+
+        html += `
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; display:flex; align-items:center; margin-bottom:12px;">
+            <div style="width:48px; height:48px; border-radius:50%; background:var(--pastel-blue); display:flex; align-items:center; justify-content:center; font-size:20px; color:var(--text-blue); margin-right:16px;">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <div style="flex:1;">
+              <div style="font-weight:800; font-size:16px;">${u.name}</div>
+              <div style="font-size:12px; color:var(--text-light);">${u.user_id} - ${u.position || '-'}</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <div style="font-size:11px; font-weight:800; padding:4px 10px; border-radius:20px; border:1px solid ${roleColor}; color:${roleColor};">${u.role.toUpperCase()}</div>
+              ${delBtn}
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function openAddUserModal() {
+      document.getElementById('addUserCode').value = '';
+      document.getElementById('addUserPass').value = '';
+      document.getElementById('addUserName').value = '';
+      document.getElementById('addUserPos').value = 'Staff';
+      document.getElementById('addUserRole').value = 'user';
+      document.getElementById('modal-add-user').classList.remove('hidden');
+    }
+
+    async function saveNewUser() {
+      const id = document.getElementById('addUserCode').value.trim();
+      const pass = document.getElementById('addUserPass').value.trim();
+      const name = document.getElementById('addUserName').value.trim();
+      const pos = document.getElementById('addUserPos').value.trim();
+      const role = document.getElementById('addUserRole').value;
+
+      if (!id || !pass || !name) return showToast('กรุณากรอกข้อมูลให้ครบถ้วน');
+
+      showLoader('กำลังบันทึก...');
+      const { error } = await db.from('users').insert({
+        user_id: id, password: pass, name: name, position: pos, role: role
+      });
+
+      hideLoader();
+      if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
+
+      showToast('เพิ่มผู้ใช้งานสำเร็จ!', 'success');
+      closeModal('modal-add-user');
+      loadUsers();
+    }
+
+    async function deleteUser(id) {
+      const { isConfirmed } = await Swal.fire({
+        title: 'ยืนยันการลบ',
+        text: `ต้องการลบผู้ใช้งาน ${id} ออกจากระบบ?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E3000F',
+        confirmButtonText: 'ลบผู้ใช้',
+        cancelButtonText: 'ยกเลิก'
+      });
+
+      if (!isConfirmed) return;
+
+      showLoader('กำลังลบ...');
+      const { error } = await db.from('users').delete().eq('user_id', id);
+      hideLoader();
+
+      if (error) return showToast('ลบผิดพลาด: ' + error.message);
+      showToast('ลบสำเร็จ', 'success');
+      loadUsers();
+    }
+
+    // ===== MASTER DATA FUNCTIONS =====
+    let allMasterItems = [];
+    let allMasterBays = [];
+
+    function switchMasterTab(tab) {
+      if (tab === 'items') {
+        document.getElementById('masterItemsContent').classList.remove('hidden');
+        document.getElementById('masterBaysContent').classList.add('hidden');
+        document.getElementById('masterTabItems').style.background = 'var(--text-blue)';
+        document.getElementById('masterTabItems').style.color = 'white';
+        document.getElementById('masterTabBays').style.background = 'var(--card-bg)';
+        document.getElementById('masterTabBays').style.color = 'var(--text-blue)';
+        loadMasterItems();
+      } else {
+        document.getElementById('masterBaysContent').classList.remove('hidden');
+        document.getElementById('masterItemsContent').classList.add('hidden');
+        document.getElementById('masterTabBays').style.background = 'var(--text-blue)';
+        document.getElementById('masterTabBays').style.color = 'white';
+        document.getElementById('masterTabItems').style.background = 'var(--card-bg)';
+        document.getElementById('masterTabItems').style.color = 'var(--text-blue)';
+        loadMasterBays();
+      }
+    }
+
+    async function loadMasterItems() {
+      showLoader('กำลังโหลดรายการสินค้า...');
+      const { data, error } = await fetchAll('item_master', '*', { orderCol: 'item_no' });
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      allMasterItems = data || [];
+      renderMasterItems(allMasterItems);
+    }
+
+    function searchMasterItems() {
+      const q = document.getElementById('masterItemSearch').value.toLowerCase();
+      const filtered = allMasterItems.filter(it =>
+        String(it.item_no).toLowerCase().includes(q) ||
+        String(it.description || '').toLowerCase().includes(q) ||
+        String(it.barcode || '').toLowerCase().includes(q)
+      );
+      renderMasterItems(filtered);
+    }
+
+    function renderMasterItems(items) {
+      const container = document.getElementById('masterItemsList');
+      if (!items.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>';
+        return;
+      }
+      let html = '';
+      items.forEach(it => {
+        html += `
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px;">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+              <div style="flex:1;">
+                <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${it.item_no}</div>
+                <div style="font-size:14px; color:var(--text-light); margin-top:4px;">${it.description || '-'}</div>
+                <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                  <span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-blue); color:var(--text-blue); font-weight:600;"><i class="fa-solid fa-barcode" style="margin-right:4px;"></i>${it.barcode || '-'}</span>
+                </div>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <div onclick="deleteMasterItem('${it.item_no}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></div>
+              </div>
+            </div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function openAddMasterItemModal() {
+      document.getElementById('addMasterItemNo').value = '';
+      document.getElementById('addMasterBarcode').value = '';
+      document.getElementById('addMasterDesc').value = '';
+      document.getElementById('modal-add-master-item').classList.remove('hidden');
+    }
+
+    async function saveMasterItem() {
+      const itemNo = document.getElementById('addMasterItemNo').value.trim();
+      const barcode = document.getElementById('addMasterBarcode').value.trim();
+      const desc = document.getElementById('addMasterDesc').value.trim();
+      if (!itemNo || !desc) return showToast('กรุณากรอกรหัสสินค้าและชื่อสินค้า');
+      showLoader('กำลังบันทึก...');
+      const { error } = await db.from('item_master').upsert({ item_no: itemNo, barcode: barcode || null, description: desc }, { onConflict: 'item_no' });
+      hideLoader();
+      if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
+      showToast('บันทึกสำเร็จ!', 'success');
+      closeModal('modal-add-master-item');
+      loadMasterItems();
+    }
+
+    async function deleteMasterItem(itemNo) {
+      const { isConfirmed } = await Swal.fire({
+        title: 'ยืนยันการลบ',
+        text: `ลบสินค้า ${itemNo} ออกจาก Master?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E3000F',
+        confirmButtonText: 'ลบทิ้ง',
+        cancelButtonText: 'ยกเลิก'
+      });
+      if (!isConfirmed) return;
+      showLoader('กำลังลบ...');
+      const { error } = await db.from('item_master').delete().eq('item_no', itemNo);
+      hideLoader();
+      if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
+      showToast('ลบสำเร็จ', 'success');
+      loadMasterItems();
+    }
+
+    // === Master Bays ===
+    async function loadMasterBays() {
+      showLoader('กำลังโหลด Location...');
+      const { data, error } = await fetchAll('locations', '*', { orderCol: 'location_id' }).limit(200);
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      allMasterBays = data || [];
+      renderMasterBays(allMasterBays);
+    }
+
+    function searchMasterBays() {
+      const q = document.getElementById('masterBaySearch').value.toLowerCase();
+      const filtered = allMasterBays.filter(b =>
+        String(b.location_id).toLowerCase().includes(q) ||
+        String(b.location_name || '').toLowerCase().includes(q)
+      );
+      renderMasterBays(filtered);
+    }
+
+    function renderMasterBays(bays) {
+      const container = document.getElementById('masterBaysList');
+      if (!bays.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>';
+        return;
+      }
+      let html = '';
+      bays.forEach(b => {
+        const color = getDeptColor(b.location_name);
+        html += `
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; border-left:5px solid ${color};">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <div>
+                <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${b.location_id}</div>
+                <div style="font-size:13px; color:var(--text-light);">${b.location_name || '-'}</div>
+              </div>
+              <div style="display:flex; gap:8px; align-items:center;">
+                <span style="font-size:10px; font-weight:800; padding:4px 10px; border-radius:20px; background:${b.status === 'Active' ? '#dcfce7' : '#f1f5f9'}; color:${b.status === 'Active' ? '#166534' : '#64748b'};">${(b.status || 'Active').toUpperCase()}</span>
+                <div onclick="deleteMasterBay('${b.location_id}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></div>
+              </div>
+            </div>
+          </div>`;
+      });
+      container.innerHTML = html;
+    }
+
+    function openAddBayModal() {
+      document.getElementById('addBayId').value = '';
+      document.getElementById('addBayName').value = '';
+      document.getElementById('modal-add-bay').classList.remove('hidden');
+    }
+
+    async function saveMasterBay() {
+      const id = document.getElementById('addBayId').value.trim();
+      const name = document.getElementById('addBayName').value.trim();
+      if (!id || !name) return showToast('กรุณากรอกข้อมูลให้ครบ');
+      showLoader('กำลังบันทึก...');
+      const { error } = await db.from('locations').upsert({ location_id: id, location_name: name, status: 'Active' }, { onConflict: 'location_id' });
+      hideLoader();
+      if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
+      showToast('บันทึกสำเร็จ!', 'success');
+      closeModal('modal-add-bay');
+      loadMasterBays();
+      locationsData = []; // invalidate locations cache
+    }
+
+    async function deleteMasterBay(locId) {
+      const { isConfirmed } = await Swal.fire({
+        title: 'ยืนยันการลบ',
+        text: `ลบ Location ${locId} ออกจากระบบ?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#E3000F',
+        confirmButtonText: 'ลบทิ้ง',
+        cancelButtonText: 'ยกเลิก'
+      });
+      if (!isConfirmed) return;
+      showLoader('กำลังลบ...');
+      const { error } = await db.from('locations').delete().eq('location_id', locId);
+      hideLoader();
+      if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
+      showToast('ลบสำเร็จ', 'success');
+      loadMasterBays();
+      locationsData = []; // invalidate
+    }
+    // ===== GLOBAL ITEM SEARCH =====
+    let searchGlobalTimeout = null;
+    async function searchGlobalItem() {
+      clearTimeout(searchGlobalTimeout);
+      const q = document.getElementById('globalItemSearch').value.trim().toLowerCase();
+      const container = document.getElementById('globalSearchResult');
+      
+      if (!q) {
+        container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:10px; color:var(--border);"></i><br/>พิมพ์เพื่อค้นหาสินค้าว่าถูกเก็บอยู่ที่ Bay ไหนบ้าง</div>';
+        return;
+      }
+      
+      container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">กำลังค้นหา...</div>';
+      
+      searchGlobalTimeout = setTimeout(async () => {
+        // Find matching items in master first
+        const { data: masterData } = await db.from('item_master')
+          .select('item_no, description, barcode')
+          .or(`item_no.ilike.%${q}%,description.ilike.%${q}%,barcode.ilike.%${q}%`)
+          .limit(20);
+          
+        if (!masterData || masterData.length === 0) {
+          container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบสินค้าที่ตรงกับคำค้นหา</div>';
+          return;
+        }
+        
+        const itemNos = masterData.map(m => m.item_no);
+        const masterMap = {};
+        masterData.forEach(m => masterMap[m.item_no] = m);
+        
+        // Find stock for these items
+        const { data: stockData, error } = await db.from('stock')
+          .select('item_no, aisle_bay, qty')
+          .in('item_no', itemNos)
+          .gt('qty', 0);
+          
+        if (error) {
+          container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-red);">Error: ' + error.message + '</div>';
+          return;
+        }
+        
+        if (!stockData || stockData.length === 0) {
+          container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบสินค้านี้ในสต๊อก (ไม่มีของในคลัง)</div>';
+          return;
+        }
+        
+        // Group by item_no
+        const grouped = {};
+        stockData.forEach(s => {
+          if (!grouped[s.item_no]) grouped[s.item_no] = [];
+          grouped[s.item_no].push(s);
+        });
+        
+        let html = '';
+        Object.keys(grouped).forEach(itemNo => {
+          const master = masterMap[itemNo];
+          const locations = grouped[itemNo];
+          const totalQty = locations.reduce((sum, loc) => sum + loc.qty, 0);
+          
+          let locHtml = '';
+          locations.forEach(loc => {
+            locHtml += `
+              <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px dashed var(--border);">
+                <div style="font-weight:700; color:var(--text-blue);"><i class="fa-solid fa-location-dot" style="margin-right:6px; font-size:12px;"></i>${loc.aisle_bay}</div>
+                <div style="font-weight:800;">${loc.qty} ชิ้น</div>
+              </div>
+            `;
+          });
+          
+          html += `
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px; box-shadow:0 4px 10px rgba(0,0,0,0.03);">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                <div>
+                  <div style="font-weight:800; font-size:18px; color:var(--text-dark);">${itemNo}</div>
+                  <div style="font-size:14px; color:var(--text-light); margin-top:2px;">${master.description || '-'}</div>
+                </div>
+                <div style="background:var(--pastel-green); color:var(--text-green); padding:4px 12px; border-radius:20px; font-weight:800; font-size:14px;">
+                  รวม ${totalQty}
+                </div>
+              </div>
+              <div style="background:var(--bg-light); border-radius:12px; padding:8px 12px;">
+                ${locHtml}
+              </div>
+            </div>
+          `;
+        });
+        
+        container.innerHTML = html;
+      }, 500);
+    }
+
+    // ===== MOVEMENT LOG =====
+    let allMovements = [];
+    
+    async function loadMovement() {
+      showLoader('กำลังโหลดประวัติ...');
+      const { data, error } = await db.from('movement').select('*').order('created_at', { ascending: false }).limit(100);
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      
+      allMovements = data || [];
+      renderMovements(allMovements);
+    }
+    
+    function filterMovement() {
+      const q = document.getElementById('movementSearch').value.toLowerCase();
+      const filtered = allMovements.filter(m => 
+        String(m.item_no).toLowerCase().includes(q) ||
+        String(m.description || '').toLowerCase().includes(q) ||
+        String(m.location || '').toLowerCase().includes(q)
+      );
+      renderMovements(filtered);
+    }
+    
+    function renderMovements(list) {
+      const container = document.getElementById('movementListContainer');
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบประวัติทำรายการ</div>';
+        return;
+      }
+      
+      let html = '';
+      list.forEach(m => {
+        const d = new Date(m.created_at);
+        const timeStr = d.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+        const dateStr = d.toLocaleDateString('th-TH', {day:'2-digit', month:'short'});
+        
+        let typeColor, typeIcon, typeText;
+        if (m.type === 'IN') { typeColor = 'var(--text-green)'; typeIcon = 'fa-arrow-right-to-bracket'; typeText = 'รับเข้า'; }
+        else if (m.type === 'OUT') { typeColor = 'var(--text-red)'; typeIcon = 'fa-arrow-right-from-bracket'; typeText = 'นำออก'; }
+        else { typeColor = 'var(--text-blue)'; typeIcon = 'fa-boxes-packing'; typeText = 'ย้าย/ปรับ'; }
+        
+        html += `
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; display:flex; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:45px; border-right:1px dashed var(--border); padding-right:12px;">
+              <div style="font-size:12px; color:var(--text-light);">${dateStr}</div>
+              <div style="font-weight:800; color:var(--text-dark);">${timeStr}</div>
+            </div>
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                <div style="font-weight:800; font-size:15px;">${m.item_no}</div>
+                <div style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid ${typeColor}; color:${typeColor};"><i class="fa-solid ${typeIcon}" style="margin-right:4px;"></i>${typeText}</div>
+              </div>
+              <div style="font-size:13px; color:var(--text-light); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px;">${m.description || '-'}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+                <div style="color:var(--text-dark);"><i class="fa-solid fa-location-dot" style="margin-right:4px; color:var(--text-blue);"></i>${m.location || '-'}</div>
+                <div style="font-weight:800; font-size:14px; color:${typeColor};">${m.type==='IN'?'+':'-'}${m.qty} ชิ้น</div>
+              </div>
+              ${m.reason ? `<div style="font-size:12px; margin-top:6px; color:var(--text-light); background:var(--bg-light); padding:4px 8px; border-radius:6px;">${m.reason} (${m.user_id})</div>` : ''}
+            </div>
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+  </script>
+</body>
+
+</html>
