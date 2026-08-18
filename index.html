@@ -847,6 +847,44 @@
       margin-bottom: 20px;
       color: var(--text-dark);
     }
+
+    @keyframes pulse-green {
+      0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(34, 197, 94, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+    }
+    .pulse-dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse-green 2s infinite;
+    }
+    .badge-online {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .badge-offline {
+      background: #f1f5f9;
+      color: #64748b;
+      border: 1px solid #cbd5e1;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
   </style>
 </head>
 
@@ -1006,18 +1044,74 @@
         <div class="subpage-header">
           <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
           <h2 class="subpage-title">ประวัติทำรายการ</h2>
+          <div style="margin-left:auto; display:flex; gap:8px;">
+            <div class="btn-icon" onclick="loadMovement(true)" title="รีเฟรชข้อมูล"><i class="fa-solid fa-rotate-right"></i></div>
+          </div>
         </div>
+
         <div class="search-box" style="margin-bottom:10px;">
           <i class="fa-solid fa-search"></i>
           <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..." oninput="filterMovement()">
         </div>
-        <div id="deptFilterRow" style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-          <button id="deptBtn-all" onclick="filterByDept('all')" style="padding:6px 16px; border-radius:20px; border:1.5px solid var(--primary); background:var(--primary); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">ทั้งหมด</button>
+
+        <!-- Quick Date Filters (Pills) -->
+        <div style="display:flex; gap:6px; margin-bottom:10px; overflow-x:auto; padding-bottom:4px;" class="filter-tabs" id="movementDateFilters">
+          <button class="filter-tab active" id="dateFilterBtn-all" onclick="setDateFilter('all')">ทั้งหมด</button>
+          <button class="filter-tab" id="dateFilterBtn-today" onclick="setDateFilter('today')">วันนี้</button>
+          <button class="filter-tab" id="dateFilterBtn-yesterday" onclick="setDateFilter('yesterday')">เมื่อวาน</button>
+          <button class="filter-tab" id="dateFilterBtn-7days" onclick="setDateFilter('7days')">7 วันที่แล้ว</button>
+          <button class="filter-tab" id="dateFilterBtn-30days" onclick="setDateFilter('30days')">30 วันที่แล้ว</button>
+          <button class="filter-tab" id="dateFilterBtn-custom" onclick="toggleCustomDatePicker()"><i class="fa-regular fa-calendar-days"></i> ระบุวันที่</button>
+        </div>
+
+        <!-- Custom Date Range Box (Collapsible) -->
+        <div id="customDateRangeBox" class="hidden" style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:12px 16px; margin-bottom:12px;">
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px; color:var(--text-dark);"><i class="fa-solid fa-calendar-day" style="color:var(--text-blue); margin-right:6px;"></i>เลือกช่วงวันที่ย้อนหลัง</div>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+            <div style="flex:1;">
+              <label style="font-size:11px; color:var(--text-light); display:block; margin-bottom:3px;">ตั้งแต่วันที่</label>
+              <input type="date" id="movementDateFrom" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); font-size:13px; background:var(--bg-color); color:var(--text-dark);">
+            </div>
+            <div style="flex:1;">
+              <label style="font-size:11px; color:var(--text-light); display:block; margin-bottom:3px;">ถึงวันที่</label>
+              <input type="date" id="movementDateTo" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); font-size:13px; background:var(--bg-color); color:var(--text-dark);">
+            </div>
+          </div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-red" style="flex:1; padding:8px; font-size:13px;" onclick="applyCustomDateFilter()"><i class="fa-solid fa-filter"></i> กรองวันที่</button>
+            <button class="btn btn-outline" style="flex:1; padding:8px; font-size:13px;" onclick="resetCustomDateFilter()">ล้างค่า</button>
+          </div>
+        </div>
+
+        <!-- Department Filter Row -->
+        <div id="deptFilterRow" style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+          <button id="deptBtn-all" onclick="filterByDept('all')" style="padding:6px 16px; border-radius:20px; border:1.5px solid var(--makro-red); background:var(--makro-red); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">ทั้งหมด</button>
           <button id="deptBtn-dry" onclick="filterByDept('DryFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #e67e22; background:transparent; color:#e67e22; font-weight:700; font-size:13px; cursor:pointer;">DryFood</button>
           <button id="deptBtn-non" onclick="filterByDept('NonFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #8e44ad; background:transparent; color:#8e44ad; font-weight:700; font-size:13px; cursor:pointer;">NonFood</button>
           <button id="deptBtn-fresh" onclick="filterByDept('FreshFood')" style="padding:6px 16px; border-radius:20px; border:1.5px solid #27ae60; background:transparent; color:#27ae60; font-weight:700; font-size:13px; cursor:pointer;">FreshFood</button>
         </div>
+
+        <!-- Type Filter Row -->
+        <div style="display:flex; gap:6px; margin-bottom:14px; align-items:center;">
+          <span style="font-size:12px; color:var(--text-light); font-weight:600;">ประเภท:</span>
+          <div class="filter-tab active" id="typeFilter-all" onclick="setTypeFilter('all')" style="font-size:12px; padding:4px 12px;">ทั้งหมด</div>
+          <div class="filter-tab" id="typeFilter-IN" onclick="setTypeFilter('IN')" style="font-size:12px; padding:4px 12px; color:var(--text-green);"><i class="fa-solid fa-arrow-right-to-bracket"></i> รับเข้า</div>
+          <div class="filter-tab" id="typeFilter-OUT" onclick="setTypeFilter('OUT')" style="font-size:12px; padding:4px 12px; color:var(--text-red);"><i class="fa-solid fa-arrow-right-from-bracket"></i> นำออก</div>
+        </div>
+
+        <!-- Summary & Count Info -->
+        <div id="movementSummaryInfo" style="font-size:12px; color:var(--text-light); margin-bottom:8px; padding:0 4px; display:flex; justify-content:space-between;">
+          <span id="movementCountText">กำลังโหลด...</span>
+        </div>
+
         <div id="movementListContainer"></div>
+
+        <!-- Load More Button -->
+        <div id="movementLoadMoreArea" style="margin-top:16px; margin-bottom:24px; text-align:center;">
+          <button id="btnLoadMoreMovement" class="btn btn-outline" style="width:100%; border-color:var(--text-blue); color:var(--text-blue); font-weight:700;" onclick="loadMoreMovement()">
+            <i class="fa-solid fa-arrow-down"></i> โหลดประวัติเพิ่มเติม (+50)
+          </button>
+        </div>
       </div>
 
       <!-- VIEW: ITEM SEARCH (Global) -->
@@ -1162,6 +1256,49 @@
         </div>
       </div>
 
+      <!-- VIEW: ONLINE USERS -->
+      <div id="view-online-users" class="hidden">
+        <div class="subpage-header">
+          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
+          <div>
+            <h2 class="subpage-title" style="display:flex; align-items:center; gap:8px;">
+              User ออนไลน์
+              <span class="pulse-dot"></span>
+            </h2>
+            <div style="font-size:12px; color:var(--text-light);">ตรวจสอบผู้ใช้งานที่กำลังออนไลน์ในระบบ</div>
+          </div>
+          <div style="margin-left:auto;">
+            <div class="btn-icon" onclick="refreshOnlineUsers()" title="รีเฟรช"><i class="fa-solid fa-rotate-right"></i></div>
+          </div>
+        </div>
+
+        <!-- Online Stats -->
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
+          <div style="background:linear-gradient(135deg, #10b981, #059669); border-radius:16px; padding:16px; color:white; position:relative; overflow:hidden;">
+            <div style="font-size:12px; font-weight:600; opacity:0.9;">ออนไลน์ตอนนี้</div>
+            <div style="font-size:28px; font-weight:800; margin-top:4px;" id="onlineCountNum">0 <span style="font-size:14px; font-weight:normal;">คน</span></div>
+            <i class="fa-solid fa-tower-broadcast" style="position:absolute; right:10px; bottom:10px; font-size:36px; opacity:0.2;"></i>
+          </div>
+          <div style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius:16px; padding:16px; color:white; position:relative; overflow:hidden;">
+            <div style="font-size:12px; font-weight:600; opacity:0.9;">ผู้ใช้ทั้งหมด</div>
+            <div style="font-size:28px; font-weight:800; margin-top:4px;" id="totalRegisteredUsersNum">- <span style="font-size:14px; font-weight:normal;">คน</span></div>
+            <i class="fa-solid fa-users" style="position:absolute; right:10px; bottom:10px; font-size:36px; opacity:0.2;"></i>
+          </div>
+        </div>
+
+        <!-- Section: Currently Active Users -->
+        <div style="font-size:15px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <span class="pulse-dot"></span> ผู้ใช้ที่กำลังใช้งานอยู่ (Active Users)
+        </div>
+        <div id="activeOnlineUsersList" style="margin-bottom:24px;"></div>
+
+        <!-- Section: All Registered Users & Status -->
+        <div style="font-size:15px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
+          <i class="fa-solid fa-address-book" style="color:var(--text-blue);"></i> รายชื่อผู้ใช้ทั้งหมดในระบบ
+        </div>
+        <div id="allUsersStatusList"></div>
+      </div>
+
       <!-- VIEW: ADMIN -->
       <div id="view-admin" class="hidden">
         <div class="admin-profile">
@@ -1200,15 +1337,18 @@
             <div class="title text-center">เพิ่มฐานข้อมูล</div>
             <div class="subtitle text-center">เพิ่มข้อมูล Master ใหม่</div>
           </div>
-          <div class="cute-menu-card"
-            onclick="Swal.fire({icon:'info', title:'Comming Soon', text:'ระบบออนไลน์จะมาในอัปเดตถัดไป!'})">
+          <div class="cute-menu-card" onclick="navTo('online-users')">
             <div class="text-center" style="font-size:32px; margin-bottom:8px;">🟢</div>
-            <div class="title text-center">User ออนไลน์</div>
+            <div class="title text-center" style="display:flex; align-items:center; justify-content:center; gap:6px;">
+              User ออนไลน์
+              <span id="adminOnlineCountBadge" class="badge-online" style="font-size:10px; padding:1px 6px;">1 คน</span>
+            </div>
+            <div class="subtitle text-center">ดูผู้ใช้งานที่กำลังออนไลน์</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('manage-users')">
             <div class="text-center" style="font-size:32px; margin-bottom:8px;">👥</div>
             <div class="title text-center">จัดการผู้ใช้งาน</div>
-          </div>
+            <div class="subtitle text-center">เพิ่ม/ลบ ผู้ใช้งาน</div>
           </div>
         </div>
       </div>
@@ -1449,6 +1589,7 @@
         currentUser = JSON.parse(savedUser);
         isAdmin = String(currentUser.role).toLowerCase() === 'admin';
         setupUserUI();
+        initPresence();
         document.getElementById('view-login').classList.add('hidden');
         document.getElementById('app-wrapper').classList.remove('hidden');
         navTo('home');
@@ -1478,7 +1619,7 @@
 
     // Navigation
     function navTo(viewId) {
-      ['login', 'home', 'locations', 'bay-details', 'movement', 'admin', 'receive', 'move-bay', 'empty-bays', 'manage-users', 'master-data', 'item-search'].forEach(v => {
+      ['login', 'home', 'locations', 'bay-details', 'movement', 'admin', 'receive', 'move-bay', 'empty-bays', 'manage-users', 'master-data', 'item-search', 'online-users'].forEach(v => {
         const el = document.getElementById('view-' + v);
         if (el) el.classList.add('hidden');
       });
@@ -1487,7 +1628,7 @@
       // Update Bottom Nav
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       let activeId = viewId === 'bay-details' ? 'locations' : viewId;
-      if (activeId === 'item-search') activeId = 'home';
+      if (activeId === 'item-search' || activeId === 'online-users') activeId = activeId === 'online-users' ? 'admin' : 'home';
       const activeNav = document.getElementById('nav-' + activeId);
       if (activeNav) activeNav.classList.add('active');
 
@@ -1495,8 +1636,9 @@
       if (viewId === 'locations') loadLocations();
       if (viewId === 'empty-bays') loadEmptyBays();
       if (viewId === 'manage-users') loadUsers();
-      if (viewId === 'master-data') loadMasterItems();
-      if (viewId === 'movement') loadMovement();
+      if (viewId === 'master-data') loadMasterItems(0, true);
+      if (viewId === 'movement') loadMovement(true);
+      if (viewId === 'online-users') loadOnlineUsersView();
     }
 
     // Theme & Clock
@@ -1558,12 +1700,16 @@
       isAdmin = String(currentUser.role).toLowerCase() === 'admin';
       localStorage.setItem('topstock_user', JSON.stringify(currentUser));
       setupUserUI();
+      initPresence();
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('app-wrapper').classList.remove('hidden');
       navTo('home');
     }
 
     function doLogout() {
+      if (presenceChannel) {
+        try { presenceChannel.untrack(); presenceChannel.unsubscribe(); } catch(e){}
+      }
       localStorage.removeItem('topstock_user');
       currentUser = null; isAdmin = false;
       document.getElementById('app-wrapper').classList.add('hidden');
@@ -2643,7 +2789,11 @@
     }
 
     // ===== MASTER DATA FUNCTIONS =====
-    let allMasterItems = [];
+    let masterItemsList = [];
+    let masterItemsPage = 0;
+    const MASTER_PAGE_SIZE = 50;
+    let masterItemsHasMore = true;
+    let masterSearchTimeout = null;
     let allMasterBays = [];
 
     function switchMasterTab(tab) {
@@ -2654,7 +2804,7 @@
         document.getElementById('masterTabItems').style.color = 'white';
         document.getElementById('masterTabBays').style.background = 'var(--card-bg)';
         document.getElementById('masterTabBays').style.color = 'var(--text-blue)';
-        loadMasterItems();
+        loadMasterItems(0, true);
       } else {
         document.getElementById('masterBaysContent').classList.remove('hidden');
         document.getElementById('masterItemsContent').classList.add('hidden');
@@ -2666,49 +2816,127 @@
       }
     }
 
-    async function loadMasterItems() {
-      showLoader('กำลังโหลดรายการสินค้า...');
-      const { data, error } = await fetchAll('item_master', '*', { orderCol: 'item_no' });
-      hideLoader();
-      if (error) return showToast('Error: ' + error.message);
-      allMasterItems = data || [];
-      renderMasterItems(allMasterItems);
+    async function loadMasterItems(page = 0, reset = false) {
+      try {
+        showLoader(page === 0 ? 'กำลังโหลดรายการสินค้า...' : 'กำลังโหลดเพิ่มเติม...');
+        if (reset) {
+          masterItemsPage = 0;
+          masterItemsList = [];
+          masterItemsHasMore = true;
+        }
+
+        const from = page * MASTER_PAGE_SIZE;
+        const to = from + MASTER_PAGE_SIZE - 1;
+
+        const { data, count, error } = await db
+          .from('item_master')
+          .select('*', { count: 'exact' })
+          .order('item_no')
+          .range(from, to);
+
+        if (error) {
+          showToast('Error: ' + error.message);
+          return;
+        }
+
+        if (data) {
+          if (reset) {
+            masterItemsList = data;
+          } else {
+            masterItemsList = masterItemsList.concat(data);
+          }
+          masterItemsHasMore = data.length === MASTER_PAGE_SIZE;
+          masterItemsPage = page;
+        } else {
+          masterItemsHasMore = false;
+        }
+
+        renderMasterItems(masterItemsList, count);
+      } catch (err) {
+        showToast('เกิดข้อผิดพลาด: ' + err.message);
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function loadMoreMasterItems() {
+      if (!masterItemsHasMore) return;
+      loadMasterItems(masterItemsPage + 1, false);
     }
 
     function searchMasterItems() {
-      const q = document.getElementById('masterItemSearch').value.toLowerCase();
-      const filtered = allMasterItems.filter(it =>
-        String(it.item_no).toLowerCase().includes(q) ||
-        String(it.description || '').toLowerCase().includes(q) ||
-        String(it.barcode || '').toLowerCase().includes(q)
-      );
-      renderMasterItems(filtered);
-    }
-
-    function renderMasterItems(items) {
-      const container = document.getElementById('masterItemsList');
-      if (!items.length) {
-        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>';
+      clearTimeout(masterSearchTimeout);
+      const q = document.getElementById('masterItemSearch').value.trim();
+      
+      if (!q) {
+        renderMasterItems(masterItemsList);
         return;
       }
-      let html = '';
+
+      masterSearchTimeout = setTimeout(async () => {
+        try {
+          showLoader('กำลังค้นหา...');
+          const { data, error } = await db
+            .from('item_master')
+            .select('*')
+            .or(`item_no.ilike.%${q}%,description.ilike.%${q}%,barcode.ilike.%${q}%`)
+            .order('item_no')
+            .limit(50);
+          
+          if (error) {
+            showToast('ค้นหาผิดพลาด: ' + error.message);
+            return;
+          }
+          renderMasterItems(data || [], (data || []).length, true);
+        } catch (err) {
+          showToast('Error: ' + err.message);
+        } finally {
+          hideLoader();
+        }
+      }, 350);
+    }
+
+    function renderMasterItems(items, totalCount = null, isSearch = false) {
+      const container = document.getElementById('masterItemsList');
+      if (!items || !items.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:36px; color:var(--border); margin-bottom:8px;"></i><br/>ไม่พบข้อมูลสินค้า</div>';
+        return;
+      }
+
+      let infoText = '';
+      if (isSearch) {
+        infoText = `<div style="font-size:12px; color:var(--text-light); margin-bottom:12px; padding:0 4px;">ผลการค้นหาพบ ${items.length} รายการ</div>`;
+      } else if (totalCount !== null) {
+        infoText = `<div style="font-size:12px; color:var(--text-light); margin-bottom:12px; padding:0 4px;">แสดง ${items.length} จากทั้งหมด ${totalCount.toLocaleString()} รายการ</div>`;
+      }
+
+      let html = infoText;
       items.forEach(it => {
         html += `
-          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px;">
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-              <div style="flex:1;">
+              <div style="flex:1; min-width:0; margin-right:12px;">
                 <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${it.item_no}</div>
-                <div style="font-size:14px; color:var(--text-light); margin-top:4px;">${it.description || '-'}</div>
+                <div style="font-size:14px; color:var(--text-light); margin-top:4px; word-break:break-word;">${it.description || '-'}</div>
                 <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
                   <span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-blue); color:var(--text-blue); font-weight:600;"><i class="fa-solid fa-barcode" style="margin-right:4px;"></i>${it.barcode || '-'}</span>
                 </div>
               </div>
               <div style="display:flex; gap:8px;">
-                <div onclick="deleteMasterItem('${it.item_no}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></div>
+                <div onclick="deleteMasterItem('${it.item_no}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;" title="ลบสินค้า"><i class="fa-solid fa-trash-can"></i></div>
               </div>
             </div>
           </div>`;
       });
+
+      if (!isSearch && masterItemsHasMore) {
+        html += `
+          <div style="text-align:center; margin-top:16px; margin-bottom:20px;">
+            <button class="btn btn-outline" style="border-color:var(--text-blue); color:var(--text-blue); font-weight:700;" onclick="loadMoreMasterItems()"><i class="fa-solid fa-arrow-down"></i> โหลดสินค้าเพิ่มเติม (+50)</button>
+          </div>
+        `;
+      }
+
       container.innerHTML = html;
     }
 
@@ -2730,7 +2958,7 @@
       if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
       showToast('บันทึกสำเร็จ!', 'success');
       closeModal('modal-add-master-item');
-      loadMasterItems();
+      loadMasterItems(0, true);
     }
 
     async function deleteMasterItem(itemNo) {
@@ -2749,17 +2977,25 @@
       hideLoader();
       if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
       showToast('ลบสำเร็จ', 'success');
-      loadMasterItems();
+      loadMasterItems(0, true);
     }
 
     // === Master Bays ===
     async function loadMasterBays() {
-      showLoader('กำลังโหลด Location...');
-      const { data, error } = await fetchAll('locations', '*', { orderCol: 'location_id' }).limit(200);
-      hideLoader();
-      if (error) return showToast('Error: ' + error.message);
-      allMasterBays = data || [];
-      renderMasterBays(allMasterBays);
+      try {
+        showLoader('กำลังโหลด Location...');
+        const { data, error } = await db.from('locations').select('*').order('location_id');
+        if (error) {
+          showToast('Error: ' + error.message);
+          return;
+        }
+        allMasterBays = data || [];
+        renderMasterBays(allMasterBays);
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        hideLoader();
+      }
     }
 
     function searchMasterBays() {
@@ -2814,7 +3050,7 @@
       showToast('บันทึกสำเร็จ!', 'success');
       closeModal('modal-add-bay');
       loadMasterBays();
-      locationsData = []; // invalidate locations cache
+      locationsData = [];
     }
 
     async function deleteMasterBay(locId) {
@@ -2834,8 +3070,9 @@
       if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
       showToast('ลบสำเร็จ', 'success');
       loadMasterBays();
-      locationsData = []; // invalidate
+      locationsData = [];
     }
+
     // ===== GLOBAL ITEM SEARCH =====
     let searchGlobalTimeout = null;
     async function searchGlobalItem() {
@@ -2851,7 +3088,6 @@
       container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">กำลังค้นหา...</div>';
       
       searchGlobalTimeout = setTimeout(async () => {
-        // Find matching items in master first
         const { data: masterData } = await db.from('item_master')
           .select('item_no, description, barcode')
           .or(`item_no.ilike.%${q}%,description.ilike.%${q}%,barcode.ilike.%${q}%`)
@@ -2866,7 +3102,6 @@
         const masterMap = {};
         masterData.forEach(m => masterMap[m.item_no] = m);
         
-        // Find stock for these items
         const { data: stockData, error } = await db.from('stock')
           .select('item_no, aisle_bay, qty')
           .in('item_no', itemNos)
@@ -2882,7 +3117,6 @@
           return;
         }
         
-        // Group by item_no
         const grouped = {};
         stockData.forEach(s => {
           if (!grouped[s.item_no]) grouped[s.item_no] = [];
@@ -2910,7 +3144,7 @@
               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                 <div>
                   <div style="font-weight:800; font-size:18px; color:var(--text-dark);">${itemNo}</div>
-                  <div style="font-size:14px; color:var(--text-light); margin-top:2px;">${master.description || '-'}</div>
+                  <div style="font-size:14px; color:var(--text-light); margin-top:2px;">${master ? (master.description || '-') : '-'}</div>
                 </div>
                 <div style="background:var(--pastel-green); color:var(--text-green); padding:4px 12px; border-radius:20px; font-weight:800; font-size:14px;">
                   รวม ${totalQty}
@@ -2927,30 +3161,355 @@
       }, 500);
     }
 
-    // ===== MOVEMENT LOG =====
+    // ===== ONLINE USERS SYSTEM =====
+    let presenceChannel = null;
+    let liveOnlineUsers = [];
+    let allSystemUsers = [];
+
+    function initPresence() {
+      if (!currentUser) return;
+
+      try {
+        if (presenceChannel) {
+          presenceChannel.unsubscribe();
+        }
+
+        presenceChannel = db.channel('topstock_presence_v1', {
+          config: {
+            presence: { key: currentUser.id }
+          }
+        });
+
+        presenceChannel
+          .on('presence', { event: 'sync' }, () => {
+            const state = presenceChannel.presenceState();
+            const usersMap = new Map();
+            for (const key in state) {
+              state[key].forEach(p => {
+                if (p.user_id) {
+                  usersMap.set(p.user_id, p);
+                }
+              });
+            }
+            liveOnlineUsers = Array.from(usersMap.values());
+            updateOnlineBadgesAndList();
+          })
+          .subscribe(async (status) => {
+            if (status === 'SUBSCRIBED') {
+              await presenceChannel.track({
+                user_id: currentUser.id,
+                name: currentUser.name,
+                role: currentUser.role,
+                position: currentUser.position || 'Staff',
+                online_at: new Date().toISOString(),
+                device: navigator.userAgent.includes('Mobile') ? 'มือถือ' : 'คอมพิวเตอร์'
+              });
+            }
+          });
+
+        window.addEventListener('beforeunload', () => {
+          if (presenceChannel) presenceChannel.untrack();
+        });
+      } catch (err) {
+        console.error('Presence error:', err);
+      }
+    }
+
+    function updateOnlineBadgesAndList() {
+      if (currentUser && !liveOnlineUsers.some(u => u.user_id === currentUser.id)) {
+        liveOnlineUsers.push({
+          user_id: currentUser.id,
+          name: currentUser.name,
+          role: currentUser.role,
+          position: currentUser.position || 'Staff',
+          online_at: new Date().toISOString(),
+          device: 'อุปกรณ์นี้'
+        });
+      }
+
+      const count = liveOnlineUsers.length;
+      
+      const adminBadge = document.getElementById('adminOnlineCountBadge');
+      if (adminBadge) {
+        adminBadge.textContent = `${count} คน`;
+      }
+
+      const onlineNumEl = document.getElementById('onlineCountNum');
+      if (onlineNumEl) {
+        onlineNumEl.innerHTML = `${count} <span style="font-size:14px; font-weight:normal;">คน</span>`;
+      }
+
+      renderOnlineUsersLists();
+    }
+
+    async function loadOnlineUsersView() {
+      showLoader('กำลังโหลดสถานะผู้ใช้...');
+      try {
+        const { data, error } = await db.from('users').select('*').order('name');
+        if (!error && data) {
+          allSystemUsers = data;
+          const totalEl = document.getElementById('totalRegisteredUsersNum');
+          if (totalEl) totalEl.innerHTML = `${data.length} <span style="font-size:14px; font-weight:normal;">คน</span>`;
+        }
+        updateOnlineBadgesAndList();
+      } catch(e) {
+        console.error(e);
+      } finally {
+        hideLoader();
+      }
+    }
+
+    function refreshOnlineUsers() {
+      loadOnlineUsersView();
+      showToast('อัปเดตสถานะสำเร็จ', 'success');
+    }
+
+    function renderOnlineUsersLists() {
+      const activeContainer = document.getElementById('activeOnlineUsersList');
+      const allContainer = document.getElementById('allUsersStatusList');
+      if (!activeContainer || !allContainer) return;
+
+      // 1. Render Active Online Users
+      if (liveOnlineUsers.length === 0) {
+        activeContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light); background:var(--card-bg); border-radius:16px; border:1px solid var(--border);">ไม่มีผู้ใช้ออนไลน์</div>';
+      } else {
+        let actHtml = '';
+        liveOnlineUsers.forEach(u => {
+          const isMe = currentUser && u.user_id === currentUser.id;
+          const roleColor = (u.role || '').toLowerCase() === 'admin' ? 'var(--text-purple)' : 'var(--text-blue)';
+          const d = u.online_at ? new Date(u.online_at) : new Date();
+          const timeStr = d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+
+          actHtml += `
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+              <div style="position:relative;">
+                <div style="width:44px; height:44px; border-radius:50%; background:var(--pastel-green); display:flex; align-items:center; justify-content:center; color:var(--text-green); font-size:18px;">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div class="pulse-dot" style="position:absolute; bottom:0; right:0; border:2px solid var(--card-bg);"></div>
+              </div>
+              <div style="flex:1; min-width:0;">
+                <div style="font-weight:800; font-size:15px; color:var(--text-dark); display:flex; align-items:center; gap:6px;">
+                  ${u.name || u.user_id}
+                  ${isMe ? '<span style="font-size:10px; background:var(--pastel-blue); color:var(--text-blue); padding:1px 6px; border-radius:10px; font-weight:700;">(คุณ)</span>' : ''}
+                </div>
+                <div style="font-size:12px; color:var(--text-light); margin-top:2px;">
+                  ${u.user_id} • ${u.position || 'Staff'} • เข้าเมื่อ ${timeStr} น.
+                </div>
+              </div>
+              <div style="text-align:right;">
+                <div style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid ${roleColor}; color:${roleColor}; margin-bottom:4px; display:inline-block;">
+                  ${(u.role || 'USER').toUpperCase()}
+                </div>
+                <div class="badge-online" style="font-size:10px; padding:2px 8px;">
+                  <span class="pulse-dot" style="width:6px; height:6px;"></span> ออนไลน์
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        activeContainer.innerHTML = actHtml;
+      }
+
+      // 2. Render All Users with Status
+      if (allSystemUsers.length === 0) {
+        allContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light);">ไม่พบรายชื่อผู้ใช้</div>';
+      } else {
+        const onlineSet = new Set(liveOnlineUsers.map(u => u.user_id));
+        let allHtml = '';
+        allSystemUsers.forEach(u => {
+          const isOnline = onlineSet.has(u.user_id) || (currentUser && u.user_id === currentUser.id);
+          const roleColor = (u.role || '').toLowerCase() === 'admin' ? 'var(--text-purple)' : 'var(--text-blue)';
+
+          allHtml += `
+            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:12px 16px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div style="width:38px; height:38px; border-radius:50%; background:${isOnline ? 'var(--pastel-green)' : 'var(--bg-color)'}; display:flex; align-items:center; justify-content:center; color:${isOnline ? 'var(--text-green)' : 'var(--text-light)'}; font-size:16px;">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <div>
+                  <div style="font-weight:700; font-size:14px; color:var(--text-dark);">${u.name}</div>
+                  <div style="font-size:11px; color:var(--text-light);">${u.user_id} • ${u.position || '-'}</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; border:1px solid ${roleColor}; color:${roleColor};">${(u.role || 'USER').toUpperCase()}</span>
+                ${isOnline 
+                  ? `<span class="badge-online"><span class="pulse-dot" style="width:6px; height:6px;"></span> ออนไลน์</span>`
+                  : `<span class="badge-offline"><i class="fa-solid fa-moon" style="font-size:9px;"></i> ออฟไลน์</span>`
+                }
+              </div>
+            </div>
+          `;
+        });
+        allContainer.innerHTML = allHtml;
+      }
+    }
+
+    // ===== MOVEMENT LOG (ENHANCED) =====
     let allMovements = [];
-    
-    async function loadMovement() {
+    let movementPage = 0;
+    const MOVEMENT_PAGE_SIZE = 50;
+    let movementHasMore = true;
+    let movementDateFilter = 'all'; // 'all', 'today', 'yesterday', '7days', '30days', 'custom'
+    let movementCustomFrom = null;
+    let movementCustomTo = null;
+    let movementTypeFilter = 'all'; // 'all', 'IN', 'OUT'
+
+    async function loadMovement(reset = true) {
       if (locationsData.length === 0) {
-        // ต้องโหลด locationsData มาก่อนเพื่อดึงชื่อแผนกมาใช้กรอง
         await loadLocations();
       }
 
-      showLoader('กำลังโหลดประวัติ...');
-      const { data, error } = await db.from('movement').select('*').order('created_at', { ascending: false }).limit(100);
-      hideLoader();
-      if (error) return showToast('Error: ' + error.message);
-      
-      allMovements = data || [];
-      renderMovements(allMovements);
+      try {
+        showLoader(reset ? 'กำลังโหลดประวัติ...' : 'กำลังโหลดเพิ่มเติม...');
+        if (reset) {
+          movementPage = 0;
+          allMovements = [];
+          movementHasMore = true;
+        }
+
+        const from = movementPage * MOVEMENT_PAGE_SIZE;
+        const to = from + MOVEMENT_PAGE_SIZE - 1;
+
+        let query = db.from('movement').select('*', { count: 'exact' });
+
+        // Apply Date Filters
+        const now = new Date();
+        if (movementDateFilter === 'today') {
+          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+          query = query.gte('created_at', startOfToday.toISOString());
+        } else if (movementDateFilter === 'yesterday') {
+          const startOfYest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0);
+          const endOfYest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
+          query = query.gte('created_at', startOfYest.toISOString()).lte('created_at', endOfYest.toISOString());
+        } else if (movementDateFilter === '7days') {
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          query = query.gte('created_at', sevenDaysAgo.toISOString());
+        } else if (movementDateFilter === '30days') {
+          const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+          query = query.gte('created_at', thirtyDaysAgo.toISOString());
+        } else if (movementDateFilter === 'custom' && movementCustomFrom) {
+          const startD = new Date(movementCustomFrom + 'T00:00:00');
+          query = query.gte('created_at', startD.toISOString());
+          if (movementCustomTo) {
+            const endD = new Date(movementCustomTo + 'T23:59:59.999');
+            query = query.lte('created_at', endD.toISOString());
+          }
+        }
+
+        if (movementTypeFilter !== 'all') {
+          query = query.eq('type', movementTypeFilter);
+        }
+
+        const { data, count, error } = await query
+          .order('created_at', { ascending: false })
+          .range(from, to);
+
+        if (error) {
+          showToast('Error: ' + error.message);
+          return;
+        }
+
+        if (data) {
+          if (reset) {
+            allMovements = data;
+          } else {
+            allMovements = allMovements.concat(data);
+          }
+          movementHasMore = data.length === MOVEMENT_PAGE_SIZE;
+        } else {
+          movementHasMore = false;
+        }
+
+        filterMovement(count);
+      } catch (err) {
+        showToast('Error: ' + err.message);
+      } finally {
+        hideLoader();
+      }
     }
-    
-    function filterMovement() {
+
+    function loadMoreMovement() {
+      if (!movementHasMore) return;
+      movementPage++;
+      loadMovement(false);
+    }
+
+    function setDateFilter(filterType) {
+      movementDateFilter = filterType;
+      document.querySelectorAll('#movementDateFilters .filter-tab').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById('dateFilterBtn-' + filterType);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const customBox = document.getElementById('customDateRangeBox');
+      if (filterType !== 'custom' && customBox) {
+        customBox.classList.add('hidden');
+      }
+
+      loadMovement(true);
+    }
+
+    function toggleCustomDatePicker() {
+      const customBox = document.getElementById('customDateRangeBox');
+      if (customBox.classList.contains('hidden')) {
+        customBox.classList.remove('hidden');
+        document.querySelectorAll('#movementDateFilters .filter-tab').forEach(b => b.classList.remove('active'));
+        document.getElementById('dateFilterBtn-custom').classList.add('active');
+        
+        const now = new Date();
+        const todayStr = now.toISOString().split('T')[0];
+        if (!document.getElementById('movementDateTo').value) document.getElementById('movementDateTo').value = todayStr;
+        if (!document.getElementById('movementDateFrom').value) {
+          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+          document.getElementById('movementDateFrom').value = sevenDaysAgo.toISOString().split('T')[0];
+        }
+      } else {
+        customBox.classList.add('hidden');
+      }
+    }
+
+    function applyCustomDateFilter() {
+      const from = document.getElementById('movementDateFrom').value;
+      const to = document.getElementById('movementDateTo').value;
+      if (!from) return showToast('กรุณาเลือกวันที่เริ่มต้น');
+      movementDateFilter = 'custom';
+      movementCustomFrom = from;
+      movementCustomTo = to || from;
+      loadMovement(true);
+    }
+
+    function resetCustomDateFilter() {
+      document.getElementById('movementDateFrom').value = '';
+      document.getElementById('movementDateTo').value = '';
+      movementCustomFrom = null;
+      movementCustomTo = null;
+      setDateFilter('all');
+    }
+
+    function setTypeFilter(t) {
+      movementTypeFilter = t;
+      ['all', 'IN', 'OUT'].forEach(type => {
+        const el = document.getElementById('typeFilter-' + type);
+        if (el) {
+          if (type === t) {
+            el.classList.add('active');
+            el.style.fontWeight = '700';
+          } else {
+            el.classList.remove('active');
+            el.style.fontWeight = '500';
+          }
+        }
+      });
+      loadMovement(true);
+    }
+
+    function filterMovement(totalCount = null) {
       const q = document.getElementById('movementSearch').value.toLowerCase();
       const filtered = allMovements.filter(m => {
         const locId = String(m.location || '');
         
-        // กรองแผนก โดยดูชื่อแผนกจาก locationsData
+        // กรองแผนก
         if (currentDeptFilter !== 'all') {
           const locObj = locationsData.find(l => l.id === locId);
           const locDeptName = locObj ? (locObj.name || '').trim() : '';
@@ -2964,18 +3523,35 @@
           return (
             String(m.item_no).toLowerCase().includes(q) ||
             String(m.description || '').toLowerCase().includes(q) ||
+            String(m.reason || '').toLowerCase().includes(q) ||
+            String(m.user_id || '').toLowerCase().includes(q) ||
             locId.toLowerCase().includes(q)
           );
         }
         return true;
       });
-      renderMovements(filtered);
+      renderMovements(filtered, totalCount);
     }
     
-    function renderMovements(list) {
+    function renderMovements(list, totalCount = null) {
       const container = document.getElementById('movementListContainer');
+      const countEl = document.getElementById('movementCountText');
+      const loadMoreArea = document.getElementById('movementLoadMoreArea');
+
+      if (countEl) {
+        if (totalCount !== null) {
+          countEl.textContent = `แสดง ${list.length} จากทั้งหมด ${totalCount.toLocaleString()} รายการ`;
+        } else {
+          countEl.textContent = `พบ ${list.length} รายการ`;
+        }
+      }
+
+      if (loadMoreArea) {
+        loadMoreArea.style.display = movementHasMore ? 'block' : 'none';
+      }
+
       if (!list.length) {
-        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบประวัติทำรายการ</div>';
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);"><i class="fa-solid fa-clock-rotate-left" style="font-size:36px; color:var(--border); margin-bottom:8px;"></i><br/>ไม่พบประวัติทำรายการในช่วงนี้</div>';
         return;
       }
       
@@ -2983,30 +3559,53 @@
       list.forEach(m => {
         const d = new Date(m.created_at);
         const timeStr = d.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
-        const dateStr = d.toLocaleDateString('th-TH', {day:'2-digit', month:'short'});
+        const dateStr = d.toLocaleDateString('th-TH', {day:'numeric', month:'short'});
         
-        let typeColor, typeIcon, typeText;
-        if (m.type === 'IN') { typeColor = 'var(--text-green)'; typeIcon = 'fa-arrow-right-to-bracket'; typeText = 'รับเข้า'; }
-        else if (m.type === 'OUT') { typeColor = 'var(--text-red)'; typeIcon = 'fa-arrow-right-from-bracket'; typeText = 'นำออก'; }
-        else { typeColor = 'var(--text-blue)'; typeIcon = 'fa-boxes-packing'; typeText = 'ย้าย/ปรับ'; }
+        let typeColor, typeBg, typeBorder, typeIcon, typeText, qtySign;
+        if (m.type === 'IN') {
+          typeColor = '#16a34a';
+          typeBg = '#f0fdf4';
+          typeBorder = '#86efac';
+          typeIcon = 'fa-arrow-right-to-bracket';
+          typeText = 'รับเข้า';
+          qtySign = '+';
+        } else if (m.type === 'OUT') {
+          typeColor = '#dc2626';
+          typeBg = '#fef2f2';
+          typeBorder = '#fca5a5';
+          typeIcon = 'fa-arrow-right-from-bracket';
+          typeText = 'นำออก';
+          qtySign = '-';
+        } else {
+          typeColor = '#2563eb';
+          typeBg = '#eff6ff';
+          typeBorder = '#93c5fd';
+          typeIcon = 'fa-boxes-packing';
+          typeText = 'ย้าย Bay';
+          qtySign = '';
+        }
         
         html += `
-          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; display:flex; gap:12px;">
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:45px; border-right:1px dashed var(--border); padding-right:12px;">
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:12px; display:flex; gap:14px; align-items:stretch; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:48px; border-right:1px dashed var(--border); padding-right:12px; text-align:center;">
               <div style="font-size:12px; color:var(--text-light);">${dateStr}</div>
-              <div style="font-weight:800; color:var(--text-dark);">${timeStr}</div>
+              <div style="font-weight:800; font-size:16px; color:var(--text-dark); margin-top:2px;">${timeStr}</div>
             </div>
-            <div style="flex:1;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
-                <div style="font-weight:800; font-size:15px;">${m.item_no}</div>
-                <div style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid ${typeColor}; color:${typeColor};"><i class="fa-solid ${typeIcon}" style="margin-right:4px;"></i>${typeText}</div>
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:3px;">
+                <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${m.item_no}</div>
+                <div style="font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; border:1px solid ${typeBorder}; background:${typeBg}; color:${typeColor}; display:inline-flex; align-items:center; gap:4px;">
+                  <i class="fa-solid ${typeIcon}"></i> ${typeText}
+                </div>
               </div>
-              <div style="font-size:13px; color:var(--text-light); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px;">${m.description || '-'}</div>
-              <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
-                <div style="color:var(--text-dark);"><i class="fa-solid fa-location-dot" style="margin-right:4px; color:var(--text-blue);"></i>${m.location || '-'}</div>
-                <div style="font-weight:800; font-size:14px; color:${typeColor};">${m.type==='IN'?'+':'-'}${m.qty} ชิ้น</div>
+              <div style="font-size:13px; color:var(--text-light); margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.description || '-'}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center;">
+                <div style="font-size:13px; font-weight:700; color:var(--text-blue); display:flex; align-items:center; gap:4px;">
+                  <i class="fa-solid fa-location-dot" style="color:var(--text-blue);"></i> ${m.location || '-'}
+                </div>
+                <div style="font-weight:800; font-size:16px; color:${typeColor};">${qtySign}${m.qty} <span style="font-size:13px; font-weight:600;">ชิ้น</span></div>
               </div>
-              ${m.reason ? `<div style="font-size:12px; margin-top:6px; color:var(--text-light); background:var(--bg-light); padding:4px 8px; border-radius:6px;">${m.reason} (${m.user_id})</div>` : ''}
+              ${m.reason ? `<div style="font-size:11px; margin-top:8px; color:var(--text-light); background:var(--bg-color); padding:4px 8px; border-radius:8px; border:1px solid var(--border); display:inline-block;">${m.reason}${m.user_id ? ` (${m.user_id})` : ''}</div>` : ''}
             </div>
           </div>
         `;
