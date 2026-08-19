@@ -1599,6 +1599,7 @@
   <!-- jsPDF + AutoTable for PDF Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+  <script src="kanit_font.js"></script>
 
   <!-- SweetAlert2 & HTML5-QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -3915,6 +3916,14 @@
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
 
+        // Add custom Thai font if available
+        if (window.kanitFontBase64) {
+          doc.addFileToVFS('Kanit-Regular.ttf', window.kanitFontBase64);
+          doc.addFont('Kanit-Regular.ttf', 'Kanit', 'normal');
+          doc.addFont('Kanit-Regular.ttf', 'Kanit', 'bold');
+          doc.setFont('Kanit');
+        }
+
         const pageW = doc.internal.pageSize.getWidth();
         const pageH = doc.internal.pageSize.getHeight();
         const margin = 14;
@@ -3924,7 +3933,7 @@
         doc.rect(0, 0, pageW, 18, 'F');
         doc.setTextColor(255, 255, 255);
         doc.setFontSize(16);
-        doc.setFont('Helvetica', 'bold');
+        doc.setFont(window.kanitFontBase64 ? 'Kanit' : 'Helvetica', 'bold');
         doc.text('MAKRO TOP STOCK - Movement Report', margin, 12);
 
         // Export info
@@ -3936,7 +3945,7 @@
         // Filter info line
         doc.setTextColor(80, 80, 80);
         doc.setFontSize(9);
-        doc.setFont('Helvetica', 'normal');
+        doc.setFont(window.kanitFontBase64 ? 'Kanit' : 'Helvetica', 'normal');
 
         let dateDesc = 'All';
         if (movementDateFilter === 'today') dateDesc = 'Today';
@@ -3992,7 +4001,7 @@
             cellPadding: 2.5,
             lineColor: [220, 220, 220],
             lineWidth: 0.2,
-            font: 'Helvetica',
+            font: window.kanitFontBase64 ? 'Kanit' : 'Helvetica',
             textColor: [30, 30, 30],
             overflow: 'linebreak'
           },
@@ -4046,7 +4055,7 @@
             const pageCount = doc.internal.getNumberOfPages();
             doc.setFontSize(8);
             doc.setTextColor(150, 150, 150);
-            doc.setFont('Helvetica', 'normal');
+            doc.setFont(window.kanitFontBase64 ? 'Kanit' : 'Helvetica', 'normal');
 
             const footerY = pageH - 8;
             doc.text(`Export by: ${currentUser ? (currentUser.name || currentUser.id) : '-'}  |  ${exportDateStr}`, margin, footerY);
@@ -4068,7 +4077,7 @@
 
           doc.setFontSize(9);
           doc.setTextColor(80, 80, 80);
-          doc.setFont('Helvetica', 'bold');
+          doc.setFont(window.kanitFontBase64 ? 'Kanit' : 'Helvetica', 'bold');
 
           const totalIN = filtered.filter(m => m.type === 'IN').reduce((s, m) => s + (m.qty || 0), 0);
           const totalOUT = filtered.filter(m => m.type === 'OUT').reduce((s, m) => s + (m.qty || 0), 0);
