@@ -1014,6 +1014,35 @@
           <i class="fa-solid fa-search"></i>
           <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..." oninput="filterMovement()">
         </div>
+
+        <!-- FILTERS -->
+        <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:16px;">
+          <!-- Date -->
+          <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;" class="hide-scrollbar">
+            <div class="filter-tab active" onclick="setMoveDateFilter('all', this)">ทั้งหมด</div>
+            <div class="filter-tab" onclick="setMoveDateFilter('today', this)">วันนี้</div>
+            <div class="filter-tab" onclick="setMoveDateFilter('yesterday', this)">เมื่อวาน</div>
+            <div class="filter-tab" onclick="setMoveDateFilter('7days', this)">7 วันที่แล้ว</div>
+            <div class="filter-tab" onclick="setMoveDateFilter('30days', this)">30 วันที่แล้ว</div>
+            <div class="filter-tab" style="color:var(--text-red); border-color:var(--text-red);" onclick="setMoveDateFilter('custom', this)"><i class="fa-solid fa-calendar"></i> ระบุวันที่</div>
+          </div>
+          <!-- Dept -->
+          <div style="display:flex; gap:8px; overflow-x:auto; padding-bottom:4px;" class="hide-scrollbar">
+            <div class="filter-tab" style="background:var(--makro-red); color:white; border-color:var(--makro-red);" onclick="setMoveDeptFilter('all', this)">ทั้งหมด</div>
+            <div class="filter-tab" style="color:#f59e0b; border-color:#f59e0b;" onclick="setMoveDeptFilter('DryFood', this)">DryFood</div>
+            <div class="filter-tab" style="color:#8b5cf6; border-color:#8b5cf6;" onclick="setMoveDeptFilter('NonFood', this)">NonFood</div>
+            <div class="filter-tab" style="color:#10b981; border-color:#10b981;" onclick="setMoveDeptFilter('FreshFood', this)">FreshFood</div>
+          </div>
+          <!-- Type -->
+          <div style="display:flex; gap:8px; overflow-x:auto; align-items:center; padding-bottom:4px;" class="hide-scrollbar">
+            <div style="font-size:13px; font-weight:800; color:var(--text-light); margin-right:4px;">ประเภท:</div>
+            <div class="filter-tab active" style="color:var(--text-red); border-color:var(--text-red);" onclick="setMoveTypeFilter('all', this)">ทั้งหมด</div>
+            <div class="filter-tab" style="color:var(--text-green); border-color:var(--text-green);" onclick="setMoveTypeFilter('IN', this)"><i class="fa-solid fa-arrow-right-to-bracket"></i> รับเข้า</div>
+            <div class="filter-tab" style="color:var(--text-red); border-color:var(--text-red);" onclick="setMoveTypeFilter('OUT', this)"><i class="fa-solid fa-arrow-right-from-bracket"></i> นำออก</div>
+          </div>
+        </div>
+        <div id="movementCountText" style="font-size:13px; color:var(--text-light); margin-bottom:16px;">แสดง 0 จากทั้งหมด 0 รายการ</div>
+
         <div id="movementListContainer"></div>
       </div>
 
@@ -2757,6 +2786,39 @@
 
     // ===== MOVEMENT LOG =====
     let allMovements = [];
+    let currentMoveDate = 'all';
+    let currentMoveDept = 'all';
+    let currentMoveType = 'all';
+    let globalItemDeptMap = {};
+    
+    function setMoveDateFilter(val, el) {
+      currentMoveDate = val;
+      Array.from(el.parentElement.children).forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      if (val === 'custom') {
+        showToast('ฟังก์ชันระบุวันที่กำลังพัฒนา');
+      }
+      filterMovement();
+    }
+
+    function setMoveDeptFilter(val, el) {
+      currentMoveDept = val;
+      Array.from(el.parentElement.children).forEach(c => {
+         c.style.background = 'transparent';
+         c.style.color = c.style.borderColor;
+      });
+      el.style.background = el.style.borderColor;
+      el.style.color = 'white';
+      filterMovement();
+    }
+
+    function setMoveTypeFilter(val, el) {
+      currentMoveType = val;
+      Array.from(el.parentElement.querySelectorAll('.filter-tab')).forEach(c => c.classList.remove('active'));
+      el.classList.add('active');
+      filterMovement();
+    }
+
     
     async function loadMovement() {
       showLoader('กำลังโหลดประวัติ...');
@@ -2771,21 +2833,78 @@
         }
       }
 
+      // Load item depts into map if empty
+      if (Object.keys(globalItemDeptMap).length === 0) {
+        const { data: itemsData } = await db.from('item_master').select('item_no, dept_no');
+        if (itemsData) {
+          itemsData.forEach(i => { globalItemDeptMap[i.item_no] = i.dept_no; });
+        }
+      }
+
       const { data, error } = await db.from('movement').select('*').order('created_at', { ascending: false }).limit(100);
       hideLoader();
       if (error) return showToast('Error: ' + error.message);
       
       allMovements = data || [];
-      renderMovements(allMovements);
+      filterMovement(); // Calls render internally
     }
+
     
     function filterMovement() {
       const q = document.getElementById('movementSearch').value.toLowerCase();
-      const filtered = allMovements.filter(m => 
-        String(m.item_no).toLowerCase().includes(q) ||
-        String(m.description || '').toLowerCase().includes(q) ||
-        String(m.location || '').toLowerCase().includes(q)
-      );
+      
+      const now = new Date();
+      now.setHours(0,0,0,0);
+      
+      const filtered = allMovements.filter(m => {
+        // Text Match
+        const matchText = String(m.item_no).toLowerCase().includes(q) ||
+                          String(m.description || '').toLowerCase().includes(q) ||
+                          String(m.location || '').toLowerCase().includes(q);
+        if (!matchText) return false;
+
+        // Type Match
+        if (currentMoveType !== 'all' && m.type !== currentMoveType) return false;
+
+        // Dept Match
+        if (currentMoveDept !== 'all') {
+          const itemDept = globalItemDeptMap[m.item_no];
+          if (!itemDept || !itemDept.toLowerCase().includes(currentMoveDept.toLowerCase())) return false;
+        }
+
+        // Date Match
+        if (currentMoveDate !== 'all' && currentMoveDate !== 'custom') {
+          const d = new Date(m.created_at);
+          d.setHours(0,0,0,0);
+          
+          if (currentMoveDate === 'today' && d.getTime() !== now.getTime()) return false;
+          
+          if (currentMoveDate === 'yesterday') {
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+            if (d.getTime() !== yesterday.getTime()) return false;
+          }
+          
+          if (currentMoveDate === '7days') {
+            const days7 = new Date(now);
+            days7.setDate(days7.getDate() - 7);
+            if (d.getTime() < days7.getTime()) return false;
+          }
+          
+          if (currentMoveDate === '30days') {
+            const days30 = new Date(now);
+            days30.setDate(days30.getDate() - 30);
+            if (d.getTime() < days30.getTime()) return false;
+          }
+        }
+        return true;
+      });
+      
+      const countEl = document.getElementById('movementCountText');
+      if (countEl) {
+        countEl.innerText = `แสดง ${filtered.length} จากทั้งหมด ${allMovements.length} รายการ`;
+      }
+      
       renderMovements(filtered);
     }
     
