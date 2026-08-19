@@ -378,7 +378,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      font-size: 55px;
+      font-size: 40px;
       margin-bottom: 12px;
       border: 4px solid var(--pastel-blue);
     }
@@ -847,55 +847,6 @@
       margin-bottom: 20px;
       color: var(--text-dark);
     }
-
-    @keyframes pulse-green {
-      0% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
-      }
-
-      70% {
-        box-shadow: 0 0 0 8px rgba(34, 197, 94, 0);
-      }
-
-      100% {
-        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
-      }
-    }
-
-    .pulse-dot {
-      display: inline-block;
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #22c55e;
-      animation: pulse-green 2s infinite;
-    }
-
-    .badge-online {
-      background: #dcfce7;
-      color: #15803d;
-      border: 1px solid #86efac;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .badge-offline {
-      background: #f1f5f9;
-      color: #64748b;
-      border: 1px solid #cbd5e1;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
   </style>
 </head>
 
@@ -935,11 +886,8 @@
         <i class="fa-solid fa-boxes-stacked"></i> Top Stock
       </div>
       <div class="header-actions">
-        <button class="theme-toggle" onclick="navTo('item-search')"
-          style="margin-right:5px; color:var(--text-blue); background:var(--pastel-blue);"><i
-            class="fa-solid fa-magnifying-glass"></i></button>
-        <button class="theme-toggle" onclick="toggleTheme()" id="btnThemeToggle"><i
-            class="fa-solid fa-moon"></i></button>
+        <button class="theme-toggle" onclick="navTo('item-search')" style="margin-right:5px; color:var(--text-blue); background:var(--pastel-blue);"><i class="fa-solid fa-magnifying-glass"></i></button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="btnThemeToggle"><i class="fa-solid fa-moon"></i></button>
         <button class="logout-btn" onclick="doLogout()"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
       </div>
     </div>
@@ -977,38 +925,32 @@
 
         <div class="cute-menu-grid">
           <div class="cute-menu-card" onclick="navTo('receive')">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_receive.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_receive.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">รับเข้า</div>
             <div class="subtitle">สแกนเพิ่มสินค้าเข้าระบบ</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('locations')">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_search.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_search.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">ค้นหา/จัดการ</div>
             <div class="subtitle">ค้นหาและแก้ไขจำนวน</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('move-bay')">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_move_bay.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_move_bay.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">ย้ายทั้ง Bay</div>
             <div class="subtitle">ย้ายหรือลบทีละหลาย Bay</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('movement')">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_movement.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_movement.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">Movement</div>
             <div class="subtitle">เช็คประวัติทำรายการ</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('empty-bays')">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_empty_bay.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_empty_bay.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">เช็ค Bay ว่าง</div>
             <div class="subtitle">ตรวจสอบพื้นที่ว่างอยู่</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('admin')" id="dashBtnAdmin">
-            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_admin.png"
-                style="width:100%; height:100%; object-fit:contain;"></div>
+            <div class="cute-menu-icon" style="background:transparent;"><img src="img/icon_admin.png" style="width:100%; height:100%; object-fit:contain;"></div>
             <div class="title">Admin Zone</div>
             <div class="subtitle">จัดการระบบหลังบ้าน</div>
           </div>
@@ -1062,120 +1004,31 @@
       <!-- VIEW: MOVEMENT -->
       <div id="view-movement" class="hidden">
         <div class="subpage-header">
-          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
-          </div>
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
           <h2 class="subpage-title">ประวัติทำรายการ</h2>
-          <div style="margin-left:auto; display:flex; gap:8px;">
-            <div class="btn-icon" onclick="loadMovement(true)" title="รีเฟรชข้อมูล"><i
-                class="fa-solid fa-rotate-right"></i></div>
+          <div class="btn-icon" onclick="exportMovementPDF()" style="margin-left:auto; background:var(--pastel-red); color:var(--text-red); border:1px solid var(--text-red); width:auto; padding:0 12px; font-size:14px; border-radius:12px; gap:8px;">
+            <i class="fa-solid fa-file-pdf"></i> Export PDF
           </div>
         </div>
-
-        <div class="search-box" style="margin-bottom:10px;">
+        <div class="search-box" style="margin-bottom:16px;">
           <i class="fa-solid fa-search"></i>
-          <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..."
-            oninput="filterMovement()">
+          <input type="text" id="movementSearch" placeholder="ค้นหารหัสสินค้า, ชื่อ, Location..." oninput="filterMovement()">
         </div>
-
-        <!-- Quick Date Filters (Pills) -->
-        <div style="display:flex; gap:6px; margin-bottom:10px; overflow-x:auto; padding-bottom:4px;" class="filter-tabs"
-          id="movementDateFilters">
-          <button class="filter-tab active" id="dateFilterBtn-all" onclick="setDateFilter('all')">ทั้งหมด</button>
-          <button class="filter-tab" id="dateFilterBtn-today" onclick="setDateFilter('today')">วันนี้</button>
-          <button class="filter-tab" id="dateFilterBtn-yesterday" onclick="setDateFilter('yesterday')">เมื่อวาน</button>
-          <button class="filter-tab" id="dateFilterBtn-7days" onclick="setDateFilter('7days')">7 วันที่แล้ว</button>
-          <button class="filter-tab" id="dateFilterBtn-30days" onclick="setDateFilter('30days')">30 วันที่แล้ว</button>
-          <button class="filter-tab" id="dateFilterBtn-custom" onclick="toggleCustomDatePicker()"><i
-              class="fa-regular fa-calendar-days"></i> ระบุวันที่</button>
-        </div>
-
-        <!-- Custom Date Range Box (Collapsible) -->
-        <div id="customDateRangeBox" class="hidden"
-          style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:12px 16px; margin-bottom:12px;">
-          <div style="font-size:13px; font-weight:700; margin-bottom:8px; color:var(--text-dark);"><i
-              class="fa-solid fa-calendar-day"
-              style="color:var(--text-blue); margin-right:6px;"></i>เลือกช่วงวันที่ย้อนหลัง</div>
-          <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
-            <div style="flex:1;">
-              <label
-                style="font-size:11px; color:var(--text-light); display:block; margin-bottom:3px;">ตั้งแต่วันที่</label>
-              <input type="date" id="movementDateFrom"
-                style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); font-size:13px; background:var(--bg-color); color:var(--text-dark);">
-            </div>
-            <div style="flex:1;">
-              <label
-                style="font-size:11px; color:var(--text-light); display:block; margin-bottom:3px;">ถึงวันที่</label>
-              <input type="date" id="movementDateTo"
-                style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--border); font-size:13px; background:var(--bg-color); color:var(--text-dark);">
-            </div>
-          </div>
-          <div style="display:flex; gap:8px;">
-            <button class="btn btn-red" style="flex:1; padding:8px; font-size:13px;"
-              onclick="applyCustomDateFilter()"><i class="fa-solid fa-filter"></i> กรองวันที่</button>
-            <button class="btn btn-outline" style="flex:1; padding:8px; font-size:13px;"
-              onclick="resetCustomDateFilter()">ล้างค่า</button>
-          </div>
-        </div>
-
-        <!-- Department Filter Row -->
-        <div id="deptFilterRow" style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
-          <button id="deptBtn-all" onclick="filterByDept('all')"
-            style="padding:6px 16px; border-radius:20px; border:1.5px solid var(--makro-red); background:var(--makro-red); color:#fff; font-weight:700; font-size:13px; cursor:pointer;">ทั้งหมด</button>
-          <button id="deptBtn-dry" onclick="filterByDept('DryFood')"
-            style="padding:6px 16px; border-radius:20px; border:1.5px solid #e67e22; background:transparent; color:#e67e22; font-weight:700; font-size:13px; cursor:pointer;">DryFood</button>
-          <button id="deptBtn-non" onclick="filterByDept('NonFood')"
-            style="padding:6px 16px; border-radius:20px; border:1.5px solid #8e44ad; background:transparent; color:#8e44ad; font-weight:700; font-size:13px; cursor:pointer;">NonFood</button>
-          <button id="deptBtn-fresh" onclick="filterByDept('FreshFood')"
-            style="padding:6px 16px; border-radius:20px; border:1.5px solid #27ae60; background:transparent; color:#27ae60; font-weight:700; font-size:13px; cursor:pointer;">FreshFood</button>
-        </div>
-
-        <!-- Type Filter Row -->
-        <div style="display:flex; gap:6px; margin-bottom:14px; align-items:center;">
-          <span style="font-size:12px; color:var(--text-light); font-weight:600;">ประเภท:</span>
-          <div class="filter-tab active" id="typeFilter-all" onclick="setTypeFilter('all')"
-            style="font-size:12px; padding:4px 12px;">ทั้งหมด</div>
-          <div class="filter-tab" id="typeFilter-IN" onclick="setTypeFilter('IN')"
-            style="font-size:12px; padding:4px 12px; color:var(--text-green);"><i
-              class="fa-solid fa-arrow-right-to-bracket"></i> รับเข้า</div>
-          <div class="filter-tab" id="typeFilter-OUT" onclick="setTypeFilter('OUT')"
-            style="font-size:12px; padding:4px 12px; color:var(--text-red);"><i
-              class="fa-solid fa-arrow-right-from-bracket"></i> นำออก</div>
-        </div>
-
-        <!-- Summary & Count Info -->
-        <div id="movementSummaryInfo"
-          style="font-size:12px; color:var(--text-light); margin-bottom:8px; padding:0 4px; display:flex; justify-content:space-between;">
-          <span id="movementCountText">กำลังโหลด...</span>
-        </div>
-
         <div id="movementListContainer"></div>
-
-        <!-- Load More Button -->
-        <div id="movementLoadMoreArea" style="margin-top:16px; margin-bottom:24px; text-align:center;">
-          <button id="btnLoadMoreMovement" class="btn btn-outline"
-            style="width:100%; border-color:var(--text-blue); color:var(--text-blue); font-weight:700;"
-            onclick="loadMoreMovement()">
-            <i class="fa-solid fa-arrow-down"></i> โหลดประวัติเพิ่มเติม (+50)
-          </button>
-        </div>
       </div>
 
       <!-- VIEW: ITEM SEARCH (Global) -->
       <div id="view-item-search" class="hidden">
         <div class="subpage-header">
-          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
-          </div>
+          <div class="back-btn" onclick="navTo('home')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
           <h2 class="subpage-title">ค้นหาสินค้าว่าอยู่ไหน?</h2>
         </div>
         <div class="search-box">
           <i class="fa-solid fa-search"></i>
-          <input type="text" id="globalItemSearch" placeholder="พิมพ์ รหัสสินค้า, บาร์โค้ด หรือชื่อ..."
-            oninput="searchGlobalItem()">
+          <input type="text" id="globalItemSearch" placeholder="พิมพ์ รหัสสินค้า, บาร์โค้ด หรือชื่อ..." oninput="searchGlobalItem()">
         </div>
         <div id="globalSearchResult" style="margin-top:20px;">
-          <div class="text-center" style="padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open"
-              style="font-size:40px; margin-bottom:10px; color:var(--border);"></i><br />พิมพ์เพื่อค้นหาสินค้าว่าถูกเก็บอยู่ที่
-            Bay ไหนบ้าง</div>
+          <div class="text-center" style="padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:10px; color:var(--border);"></i><br/>พิมพ์เพื่อค้นหาสินค้าว่าถูกเก็บอยู่ที่ Bay ไหนบ้าง</div>
         </div>
       </div>
 
@@ -1188,16 +1041,11 @@
         </div>
 
         <div style="background:var(--card-bg); padding:20px; border-radius:20px; border:1px solid var(--border);">
-          <div id="recv-scanner-area"
-            style="width:100%; max-width:400px; margin:0 auto 16px auto; border-radius:16px; overflow:hidden; position:relative;">
+          <div id="recv-scanner-area" style="width:100%; max-width:400px; margin:0 auto 16px auto; border-radius:16px; overflow:hidden; position:relative;">
             <video id="recv-camera-preview" style="width:100%; display:none; border-radius:16px;"></video>
           </div>
-          <button class="btn btn-outline"
-            style="margin-bottom:20px; width:100%; border-color:var(--text-blue); color:var(--text-blue);"
-            onclick="startRecvScanner()" id="btnStartScan"><i class="fa-solid fa-camera"></i> เปิดกล้องสแกน</button>
-          <button class="btn btn-outline hidden"
-            style="margin-bottom:20px; width:100%; color:var(--text-red); border-color:var(--text-red);"
-            onclick="stopRecvScanner()" id="btnStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
+          <button class="btn btn-outline" style="margin-bottom:20px; width:100%; border-color:var(--text-blue); color:var(--text-blue);" onclick="startRecvScanner()" id="btnStartScan"><i class="fa-solid fa-camera"></i> เปิดกล้องสแกน</button>
+          <button class="btn btn-outline hidden" style="margin-bottom:20px; width:100%; color:var(--text-red); border-color:var(--text-red);" onclick="stopRecvScanner()" id="btnStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
 
           <div class="input-group">
             <label>Item No หรือ Barcode</label>
@@ -1261,13 +1109,8 @@
           <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
           </div>
           <h2 class="subpage-title">จัดการผู้ใช้งาน</h2>
-          <div style="margin-left:auto; display:flex; gap:10px;">
-            <div class="btn-icon" style="background:var(--text-blue); color:white;"
-              onclick="document.getElementById('csvUploadInputUsers').click()" title="อัปโหลด Users CSV"><i
-                class="fa-solid fa-cloud-arrow-up"></i></div>
+          <div style="margin-left:auto;">
             <div class="btn-icon" onclick="openAddUserModal()"><i class="fa-solid fa-plus"></i></div>
-            <input type="file" id="csvUploadInputUsers" class="hidden" accept=".csv"
-              onchange="handleUserCSVUpload(event)">
           </div>
         </div>
         <div id="usersListContainer"></div>
@@ -1276,40 +1119,27 @@
       <!-- VIEW: MASTER DATA -->
       <div id="view-master-data" class="hidden">
         <div class="subpage-header">
-          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
-          </div>
+          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i></div>
           <h2 class="subpage-title">Master Data</h2>
         </div>
 
         <!-- Tabs -->
-        <div
-          style="display:flex; gap:0; margin-bottom:20px; border-radius:12px; overflow:hidden; border:2px solid var(--text-blue);">
-          <div id="masterTabItems" onclick="switchMasterTab('items')"
-            style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--text-blue); color:white;">
-            จัดการสินค้า (Items)</div>
-          <div id="masterTabBays" onclick="switchMasterTab('bays')"
-            style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--card-bg); color:var(--text-blue);">
-            จัดการตำแหน่ง (Bays)</div>
+        <div style="display:flex; gap:0; margin-bottom:20px; border-radius:12px; overflow:hidden; border:2px solid var(--text-blue);">
+          <div id="masterTabItems" onclick="switchMasterTab('items')" style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--text-blue); color:white;">จัดการสินค้า (Items)</div>
+          <div id="masterTabBays" onclick="switchMasterTab('bays')" style="flex:1; padding:12px; text-align:center; font-weight:700; cursor:pointer; background:var(--card-bg); color:var(--text-blue);">จัดการตำแหน่ง (Bays)</div>
         </div>
 
         <!-- Items Tab Content -->
         <div id="masterItemsContent">
           <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap;">
-            <button class="btn btn-red" style="flex:1; min-width:120px;" onclick="openAddMasterItemModal()"><i
-                class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่</button>
-            <button class="btn btn-outline"
-              style="flex:1; min-width:120px; border-color:var(--text-blue); color:var(--text-blue);"
-              onclick="document.getElementById('csvUploadInputMaster').click()"><i
-                class="fa-solid fa-cloud-arrow-up"></i> อัปโหลด CSV</button>
-            <button class="btn btn-outline"
-              style="flex:1; min-width:120px; border-color:var(--text-green); color:var(--text-green);"
-              onclick="downloadCSVTemplate()"><i class="fa-solid fa-download"></i> โหลด Template</button>
+            <button class="btn btn-red" style="flex:1; min-width:120px;" onclick="openAddMasterItemModal()"><i class="fa-solid fa-plus"></i> เพิ่มสินค้าใหม่</button>
+            <button class="btn btn-outline" style="flex:1; min-width:120px; border-color:var(--text-blue); color:var(--text-blue);" onclick="document.getElementById('csvUploadInputMaster').click()"><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลด CSV</button>
+            <button class="btn btn-outline" style="flex:1; min-width:120px; border-color:var(--text-green); color:var(--text-green);" onclick="downloadCSVTemplate()"><i class="fa-solid fa-download"></i> โหลด Template</button>
             <input type="file" id="csvUploadInputMaster" class="hidden" accept=".csv" onchange="handleCSVUpload(event)">
           </div>
           <div class="search-box" style="margin-bottom:16px;">
             <i class="fa-solid fa-search"></i>
-            <input type="text" id="masterItemSearch" placeholder="ค้นหา รหัสสินค้า, ชื่อ, Barcode..."
-              oninput="searchMasterItems()">
+            <input type="text" id="masterItemSearch" placeholder="ค้นหา รหัสสินค้า, ชื่อ, Barcode..." oninput="searchMasterItems()">
           </div>
           <div id="masterItemsList"></div>
         </div>
@@ -1317,8 +1147,7 @@
         <!-- Bays Tab Content -->
         <div id="masterBaysContent" class="hidden">
           <div style="display:flex; gap:8px; margin-bottom:16px;">
-            <button class="btn btn-red" style="flex:1;" onclick="openAddBayModal()"><i class="fa-solid fa-plus"></i>
-              เพิ่ม Location ใหม่</button>
+            <button class="btn btn-red" style="flex:1;" onclick="openAddBayModal()"><i class="fa-solid fa-plus"></i> เพิ่ม Location ใหม่</button>
           </div>
           <div class="search-box" style="margin-bottom:16px;">
             <i class="fa-solid fa-search"></i>
@@ -1326,57 +1155,6 @@
           </div>
           <div id="masterBaysList"></div>
         </div>
-      </div>
-
-      <!-- VIEW: ONLINE USERS -->
-      <div id="view-online-users" class="hidden">
-        <div class="subpage-header">
-          <div class="back-btn" onclick="navTo('admin')" style="display:flex;"><i class="fa-solid fa-arrow-left"></i>
-          </div>
-          <div>
-            <h2 class="subpage-title" style="display:flex; align-items:center; gap:8px;">
-              User ออนไลน์
-              <span class="pulse-dot"></span>
-            </h2>
-            <div style="font-size:12px; color:var(--text-light);">ตรวจสอบผู้ใช้งานที่กำลังออนไลน์ในระบบ</div>
-          </div>
-          <div style="margin-left:auto;">
-            <div class="btn-icon" onclick="refreshOnlineUsers()" title="รีเฟรช"><i class="fa-solid fa-rotate-right"></i>
-            </div>
-          </div>
-        </div>
-
-        <!-- Online Stats -->
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:20px;">
-          <div
-            style="background:linear-gradient(135deg, #10b981, #059669); border-radius:16px; padding:16px; color:white; position:relative; overflow:hidden;">
-            <div style="font-size:12px; font-weight:600; opacity:0.9;">ออนไลน์ตอนนี้</div>
-            <div style="font-size:28px; font-weight:800; margin-top:4px;" id="onlineCountNum">0 <span
-                style="font-size:14px; font-weight:normal;">คน</span></div>
-            <i class="fa-solid fa-tower-broadcast"
-              style="position:absolute; right:10px; bottom:10px; font-size:36px; opacity:0.2;"></i>
-          </div>
-          <div
-            style="background:linear-gradient(135deg, #3b82f6, #1d4ed8); border-radius:16px; padding:16px; color:white; position:relative; overflow:hidden;">
-            <div style="font-size:12px; font-weight:600; opacity:0.9;">ผู้ใช้ทั้งหมด</div>
-            <div style="font-size:28px; font-weight:800; margin-top:4px;" id="totalRegisteredUsersNum">- <span
-                style="font-size:14px; font-weight:normal;">คน</span></div>
-            <i class="fa-solid fa-users"
-              style="position:absolute; right:10px; bottom:10px; font-size:36px; opacity:0.2;"></i>
-          </div>
-        </div>
-
-        <!-- Section: Currently Active Users -->
-        <div style="font-size:15px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-          <span class="pulse-dot"></span> ผู้ใช้ที่กำลังใช้งานอยู่ (Active Users)
-        </div>
-        <div id="activeOnlineUsersList" style="margin-bottom:24px;"></div>
-
-        <!-- Section: All Registered Users & Status -->
-        <div style="font-size:15px; font-weight:800; margin-bottom:12px; display:flex; align-items:center; gap:8px;">
-          <i class="fa-solid fa-address-book" style="color:var(--text-blue);"></i> รายชื่อผู้ใช้ทั้งหมดในระบบ
-        </div>
-        <div id="allUsersStatusList"></div>
       </div>
 
       <!-- VIEW: ADMIN -->
@@ -1396,24 +1174,36 @@
           <i class="fa-solid fa-chevron-right" style="background:none; font-size:20px;"></i>
         </div>
 
+        <div class="admin-card-green">
+          <h3><i class="fa-solid fa-cloud-arrow-up"></i> อัปโหลดสินค้า (CSV)</h3>
+          <p style="font-size:12px; color:var(--text-light); margin-top:-10px; margin-bottom:12px;">อัปเดตข้อมูล Master
+            Item ผ่านไฟล์ .csv</p>
+          <div class="admin-btn-grid">
+            <div class="btn-template" onclick="downloadCSVTemplate()">
+              <div style="font-size:24px; margin-bottom:4px;">📄</div>โหลด Template
+            </div>
+            <div class="btn-upload" onclick="document.getElementById('csvUploadInput').click()">
+              <div style="font-size:24px; margin-bottom:4px;">📤</div>เลือกไฟล์ Upload
+            </div>
+            <input type="file" id="csvUploadInput" class="hidden" accept=".csv" onchange="handleCSVUpload(event)">
+          </div>
+        </div>
+
         <div class="cute-menu-grid">
           <div class="cute-menu-card" onclick="navTo('master-data')">
             <div class="text-center" style="font-size:32px; margin-bottom:8px;">📋</div>
             <div class="title text-center">เพิ่มฐานข้อมูล</div>
             <div class="subtitle text-center">เพิ่มข้อมูล Master ใหม่</div>
           </div>
-          <div class="cute-menu-card" onclick="navTo('online-users')">
+          <div class="cute-menu-card"
+            onclick="Swal.fire({icon:'info', title:'Comming Soon', text:'ระบบออนไลน์จะมาในอัปเดตถัดไป!'})">
             <div class="text-center" style="font-size:32px; margin-bottom:8px;">🟢</div>
-            <div class="title text-center" style="display:flex; align-items:center; justify-content:center; gap:6px;">
-              User ออนไลน์
-              <span id="adminOnlineCountBadge" class="badge-online" style="font-size:10px; padding:1px 6px;">1 คน</span>
-            </div>
-            <div class="subtitle text-center">ดูผู้ใช้งานที่กำลังออนไลน์</div>
+            <div class="title text-center">User ออนไลน์</div>
           </div>
           <div class="cute-menu-card" onclick="navTo('manage-users')">
             <div class="text-center" style="font-size:32px; margin-bottom:8px;">👥</div>
             <div class="title text-center">จัดการผู้ใช้งาน</div>
-            <div class="subtitle text-center">เพิ่ม/ลบ ผู้ใช้งาน</div>
+          </div>
           </div>
         </div>
       </div>
@@ -1446,11 +1236,8 @@
       <div id="modal-scanner-area" style="width:100%; margin:0 auto 12px auto; border-radius:12px; overflow:hidden;">
         <video id="modal-camera-preview" style="width:100%; display:none; border-radius:12px;"></video>
       </div>
-      <button class="btn btn-outline" style="margin-bottom:16px; border-color:var(--text-blue); color:var(--text-blue);"
-        onclick="startModalScanner()" id="btnModalStartScan"><i class="fa-solid fa-camera"></i> สแกน Barcode</button>
-      <button class="btn btn-outline hidden"
-        style="margin-bottom:16px; color:var(--text-red); border-color:var(--text-red);" onclick="stopModalScanner()"
-        id="btnModalStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
+      <button class="btn btn-outline" style="margin-bottom:16px; border-color:var(--text-blue); color:var(--text-blue);" onclick="startModalScanner()" id="btnModalStartScan"><i class="fa-solid fa-camera"></i> สแกน Barcode</button>
+      <button class="btn btn-outline hidden" style="margin-bottom:16px; color:var(--text-red); border-color:var(--text-red);" onclick="stopModalScanner()" id="btnModalStopScan"><i class="fa-solid fa-camera-rotate"></i> ปิดกล้อง</button>
 
       <div class="input-group">
         <label>Item No หรือ Barcode</label>
@@ -1479,26 +1266,16 @@
     <div class="modal-content">
       <h3 class="modal-title">เพิ่มสินค้าใหม่ใน Master</h3>
       <div class="input-group">
-        <label>Item No (รหัสสินค้า) <span style="color:var(--text-red);">*</span></label>
-        <input type="text" id="addMasterItemNo" placeholder="เช่น 801218">
+        <label>Item No (รหัสสินค้า)</label>
+        <input type="text" id="addMasterItemNo">
       </div>
       <div class="input-group">
         <label>Barcode</label>
-        <input type="text" id="addMasterBarcode" placeholder="เช่น 2500008012183">
+        <input type="text" id="addMasterBarcode">
       </div>
       <div class="input-group">
-        <label>ชื่อสินค้า (Description) <span style="color:var(--text-red);">*</span></label>
-        <input type="text" id="addMasterDesc" placeholder="เช่น PM02 เล็บ-150 150มลX1ขวด">
-      </div>
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
-        <div class="input-group">
-          <label>Dept (แผนก)</label>
-          <input type="text" id="addMasterDept" placeholder="เช่น DryFood">
-        </div>
-        <div class="input-group">
-          <label>Class (หมวด)</label>
-          <input type="text" id="addMasterClass" placeholder="เช่น NonFood">
-        </div>
+        <label>ชื่อสินค้า (Description)</label>
+        <input type="text" id="addMasterDesc">
       </div>
       <div style="display:flex; gap:10px; margin-top:24px;">
         <button class="btn btn-outline" onclick="closeModal('modal-add-master-item')">ยกเลิก</button>
@@ -1532,23 +1309,9 @@
       <h3 class="modal-title">ยืนยันลบสินค้า</h3>
       <p id="delItemDesc" class="font-bold" style="color:var(--text-dark);"></p>
       <div class="input-group">
-        <label>จำนวนที่ต้องการลบ</label>
-        <div style="display:flex; align-items:center; gap:10px;">
-          <button class="btn btn-outline" style="width:40px;height:40px;padding:0;font-size:20px;border-radius:10px;"
-            onclick="adjustDeleteQty(-1)">−</button>
-          <input type="number" id="deleteQty" min="1" value="1"
-            style="width:70px;text-align:center;font-size:18px;font-weight:bold;border-radius:10px;border:1.5px solid var(--border);padding:8px;">
-          <button class="btn btn-outline" style="width:40px;height:40px;padding:0;font-size:20px;border-radius:10px;"
-            onclick="adjustDeleteQty(1)">+</button>
-          <span style="color:var(--text-muted);font-size:14px;">/ <span id="deleteMaxQty">1</span> ชิ้น</span>
-        </div>
-      </div>
-      <div class="input-group">
         <label>เหตุผล</label>
         <select id="deleteReason">
           <option value="เติมหน้าบ้าน">เติมหน้าบ้าน</option>
-          <option value="ออเดอร์ลูกค้า">ออเดอร์ลูกค้า</option>
-          <option value="ย้าย Bay">ย้าย Bay</option>
           <option value="สินค้าชำรุด">สินค้าชำรุด</option>
           <option value="อื่นๆ">อื่นๆ</option>
         </select>
@@ -1600,6 +1363,8 @@
 
   <!-- Supabase SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- html2pdf -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <script>
     window.onerror = function (msg, url, lineNo, columnNo, error) {
       alert('JS Error: ' + msg + '\nLine: ' + lineNo + '\nCol: ' + columnNo);
@@ -1622,30 +1387,7 @@
     let currentBayId = null;
     let itemToDelete = null;
     let isDarkMode = localStorage.getItem('theme') === 'dark';
-    let currentDeptFilter = 'all';
-
-    function filterByDept(dept) {
-      currentDeptFilter = dept;
-      // Update button styles
-      const deptMap = {
-        'all': { id: 'deptBtn-all', color: 'var(--primary)' },
-        'DryFood': { id: 'deptBtn-dry', color: '#e67e22' },
-        'NonFood': { id: 'deptBtn-non', color: '#8e44ad' },
-        'FreshFood': { id: 'deptBtn-fresh', color: '#27ae60' },
-      };
-      Object.entries(deptMap).forEach(([key, val]) => {
-        const btn = document.getElementById(val.id);
-        if (!btn) return;
-        if (key === dept) {
-          btn.style.background = val.color;
-          btn.style.color = '#fff';
-        } else {
-          btn.style.background = 'transparent';
-          btn.style.color = val.color;
-        }
-      });
-      filterMovement();
-    }
+    let globalUserMap = {};
 
     // Config Colors for Depts
     const DEPT_COLORS = {
@@ -1670,7 +1412,6 @@
         currentUser = JSON.parse(savedUser);
         isAdmin = String(currentUser.role).toLowerCase() === 'admin';
         setupUserUI();
-        initPresence();
         document.getElementById('view-login').classList.add('hidden');
         document.getElementById('app-wrapper').classList.remove('hidden');
         navTo('home');
@@ -1700,7 +1441,7 @@
 
     // Navigation
     function navTo(viewId) {
-      ['login', 'home', 'locations', 'bay-details', 'movement', 'admin', 'receive', 'move-bay', 'empty-bays', 'manage-users', 'master-data', 'item-search', 'online-users'].forEach(v => {
+      ['login', 'home', 'locations', 'bay-details', 'movement', 'admin', 'receive', 'move-bay', 'empty-bays', 'manage-users', 'master-data', 'item-search'].forEach(v => {
         const el = document.getElementById('view-' + v);
         if (el) el.classList.add('hidden');
       });
@@ -1709,7 +1450,7 @@
       // Update Bottom Nav
       document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
       let activeId = viewId === 'bay-details' ? 'locations' : viewId;
-      if (activeId === 'item-search' || activeId === 'online-users') activeId = activeId === 'online-users' ? 'admin' : 'home';
+      if (activeId === 'item-search') activeId = 'home';
       const activeNav = document.getElementById('nav-' + activeId);
       if (activeNav) activeNav.classList.add('active');
 
@@ -1717,9 +1458,8 @@
       if (viewId === 'locations') loadLocations();
       if (viewId === 'empty-bays') loadEmptyBays();
       if (viewId === 'manage-users') loadUsers();
-      if (viewId === 'master-data') loadMasterItems(0, true);
-      if (viewId === 'movement') loadMovement(true);
-      if (viewId === 'online-users') loadOnlineUsersView();
+      if (viewId === 'master-data') loadMasterItems();
+      if (viewId === 'movement') loadMovement();
     }
 
     // Theme & Clock
@@ -1781,16 +1521,12 @@
       isAdmin = String(currentUser.role).toLowerCase() === 'admin';
       localStorage.setItem('topstock_user', JSON.stringify(currentUser));
       setupUserUI();
-      initPresence();
       document.getElementById('view-login').classList.add('hidden');
       document.getElementById('app-wrapper').classList.remove('hidden');
       navTo('home');
     }
 
     function doLogout() {
-      if (presenceChannel) {
-        try { presenceChannel.untrack(); presenceChannel.unsubscribe(); } catch (e) { }
-      }
       localStorage.removeItem('topstock_user');
       currentUser = null; isAdmin = false;
       document.getElementById('app-wrapper').classList.add('hidden');
@@ -1806,29 +1542,12 @@
     }
 
     // Dashboard & Locations
-    async function fetchAll(table, select = '*', options = {}) {
-      let allData = [];
-      let from = 0;
-      const step = 1000;
-      while (true) {
-        let query = db.from(table).select(select).range(from, from + step - 1);
-        if (options.orderCol) query = query.order(options.orderCol);
-        if (options.gtCol) query = query.gt(options.gtCol, options.gtVal);
-        const { data, error } = await query;
-        if (error) return { data: null, error };
-        if (!data || data.length === 0) break;
-        allData = allData.concat(data);
-        if (data.length < step) break;
-        from += step;
-      }
-      return { data: allData, error: null };
-    }
     async function loadDashboard() {
       // Get location count
       const { count: locCount } = await db.from('locations').select('*', { count: 'exact', head: true });
 
       // Get active bays (unique locations in stock where qty > 0)
-      const { data: stockData } = await fetchAll('stock', 'aisle_bay, qty', { gtCol: 'qty', gtVal: 0 });
+      const { data: stockData } = await db.from('stock').select('aisle_bay, qty').gt('qty', 0);
 
       let activeBays = 0;
       let totalItems = 0;
@@ -1848,8 +1567,8 @@
       if (!force && locationsData.length > 0) return filterLocations();
       showLoader('กำลังโหลดรายการ...');
 
-      const { data: locs, error: locError } = await fetchAll('locations', '*', { orderCol: 'location_id' });
-      const { data: stocks, error: stockError } = await fetchAll('stock', 'aisle_bay, qty', { gtCol: 'qty', gtVal: 0 });
+      const { data: locs, error: locError } = await db.from('locations').select('*').order('location_id');
+      const { data: stocks, error: stockError } = await db.from('stock').select('aisle_bay, qty').gt('qty', 0);
 
       hideLoader();
 
@@ -1885,8 +1604,6 @@
       uniqueCats.forEach(c => {
         html += `<div class="filter-tab ${currentLocFilter === c ? 'active' : ''}" onclick="setLocFilter('${c}', this)">${c}</div>`;
       });
-      html += `<div class="filter-tab ${currentLocFilter === 'Active' ? 'active' : ''}" onclick="setLocFilter('Active', this)" style="border-color:var(--makro-blue); color:var(--makro-blue);">Active</div>`;
-      html += `<div class="filter-tab ${currentLocFilter === 'Inactive' ? 'active' : ''}" onclick="setLocFilter('Inactive', this)" style="border-color:#64748b; color:#64748b;">Inactive</div>`;
       container.innerHTML = html;
     }
 
@@ -1900,13 +1617,7 @@
     function filterLocations() {
       const q = document.getElementById('locSearch').value.toLowerCase();
       let filtered = locationsData.filter(l => String(l.id).toLowerCase().includes(q) || String(l.name).toLowerCase().includes(q));
-      if (currentLocFilter === 'Active') {
-        filtered = filtered.filter(l => l.itemCount > 0);
-      } else if (currentLocFilter === 'Inactive') {
-        filtered = filtered.filter(l => l.itemCount === 0);
-      } else if (currentLocFilter !== 'All') {
-        filtered = filtered.filter(l => String(l.name).trim() === currentLocFilter);
-      }
+      if (currentLocFilter !== 'All') filtered = filtered.filter(l => String(l.name).trim() === currentLocFilter);
 
       const c = document.getElementById('locationsListContainer');
       if (!filtered.length) { c.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>'; return; }
@@ -1997,12 +1708,12 @@
           .from('item_master')
           .select('item_no, description')
           .in('item_no', itemNos);
-
+          
         const masterMap = {};
         if (masterData) {
           masterData.forEach(m => masterMap[m.item_no] = m.description);
         }
-
+        
         stockData.forEach(r => {
           items.push({
             itemNo: r.item_no,
@@ -2152,22 +1863,9 @@
     }
 
     // Delete Item Flow
-    let deleteMaxQty = 1;
-    function adjustDeleteQty(delta) {
-      const inp = document.getElementById('deleteQty');
-      let v = parseInt(inp.value) + delta;
-      if (v < 1) v = 1;
-      if (v > deleteMaxQty) v = deleteMaxQty;
-      inp.value = v;
-    }
     function openDeleteModal(itemNo, desc, qty) {
       itemToDelete = itemNo;
-      deleteMaxQty = qty || 1;
       document.getElementById('delItemDesc').textContent = desc || '-';
-      document.getElementById('deleteQty').value = deleteMaxQty;
-      document.getElementById('deleteQty').max = deleteMaxQty;
-      document.getElementById('deleteMaxQty').textContent = deleteMaxQty;
-      document.getElementById('deleteReason').selectedIndex = 0;
       document.getElementById('modal-delete-item').classList.remove('hidden');
     }
 
@@ -2175,9 +1873,6 @@
       if (!itemToDelete) return;
       const reason = document.getElementById('deleteReason').value;
       const desc = document.getElementById('delItemDesc').textContent;
-      let deleteQty = parseInt(document.getElementById('deleteQty').value) || 1;
-      if (deleteQty < 1) deleteQty = 1;
-      if (deleteQty > deleteMaxQty) deleteQty = deleteMaxQty;
 
       showLoader('กำลังลบ...');
       closeModal('modal-delete-item');
@@ -2196,7 +1891,7 @@
           location: currentBayId,
           item_no: itemToDelete,
           description: desc,
-          qty: deleteQty,
+          qty: stockData.qty,
           reason: reason,
           user_id: currentUser.id
         });
@@ -2206,35 +1901,23 @@
           item_no: itemToDelete,
           description: desc,
           location: currentBayId,
-          qty: deleteQty,
+          qty: stockData.qty,
           reason: reason,
           user_id: currentUser.id
         });
 
-        // 3. Delete or Update stock based on quantity
-        const remainingQty = stockData.qty - deleteQty;
-        let error;
-        if (remainingQty <= 0) {
-          // ลบทั้งหมด
-          ({ error } = await db
-            .from('stock')
-            .delete()
-            .eq('aisle_bay', currentBayId)
-            .eq('item_no', itemToDelete));
-        } else {
-          // ลบบางส่วน → อัปเดตจำนวนที่เหลือ
-          ({ error } = await db
-            .from('stock')
-            .update({ qty: remainingQty })
-            .eq('aisle_bay', currentBayId)
-            .eq('item_no', itemToDelete));
-        }
+        // 3. Delete from stock
+        const { error } = await db
+          .from('stock')
+          .delete()
+          .eq('aisle_bay', currentBayId)
+          .eq('item_no', itemToDelete);
 
         hideLoader();
         if (error) {
           showToast('ลบไม่สำเร็จ: ' + error.message);
         } else {
-          showToast(`ลบสำเร็จ ${deleteQty} ชิ้น`);
+          showToast('ลบสำเร็จ');
           loadBayDetails(currentBayId, false);
           locationsData = [];
         }
@@ -2268,12 +1951,12 @@
           .from('item_master')
           .select('item_no, description')
           .in('item_no', itemNos);
-
+          
         const masterMap = {};
         if (masterData) {
           masterData.forEach(m => masterMap[m.item_no] = m.description);
         }
-
+        
         stockData.forEach(r => {
           stock.push({
             itemNo: r.item_no,
@@ -2300,9 +1983,9 @@
               .bay-title { font-size: 80px; font-weight: 800; margin: 0; color: #E3000F; line-height: 1; }
               .meta { font-size: 12px; color: #666; margin-top: 10px; }
               table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-              th, td { border: 1.5px solid #000; padding: 12.5px; text-align: left; font-size: 55px; }
+              th, td { border: 1.5px solid #000; padding: 12.5px; text-align: left; font-size: 27.5px; }
               th { background-color: #f8f9fa; font-weight: 800; border-bottom: 2.5px solid #000; }
-              .qty { text-align: center; font-weight: 800; font-size: 65px; color: #E3000F; }
+              .qty { text-align: center; font-weight: 800; font-size: 35px; color: #E3000F; }
               .item-no { font-weight: 700; white-space: nowrap; }
               .desc { font-weight: 700; line-height: 1.3; }
               @media print { .no-print { display: none; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
@@ -2343,7 +2026,7 @@
         });
       }
 
-      html += `</tbody></table></body></html>`;
+      html += `</tbody></table></div></body></html>`;
 
       const printWindow = window.open('', '_blank');
       if (!printWindow) return showToast('Pop-up ถูกบล็อก อนุญาต Pop-up ด้วยครับ');
@@ -2351,270 +2034,78 @@
       printWindow.document.close();
     }
 
-    // ===== CSV PARSING & UPLOAD TOOLS =====
-    function parseCSVText(text) {
-      if (!text) return [];
-      // Remove UTF-8 BOM if present
-      if (text.charCodeAt(0) === 0xFEFF) {
-        text = text.slice(1);
-      }
-      
-      const rows = [];
-      let currentRow = [];
-      let currentField = '';
-      let inQuotes = false;
-      
-      for (let i = 0; i < text.length; i++) {
-        const char = text[i];
-        const nextChar = text[i + 1];
-        
-        if (char === '"') {
-          if (inQuotes && nextChar === '"') {
-            currentField += '"';
-            i++; // skip escaped double quote
-          } else {
-            inQuotes = !inQuotes;
-          }
-        } else if (char === ',' && !inQuotes) {
-          currentRow.push(currentField.trim());
-          currentField = '';
-        } else if ((char === '\r' || char === '\n') && !inQuotes) {
-          if (char === '\r' && nextChar === '\n') {
-            i++; // handle CRLF
-          }
-          currentRow.push(currentField.trim());
-          currentField = '';
-          if (currentRow.length > 0 && currentRow.some(f => f.length > 0)) {
-            rows.push(currentRow);
-          }
-          currentRow = [];
-        } else {
-          currentField += char;
-        }
-      }
-      
-      if (currentField.length > 0 || currentRow.length > 0) {
-        currentRow.push(currentField.trim());
-        if (currentRow.some(f => f.length > 0)) {
-          rows.push(currentRow);
-        }
-      }
-      
-      return rows;
-    }
-
-    function sanitizeBarcodeOrCode(val) {
-      if (val === null || val === undefined) return null;
-      let s = String(val).trim();
-      if (!s || s === 'NULL' || s === 'null' || s === '-') return null;
-      
-      // Remove surrounding quotes or Excel apostrophes
-      s = s.replace(/^['"]+|['"]+$/g, '');
-      
-      // Handle scientific notation e.g. 8.85E+11, 8.851079E+12
-      if (/^[+-]?\d+(\.\d+)?[eE][+-]?\d+$/i.test(s)) {
-        try {
-          const num = Number(s);
-          if (!isNaN(num) && isFinite(num)) {
-            s = BigInt(Math.round(num)).toString();
-          }
-        } catch (e) {}
-      } else {
-        // Remove trailing .0 from numbers like 10001.0
-        s = s.replace(/\.0+$/, '');
-      }
-      
-      return s.trim() || null;
-    }
-
-    // Admin CSV Upload & Template
+    // Admin CSV Upload
     function downloadCSVTemplate() {
-      const headers = "dept_no,class,item_no,barcode,description";
-      const rows = [
-        'DryFood,NonFood,801218,2500008012183,"PM02 เล็บ-150 150มลX1ขวด"',
-        'DryFood,NonFood,8216,8851079000765,"*CHAMPION ถุงขยะดำหนาพิเศษ 30X40"""',
-        'FreshFood,Meat,1053,2840290000000,"สันคอหมูแช่แข็ง 10 กก.ขึ้นไป"'
-      ];
-      const csvContent = headers + "\n" + rows.join("\n") + "\n";
-      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csvContent], { type: 'text/csv;charset=utf-8;' });
+      const csv = "item_no,barcode,description\n10001,885000000001,สินค้าทดสอบ 1\n";
+      const blob = new Blob([new Uint8Array([0xEF, 0xBB, 0xBF]), csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
       link.download = "ItemMaster_Template.csv";
       link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
     async function handleCSVUpload(e) {
       const file = e.target.files[0];
       if (!file) return;
-      e.target.value = ''; // reset file input
+      e.target.value = ''; // reset
 
       const reader = new FileReader();
       reader.onload = async function (evt) {
-        try {
-          const text = evt.target.result;
-          showLoader('กำลังตรวจสอบไฟล์ CSV...');
+        const text = evt.target.result;
+        showLoader('กำลังอัปโหลด CSV...');
 
-          const rows = parseCSVText(text);
-          if (rows.length < 2) {
-            hideLoader();
-            return showToast('ไฟล์ไม่มีข้อมูลหรือรูปแบบไม่ถูกต้อง');
-          }
+        // Simple CSV Parser
+        const lines = text.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+        if (lines.length < 2) {
+          hideLoader();
+          return showToast('ไฟล์ไม่มีข้อมูล');
+        }
 
-          const rawHeaders = rows[0].map(h => h.toLowerCase().replace(/[\s_\-]/g, ''));
+        const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+        const idxItemNo = headers.findIndex(h => h === 'item no' || h === 'itemno' || h === 'item_no');
+        const idxDesc = headers.findIndex(h => h === 'description' || h === 'desc' || h === 'ชื่อสินค้า');
+        const idxBarcode = headers.findIndex(h => h === 'barcode');
+
+        if (idxItemNo === -1 || idxDesc === -1) {
+          hideLoader();
+          return showToast('CSV ต้องมีคอลัมน์ "item_no" และ "description"');
+        }
+
+        const insertsMap = new Map();
+        for (let i = 1; i < lines.length; i++) {
+          // Note: This basic split doesn't handle commas inside quotes properly.
+          const row = lines[i].split(',');
+          if (!row[idxItemNo]) continue;
           
-          // Flexible column matching
-          const idxItemNo = rawHeaders.findIndex(h => h === 'itemno' || h === 'item' || h === 'รหัสสินค้า' || h === 'รหัส');
-          const idxDesc = rawHeaders.findIndex(h => h === 'description' || h === 'desc' || h === 'itemdesc' || h === 'ชื่อสินค้า' || h === 'รายละเอียด' || h === 'ชื่อ');
-          const idxBarcode = rawHeaders.findIndex(h => h === 'barcode' || h === 'บาร์โค้ด' || h === 'บาร์โคด');
-          const idxDept = rawHeaders.findIndex(h => h === 'deptno' || h === 'dept' || h === 'แผนก' || h === 'รหัสแผนก');
-          const idxClass = rawHeaders.findIndex(h => h === 'class' || h === 'classname' || h === 'หมวดหมู่' || h === 'หมวด');
+          const itemNo = row[idxItemNo].trim();
+          if (!itemNo) continue;
 
-          if (idxItemNo === -1) {
-            hideLoader();
-            return Swal.fire({
-              icon: 'error',
-              title: 'ไม่พบคอลัมน์รหัสสินค้า',
-              text: 'กรุณาตรวจสอบว่ามีหัวตารางชื่อ "item_no" หรือ "รหัสสินค้า"'
-            });
-          }
-
-          const insertsMap = new Map();
-          for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
-            if (!row || row.length === 0) continue;
-
-            const rawItemNo = row[idxItemNo];
-            const itemNo = sanitizeBarcodeOrCode(rawItemNo);
-            if (!itemNo) continue;
-
-            const desc = idxDesc !== -1 && row[idxDesc] ? row[idxDesc].trim() : '-';
-            const barcode = idxBarcode !== -1 ? sanitizeBarcodeOrCode(row[idxBarcode]) : null;
-            const dept = idxDept !== -1 && row[idxDept] ? row[idxDept].trim() : null;
-            const cls = idxClass !== -1 && row[idxClass] ? row[idxClass].trim() : null;
-
-            insertsMap.set(itemNo, {
-              item_no: itemNo,
-              description: desc || '-',
-              barcode: barcode || null,
-              dept_no: dept || null,
-              class: cls || null
-            });
-          }
-
-          const inserts = Array.from(insertsMap.values());
-          if (inserts.length === 0) {
-            hideLoader();
-            return showToast('ไม่พบรายการสินค้าที่ถูกต้องในไฟล์');
-          }
-
-          // Batch upsert to Supabase
-          const BATCH_SIZE = 500;
-          let successCount = 0;
-
-          for (let i = 0; i < inserts.length; i += BATCH_SIZE) {
-            const batch = inserts.slice(i, i + BATCH_SIZE);
-            const progress = Math.min(i + batch.length, inserts.length);
-            showLoader(`กำลังบันทึกข้อมูล (${progress.toLocaleString()} / ${inserts.length.toLocaleString()} รายการ)...`);
-
-            const { error } = await db.from('item_master').upsert(batch, { onConflict: 'item_no' });
-            if (error) {
-              hideLoader();
-              return Swal.fire({
-                icon: 'error',
-                title: 'เกิดข้อผิดพลาดในการบันทึก',
-                text: `แถวที่ ${i + 1}: ${error.message}`
-              });
-            }
-            successCount += batch.length;
-          }
-
-          hideLoader();
-          await Swal.fire({
-            icon: 'success',
-            title: 'อัปโหลดสำเร็จ!',
-            html: `นำเข้าข้อมูลสินค้าทั้งหมด <b>${successCount.toLocaleString()}</b> รายการเรียบร้อยแล้ว`,
-            confirmButtonColor: '#10b981'
+          insertsMap.set(itemNo, {
+            item_no: itemNo,
+            description: row[idxDesc] ? row[idxDesc].trim() : '',
+            barcode: (idxBarcode !== -1 && row[idxBarcode]) ? row[idxBarcode].trim() : null
           });
-
-          loadMasterItems(0, true);
-        } catch (err) {
-          hideLoader();
-          Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.message });
         }
-      };
-      reader.readAsText(file, 'utf-8');
-    }
+        
+        const inserts = Array.from(insertsMap.values());
 
-    async function handleUserCSVUpload(e) {
-      const file = e.target.files[0];
-      if (!file) return;
-      e.target.value = '';
-
-      const reader = new FileReader();
-      reader.onload = async function (evt) {
-        try {
-          const text = evt.target.result;
-          showLoader('กำลังอัปโหลด Users CSV...');
-
-          const rows = parseCSVText(text);
-          if (rows.length < 2) {
+        // Upsert items in batches of 1000 (UNIQUE constraint on item_no exists)
+        let successCount = 0;
+        for (let i = 0; i < inserts.length; i += 1000) {
+          const batch = inserts.slice(i, i + 1000);
+          const { error } = await db
+            .from('item_master')
+            .upsert(batch, { onConflict: 'item_no' });
+          if (error) {
             hideLoader();
-            return showToast('ไฟล์ไม่มีข้อมูล');
+            return showToast('Error ที่แถว ' + (i + 1) + ': ' + error.message);
           }
-
-          const rawHeaders = rows[0].map(h => h.toLowerCase().replace(/[\s_\-]/g, ''));
-          const idIdx = rawHeaders.findIndex(h => h === 'userid' || h === 'user_id' || h === 'id' || h === 'รหัสพนักงาน');
-          const passIdx = rawHeaders.findIndex(h => h === 'password' || h === 'pass' || h === 'รหัสผ่าน');
-          const nameIdx = rawHeaders.findIndex(h => h === 'name' || h === 'fullname' || h === 'ชื่อ');
-          const posIdx = rawHeaders.findIndex(h => h === 'position' || h === 'pos' || h === 'ตำแหน่ง');
-          const roleIdx = rawHeaders.findIndex(h => h === 'role' || h === 'สิทธิ์');
-
-          if (idIdx === -1 || nameIdx === -1) {
-            hideLoader();
-            return showToast('CSV ต้องมีคอลัมน์ "user_id" และ "name"');
-          }
-
-          const insertsMap = new Map();
-          for (let i = 1; i < rows.length; i++) {
-            const row = rows[i];
-            if (!row || !row[idIdx]) continue;
-            
-            let userId = sanitizeBarcodeOrCode(row[idIdx]);
-            if (!userId) continue;
-
-            // แก้ปัญหา Excel ลบเลข 0 ด้านหน้า
-            userId = String(userId).padStart(8, '0');
-
-            insertsMap.set(userId, {
-              user_id: userId,
-              password: (passIdx !== -1 && row[passIdx]) ? row[passIdx].trim() : 'Makro#100',
-              name: row[nameIdx] ? row[nameIdx].trim() : '-',
-              position: (posIdx !== -1 && row[posIdx]) ? row[posIdx].trim() : '-',
-              role: (roleIdx !== -1 && row[roleIdx]) ? row[roleIdx].trim() : 'User'
-            });
-          }
-
-          const inserts = Array.from(insertsMap.values());
-          let successCount = 0;
-          for (let i = 0; i < inserts.length; i += 500) {
-            const batch = inserts.slice(i, i + 500);
-            const { error } = await db.from('users').upsert(batch, { onConflict: 'user_id' });
-            if (error) {
-              hideLoader();
-              return showToast('Error: ' + error.message);
-            }
-            successCount += batch.length;
-          }
-
-          hideLoader();
-          loadUsers();
-          showToast(`อัปโหลดสำเร็จ ${successCount} รายการ`, 'success');
-        } catch (err) {
-          hideLoader();
-          showToast('เกิดข้อผิดพลาด: ' + err.message);
+          successCount += batch.length;
         }
+
+        hideLoader();
+        showToast(`อัปโหลดสำเร็จ ${successCount} รายการ`, 'success');
       };
       reader.readAsText(file, 'utf-8');
     }
@@ -2642,7 +2133,7 @@
             onInputRecvItem();
             Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'สแกนสำเร็จ: ' + decodedText, showConfirmButton: false, timer: 2000 });
           },
-          () => { }
+          () => {}
         );
       } catch (err) {
         showToast('เปิดกล้องไม่ได้: ' + err);
@@ -2655,7 +2146,7 @@
       document.getElementById('btnStopScan').classList.add('hidden');
       document.getElementById('recv-camera-preview').style.display = 'none';
       if (recvScanner) {
-        try { await recvScanner.stop(); } catch (e) { }
+        try { await recvScanner.stop(); } catch(e) {}
       }
     }
 
@@ -2676,7 +2167,7 @@
             onInputItemCode();
             Swal.fire({ toast: true, position: 'top', icon: 'success', title: 'สแกนสำเร็จ: ' + decodedText, showConfirmButton: false, timer: 2000 });
           },
-          () => { }
+          () => {}
         );
       } catch (err) {
         showToast('เปิดกล้องไม่ได้: ' + err);
@@ -2689,7 +2180,7 @@
       document.getElementById('btnModalStopScan').classList.add('hidden');
       document.getElementById('modal-camera-preview').style.display = 'none';
       if (modalScanner) {
-        try { await modalScanner.stop(); } catch (e) { }
+        try { await modalScanner.stop(); } catch(e) {}
       }
     }
 
@@ -2868,8 +2359,8 @@
     async function loadEmptyBays() {
       showLoader('กำลังค้นหา Bay ว่าง...');
 
-      const { data: allLocs } = await fetchAll('locations', 'location_id');
-      const { data: activeStock } = await fetchAll('stock', 'aisle_bay', { gtCol: 'qty', gtVal: 0 });
+      const { data: allLocs } = await db.from('locations').select('location_id');
+      const { data: activeStock } = await db.from('stock').select('aisle_bay').gt('qty', 0);
 
       hideLoader();
       if (!allLocs) return showToast('โหลดข้อมูลล้มเหลว');
@@ -2980,11 +2471,7 @@
     }
 
     // ===== MASTER DATA FUNCTIONS =====
-    let masterItemsList = [];
-    let masterItemsPage = 0;
-    const MASTER_PAGE_SIZE = 50;
-    let masterItemsHasMore = true;
-    let masterSearchTimeout = null;
+    let allMasterItems = [];
     let allMasterBays = [];
 
     function switchMasterTab(tab) {
@@ -2995,7 +2482,7 @@
         document.getElementById('masterTabItems').style.color = 'white';
         document.getElementById('masterTabBays').style.background = 'var(--card-bg)';
         document.getElementById('masterTabBays').style.color = 'var(--text-blue)';
-        loadMasterItems(0, true);
+        loadMasterItems();
       } else {
         document.getElementById('masterBaysContent').classList.remove('hidden');
         document.getElementById('masterItemsContent').classList.add('hidden');
@@ -3007,129 +2494,49 @@
       }
     }
 
-    async function loadMasterItems(page = 0, reset = false) {
-      try {
-        showLoader(page === 0 ? 'กำลังโหลดรายการสินค้า...' : 'กำลังโหลดเพิ่มเติม...');
-        if (reset) {
-          masterItemsPage = 0;
-          masterItemsList = [];
-          masterItemsHasMore = true;
-        }
-
-        const from = page * MASTER_PAGE_SIZE;
-        const to = from + MASTER_PAGE_SIZE - 1;
-
-        const { data, count, error } = await db
-          .from('item_master')
-          .select('*', { count: 'exact' })
-          .order('item_no')
-          .range(from, to);
-
-        if (error) {
-          showToast('Error: ' + error.message);
-          return;
-        }
-
-        if (data) {
-          if (reset) {
-            masterItemsList = data;
-          } else {
-            masterItemsList = masterItemsList.concat(data);
-          }
-          masterItemsHasMore = data.length === MASTER_PAGE_SIZE;
-          masterItemsPage = page;
-        } else {
-          masterItemsHasMore = false;
-        }
-
-        renderMasterItems(masterItemsList, count);
-      } catch (err) {
-        showToast('เกิดข้อผิดพลาด: ' + err.message);
-      } finally {
-        hideLoader();
-      }
-    }
-
-    function loadMoreMasterItems() {
-      if (!masterItemsHasMore) return;
-      loadMasterItems(masterItemsPage + 1, false);
+    async function loadMasterItems() {
+      showLoader('กำลังโหลดรายการสินค้า...');
+      const { data, error } = await db.from('item_master').select('*').order('item_no').limit(200);
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      allMasterItems = data || [];
+      renderMasterItems(allMasterItems);
     }
 
     function searchMasterItems() {
-      clearTimeout(masterSearchTimeout);
-      const q = document.getElementById('masterItemSearch').value.trim();
-
-      if (!q) {
-        renderMasterItems(masterItemsList);
-        return;
-      }
-
-      masterSearchTimeout = setTimeout(async () => {
-        try {
-          showLoader('กำลังค้นหา...');
-          const { data, error } = await db
-            .from('item_master')
-            .select('*')
-            .or(`item_no.ilike.%${q}%,description.ilike.%${q}%,barcode.ilike.%${q}%`)
-            .order('item_no')
-            .limit(50);
-
-          if (error) {
-            showToast('ค้นหาผิดพลาด: ' + error.message);
-            return;
-          }
-          renderMasterItems(data || [], (data || []).length, true);
-        } catch (err) {
-          showToast('Error: ' + err.message);
-        } finally {
-          hideLoader();
-        }
-      }, 350);
+      const q = document.getElementById('masterItemSearch').value.toLowerCase();
+      const filtered = allMasterItems.filter(it =>
+        String(it.item_no).toLowerCase().includes(q) ||
+        String(it.description || '').toLowerCase().includes(q) ||
+        String(it.barcode || '').toLowerCase().includes(q)
+      );
+      renderMasterItems(filtered);
     }
 
-    function renderMasterItems(items, totalCount = null, isSearch = false) {
+    function renderMasterItems(items) {
       const container = document.getElementById('masterItemsList');
-      if (!items || !items.length) {
-        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:36px; color:var(--border); margin-bottom:8px;"></i><br/>ไม่พบข้อมูลสินค้า</div>';
+      if (!items.length) {
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบข้อมูล</div>';
         return;
       }
-
-      let infoText = '';
-      if (isSearch) {
-        infoText = `<div style="font-size:12px; color:var(--text-light); margin-bottom:12px; padding:0 4px;">ผลการค้นหาพบ ${items.length} รายการ</div>`;
-      } else if (totalCount !== null) {
-        infoText = `<div style="font-size:12px; color:var(--text-light); margin-bottom:12px; padding:0 4px;">แสดง ${items.length} จากทั้งหมด ${totalCount.toLocaleString()} รายการ</div>`;
-      }
-
-      let html = infoText;
+      let html = '';
       items.forEach(it => {
         html += `
-          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; align-items:flex-start;">
-              <div style="flex:1; min-width:0; margin-right:12px;">
+              <div style="flex:1;">
                 <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${it.item_no}</div>
-                <div style="font-size:14px; color:var(--text-light); margin-top:4px; word-break:break-word;">${it.description || '-'}</div>
-                <div style="display:flex; gap:6px; margin-top:8px; flex-wrap:wrap; align-items:center;">
-                  ${it.barcode ? `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-blue); color:var(--text-blue); font-weight:600;"><i class="fa-solid fa-barcode" style="margin-right:4px;"></i>${it.barcode}</span>` : ''}
-                  ${it.dept_no ? `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-green); color:var(--text-green); font-weight:600;"><i class="fa-solid fa-layer-group" style="margin-right:4px;"></i>${it.dept_no}</span>` : ''}
-                  ${it.class ? `<span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-orange); color:var(--text-orange); font-weight:600;"><i class="fa-solid fa-tag" style="margin-right:4px;"></i>${it.class}</span>` : ''}
+                <div style="font-size:14px; color:var(--text-light); margin-top:4px;">${it.description || '-'}</div>
+                <div style="display:flex; gap:8px; margin-top:8px; flex-wrap:wrap;">
+                  <span style="font-size:11px; padding:3px 8px; border-radius:12px; background:var(--pastel-blue); color:var(--text-blue); font-weight:600;"><i class="fa-solid fa-barcode" style="margin-right:4px;"></i>${it.barcode || '-'}</span>
                 </div>
               </div>
               <div style="display:flex; gap:8px;">
-                <div onclick="deleteMasterItem('${it.item_no}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;" title="ลบสินค้า"><i class="fa-solid fa-trash-can"></i></div>
+                <div onclick="deleteMasterItem('${it.item_no}')" style="width:36px; height:36px; border-radius:10px; background:var(--pastel-red); color:var(--text-red); display:flex; align-items:center; justify-content:center; cursor:pointer;"><i class="fa-solid fa-trash-can"></i></div>
               </div>
             </div>
           </div>`;
       });
-
-      if (!isSearch && masterItemsHasMore) {
-        html += `
-          <div style="text-align:center; margin-top:16px; margin-bottom:20px;">
-            <button class="btn btn-outline" style="border-color:var(--text-blue); color:var(--text-blue); font-weight:700;" onclick="loadMoreMasterItems()"><i class="fa-solid fa-arrow-down"></i> โหลดสินค้าเพิ่มเติม (+50)</button>
-          </div>
-        `;
-      }
-
       container.innerHTML = html;
     }
 
@@ -3137,8 +2544,6 @@
       document.getElementById('addMasterItemNo').value = '';
       document.getElementById('addMasterBarcode').value = '';
       document.getElementById('addMasterDesc').value = '';
-      document.getElementById('addMasterDept').value = '';
-      document.getElementById('addMasterClass').value = '';
       document.getElementById('modal-add-master-item').classList.remove('hidden');
     }
 
@@ -3146,22 +2551,14 @@
       const itemNo = document.getElementById('addMasterItemNo').value.trim();
       const barcode = document.getElementById('addMasterBarcode').value.trim();
       const desc = document.getElementById('addMasterDesc').value.trim();
-      const dept = document.getElementById('addMasterDept').value.trim();
-      const cls = document.getElementById('addMasterClass').value.trim();
       if (!itemNo || !desc) return showToast('กรุณากรอกรหัสสินค้าและชื่อสินค้า');
       showLoader('กำลังบันทึก...');
-      const { error } = await db.from('item_master').upsert({
-        item_no: itemNo,
-        barcode: barcode || null,
-        description: desc,
-        dept_no: dept || null,
-        class: cls || null
-      }, { onConflict: 'item_no' });
+      const { error } = await db.from('item_master').upsert({ item_no: itemNo, barcode: barcode || null, description: desc }, { onConflict: 'item_no' });
       hideLoader();
       if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
       showToast('บันทึกสำเร็จ!', 'success');
       closeModal('modal-add-master-item');
-      loadMasterItems(0, true);
+      loadMasterItems();
     }
 
     async function deleteMasterItem(itemNo) {
@@ -3180,25 +2577,17 @@
       hideLoader();
       if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
       showToast('ลบสำเร็จ', 'success');
-      loadMasterItems(0, true);
+      loadMasterItems();
     }
 
     // === Master Bays ===
     async function loadMasterBays() {
-      try {
-        showLoader('กำลังโหลด Location...');
-        const { data, error } = await db.from('locations').select('*').order('location_id');
-        if (error) {
-          showToast('Error: ' + error.message);
-          return;
-        }
-        allMasterBays = data || [];
-        renderMasterBays(allMasterBays);
-      } catch (err) {
-        showToast('Error: ' + err.message);
-      } finally {
-        hideLoader();
-      }
+      showLoader('กำลังโหลด Location...');
+      const { data, error } = await db.from('locations').select('*').order('location_id').limit(200);
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      allMasterBays = data || [];
+      renderMasterBays(allMasterBays);
     }
 
     function searchMasterBays() {
@@ -3253,7 +2642,7 @@
       showToast('บันทึกสำเร็จ!', 'success');
       closeModal('modal-add-bay');
       loadMasterBays();
-      locationsData = [];
+      locationsData = []; // invalidate locations cache
     }
 
     async function deleteMasterBay(locId) {
@@ -3273,65 +2662,67 @@
       if (error) return showToast('ลบไม่สำเร็จ: ' + error.message);
       showToast('ลบสำเร็จ', 'success');
       loadMasterBays();
-      locationsData = [];
+      locationsData = []; // invalidate
     }
-
     // ===== GLOBAL ITEM SEARCH =====
     let searchGlobalTimeout = null;
     async function searchGlobalItem() {
       clearTimeout(searchGlobalTimeout);
       const q = document.getElementById('globalItemSearch').value.trim().toLowerCase();
       const container = document.getElementById('globalSearchResult');
-
+      
       if (!q) {
         container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);"><i class="fa-solid fa-box-open" style="font-size:40px; margin-bottom:10px; color:var(--border);"></i><br/>พิมพ์เพื่อค้นหาสินค้าว่าถูกเก็บอยู่ที่ Bay ไหนบ้าง</div>';
         return;
       }
-
+      
       container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">กำลังค้นหา...</div>';
-
+      
       searchGlobalTimeout = setTimeout(async () => {
+        // Find matching items in master first
         const { data: masterData } = await db.from('item_master')
           .select('item_no, description, barcode')
           .or(`item_no.ilike.%${q}%,description.ilike.%${q}%,barcode.ilike.%${q}%`)
           .limit(20);
-
+          
         if (!masterData || masterData.length === 0) {
           container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบสินค้าที่ตรงกับคำค้นหา</div>';
           return;
         }
-
+        
         const itemNos = masterData.map(m => m.item_no);
         const masterMap = {};
         masterData.forEach(m => masterMap[m.item_no] = m);
-
+        
+        // Find stock for these items
         const { data: stockData, error } = await db.from('stock')
           .select('item_no, aisle_bay, qty')
           .in('item_no', itemNos)
           .gt('qty', 0);
-
+          
         if (error) {
           container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-red);">Error: ' + error.message + '</div>';
           return;
         }
-
+        
         if (!stockData || stockData.length === 0) {
           container.innerHTML = '<div class="text-center" style="padding:40px; color:var(--text-light);">ไม่พบสินค้านี้ในสต๊อก (ไม่มีของในคลัง)</div>';
           return;
         }
-
+        
+        // Group by item_no
         const grouped = {};
         stockData.forEach(s => {
           if (!grouped[s.item_no]) grouped[s.item_no] = [];
           grouped[s.item_no].push(s);
         });
-
+        
         let html = '';
         Object.keys(grouped).forEach(itemNo => {
           const master = masterMap[itemNo];
           const locations = grouped[itemNo];
           const totalQty = locations.reduce((sum, loc) => sum + loc.qty, 0);
-
+          
           let locHtml = '';
           locations.forEach(loc => {
             locHtml += `
@@ -3341,13 +2732,13 @@
               </div>
             `;
           });
-
+          
           html += `
             <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:16px; box-shadow:0 4px 10px rgba(0,0,0,0.03);">
               <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                 <div>
                   <div style="font-weight:800; font-size:18px; color:var(--text-dark);">${itemNo}</div>
-                  <div style="font-size:14px; color:var(--text-light); margin-top:2px;">${master ? (master.description || '-') : '-'}</div>
+                  <div style="font-size:14px; color:var(--text-light); margin-top:2px;">${master.description || '-'}</div>
                 </div>
                 <div style="background:var(--pastel-green); color:var(--text-green); padding:4px 12px; border-radius:20px; font-weight:800; font-size:14px;">
                   รวม ${totalQty}
@@ -3359,461 +2750,136 @@
             </div>
           `;
         });
-
+        
         container.innerHTML = html;
       }, 500);
     }
 
-    // ===== ONLINE USERS SYSTEM =====
-    let presenceChannel = null;
-    let liveOnlineUsers = [];
-    let allSystemUsers = [];
-
-    function initPresence() {
-      if (!currentUser) return;
-
-      try {
-        if (presenceChannel) {
-          presenceChannel.unsubscribe();
-        }
-
-        presenceChannel = db.channel('topstock_presence_v1', {
-          config: {
-            presence: { key: currentUser.id }
-          }
-        });
-
-        presenceChannel
-          .on('presence', { event: 'sync' }, () => {
-            const state = presenceChannel.presenceState();
-            const usersMap = new Map();
-            for (const key in state) {
-              state[key].forEach(p => {
-                if (p.user_id) {
-                  usersMap.set(p.user_id, p);
-                }
-              });
-            }
-            liveOnlineUsers = Array.from(usersMap.values());
-            updateOnlineBadgesAndList();
-          })
-          .subscribe(async (status) => {
-            if (status === 'SUBSCRIBED') {
-              await presenceChannel.track({
-                user_id: currentUser.id,
-                name: currentUser.name,
-                role: currentUser.role,
-                position: currentUser.position || 'Staff',
-                online_at: new Date().toISOString(),
-                device: navigator.userAgent.includes('Mobile') ? 'มือถือ' : 'คอมพิวเตอร์'
-              });
-            }
-          });
-
-        window.addEventListener('beforeunload', () => {
-          if (presenceChannel) presenceChannel.untrack();
-        });
-      } catch (err) {
-        console.error('Presence error:', err);
-      }
-    }
-
-    function updateOnlineBadgesAndList() {
-      if (currentUser && !liveOnlineUsers.some(u => u.user_id === currentUser.id)) {
-        liveOnlineUsers.push({
-          user_id: currentUser.id,
-          name: currentUser.name,
-          role: currentUser.role,
-          position: currentUser.position || 'Staff',
-          online_at: new Date().toISOString(),
-          device: 'อุปกรณ์นี้'
-        });
-      }
-
-      const count = liveOnlineUsers.length;
-
-      const adminBadge = document.getElementById('adminOnlineCountBadge');
-      if (adminBadge) {
-        adminBadge.textContent = `${count} คน`;
-      }
-
-      const onlineNumEl = document.getElementById('onlineCountNum');
-      if (onlineNumEl) {
-        onlineNumEl.innerHTML = `${count} <span style="font-size:14px; font-weight:normal;">คน</span>`;
-      }
-
-      renderOnlineUsersLists();
-    }
-
-    async function loadOnlineUsersView() {
-      showLoader('กำลังโหลดสถานะผู้ใช้...');
-      try {
-        const { data, error } = await db.from('users').select('*').order('name');
-        if (!error && data) {
-          allSystemUsers = data;
-          const totalEl = document.getElementById('totalRegisteredUsersNum');
-          if (totalEl) totalEl.innerHTML = `${data.length} <span style="font-size:14px; font-weight:normal;">คน</span>`;
-        }
-        updateOnlineBadgesAndList();
-      } catch (e) {
-        console.error(e);
-      } finally {
-        hideLoader();
-      }
-    }
-
-    function refreshOnlineUsers() {
-      loadOnlineUsersView();
-      showToast('อัปเดตสถานะสำเร็จ', 'success');
-    }
-
-    function renderOnlineUsersLists() {
-      const activeContainer = document.getElementById('activeOnlineUsersList');
-      const allContainer = document.getElementById('allUsersStatusList');
-      if (!activeContainer || !allContainer) return;
-
-      // 1. Render Active Online Users
-      if (liveOnlineUsers.length === 0) {
-        activeContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light); background:var(--card-bg); border-radius:16px; border:1px solid var(--border);">ไม่มีผู้ใช้ออนไลน์</div>';
-      } else {
-        let actHtml = '';
-        liveOnlineUsers.forEach(u => {
-          const isMe = currentUser && u.user_id === currentUser.id;
-          const roleColor = (u.role || '').toLowerCase() === 'admin' ? 'var(--text-purple)' : 'var(--text-blue)';
-          const d = u.online_at ? new Date(u.online_at) : new Date();
-          const timeStr = d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-
-          actHtml += `
-            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:14px 16px; margin-bottom:10px; display:flex; align-items:center; gap:12px; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
-              <div style="position:relative;">
-                <div style="width:44px; height:44px; border-radius:50%; background:var(--pastel-green); display:flex; align-items:center; justify-content:center; color:var(--text-green); font-size:18px;">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <div class="pulse-dot" style="position:absolute; bottom:0; right:0; border:2px solid var(--card-bg);"></div>
-              </div>
-              <div style="flex:1; min-width:0;">
-                <div style="font-weight:800; font-size:15px; color:var(--text-dark); display:flex; align-items:center; gap:6px;">
-                  ${u.name || u.user_id}
-                  ${isMe ? '<span style="font-size:10px; background:var(--pastel-blue); color:var(--text-blue); padding:1px 6px; border-radius:10px; font-weight:700;">(คุณ)</span>' : ''}
-                </div>
-                <div style="font-size:12px; color:var(--text-light); margin-top:2px;">
-                  ${u.user_id} • ${u.position || 'Staff'} • เข้าเมื่อ ${timeStr} น.
-                </div>
-              </div>
-              <div style="text-align:right;">
-                <div style="font-size:10px; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid ${roleColor}; color:${roleColor}; margin-bottom:4px; display:inline-block;">
-                  ${(u.role || 'USER').toUpperCase()}
-                </div>
-                <div class="badge-online" style="font-size:10px; padding:2px 8px;">
-                  <span class="pulse-dot" style="width:6px; height:6px;"></span> ออนไลน์
-                </div>
-              </div>
-            </div>
-          `;
-        });
-        activeContainer.innerHTML = actHtml;
-      }
-
-      // 2. Render All Users with Status
-      if (allSystemUsers.length === 0) {
-        allContainer.innerHTML = '<div style="text-align:center; padding:20px; color:var(--text-light);">ไม่พบรายชื่อผู้ใช้</div>';
-      } else {
-        const onlineSet = new Set(liveOnlineUsers.map(u => u.user_id));
-        let allHtml = '';
-        allSystemUsers.forEach(u => {
-          const isOnline = onlineSet.has(u.user_id) || (currentUser && u.user_id === currentUser.id);
-          const roleColor = (u.role || '').toLowerCase() === 'admin' ? 'var(--text-purple)' : 'var(--text-blue)';
-
-          allHtml += `
-            <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:12px 16px; margin-bottom:10px; display:flex; align-items:center; justify-content:space-between;">
-              <div style="display:flex; align-items:center; gap:12px;">
-                <div style="width:38px; height:38px; border-radius:50%; background:${isOnline ? 'var(--pastel-green)' : 'var(--bg-color)'}; display:flex; align-items:center; justify-content:center; color:${isOnline ? 'var(--text-green)' : 'var(--text-light)'}; font-size:16px;">
-                  <i class="fa-solid fa-user"></i>
-                </div>
-                <div>
-                  <div style="font-weight:700; font-size:14px; color:var(--text-dark);">${u.name}</div>
-                  <div style="font-size:11px; color:var(--text-light);">${u.user_id} • ${u.position || '-'}</div>
-                </div>
-              </div>
-              <div style="display:flex; align-items:center; gap:8px;">
-                <span style="font-size:10px; font-weight:700; padding:2px 8px; border-radius:10px; border:1px solid ${roleColor}; color:${roleColor};">${(u.role || 'USER').toUpperCase()}</span>
-                ${isOnline
-              ? `<span class="badge-online"><span class="pulse-dot" style="width:6px; height:6px;"></span> ออนไลน์</span>`
-              : `<span class="badge-offline"><i class="fa-solid fa-moon" style="font-size:9px;"></i> ออฟไลน์</span>`
-            }
-              </div>
-            </div>
-          `;
-        });
-        allContainer.innerHTML = allHtml;
-      }
-    }
-
-    // ===== MOVEMENT LOG (ENHANCED) =====
+    // ===== MOVEMENT LOG =====
     let allMovements = [];
-    let movementPage = 0;
-    const MOVEMENT_PAGE_SIZE = 50;
-    let movementHasMore = true;
-    let movementDateFilter = 'all'; // 'all', 'today', 'yesterday', '7days', '30days', 'custom'
-    let movementCustomFrom = null;
-    let movementCustomTo = null;
-    let movementTypeFilter = 'all'; // 'all', 'IN', 'OUT'
+    
+    async function loadMovement() {
+      showLoader('กำลังโหลดประวัติ...');
 
-    async function loadMovement(reset = true) {
-      if (locationsData.length === 0) {
-        await loadLocations();
+      // Load users into map if empty
+      if (Object.keys(globalUserMap).length === 0) {
+        const { data: usersData } = await db.from('users').select('user_id, name');
+        if (usersData) {
+          usersData.forEach(u => {
+            globalUserMap[u.user_id] = u.name;
+          });
+        }
       }
 
-      try {
-        showLoader(reset ? 'กำลังโหลดประวัติ...' : 'กำลังโหลดเพิ่มเติม...');
-        if (reset) {
-          movementPage = 0;
-          allMovements = [];
-          movementHasMore = true;
-        }
-
-        const from = movementPage * MOVEMENT_PAGE_SIZE;
-        const to = from + MOVEMENT_PAGE_SIZE - 1;
-
-        let query = db.from('movement').select('*', { count: 'exact' });
-
-        // Apply Date Filters
-        const now = new Date();
-        if (movementDateFilter === 'today') {
-          const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-          query = query.gte('created_at', startOfToday.toISOString());
-        } else if (movementDateFilter === 'yesterday') {
-          const startOfYest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 0, 0, 0);
-          const endOfYest = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1, 23, 59, 59, 999);
-          query = query.gte('created_at', startOfYest.toISOString()).lte('created_at', endOfYest.toISOString());
-        } else if (movementDateFilter === '7days') {
-          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          query = query.gte('created_at', sevenDaysAgo.toISOString());
-        } else if (movementDateFilter === '30days') {
-          const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-          query = query.gte('created_at', thirtyDaysAgo.toISOString());
-        } else if (movementDateFilter === 'custom' && movementCustomFrom) {
-          const startD = new Date(movementCustomFrom + 'T00:00:00');
-          query = query.gte('created_at', startD.toISOString());
-          if (movementCustomTo) {
-            const endD = new Date(movementCustomTo + 'T23:59:59.999');
-            query = query.lte('created_at', endD.toISOString());
-          }
-        }
-
-        if (movementTypeFilter !== 'all') {
-          query = query.eq('type', movementTypeFilter);
-        }
-
-        const { data, count, error } = await query
-          .order('created_at', { ascending: false })
-          .range(from, to);
-
-        if (error) {
-          showToast('Error: ' + error.message);
-          return;
-        }
-
-        if (data) {
-          if (reset) {
-            allMovements = data;
-          } else {
-            allMovements = allMovements.concat(data);
-          }
-          movementHasMore = data.length === MOVEMENT_PAGE_SIZE;
-        } else {
-          movementHasMore = false;
-        }
-
-        filterMovement(count);
-      } catch (err) {
-        showToast('Error: ' + err.message);
-      } finally {
-        hideLoader();
-      }
+      const { data, error } = await db.from('movement').select('*').order('created_at', { ascending: false }).limit(100);
+      hideLoader();
+      if (error) return showToast('Error: ' + error.message);
+      
+      allMovements = data || [];
+      renderMovements(allMovements);
     }
-
-    function loadMoreMovement() {
-      if (!movementHasMore) return;
-      movementPage++;
-      loadMovement(false);
-    }
-
-    function setDateFilter(filterType) {
-      movementDateFilter = filterType;
-      document.querySelectorAll('#movementDateFilters .filter-tab').forEach(b => b.classList.remove('active'));
-      const activeBtn = document.getElementById('dateFilterBtn-' + filterType);
-      if (activeBtn) activeBtn.classList.add('active');
-
-      const customBox = document.getElementById('customDateRangeBox');
-      if (filterType !== 'custom' && customBox) {
-        customBox.classList.add('hidden');
-      }
-
-      loadMovement(true);
-    }
-
-    function toggleCustomDatePicker() {
-      const customBox = document.getElementById('customDateRangeBox');
-      if (customBox.classList.contains('hidden')) {
-        customBox.classList.remove('hidden');
-        document.querySelectorAll('#movementDateFilters .filter-tab').forEach(b => b.classList.remove('active'));
-        document.getElementById('dateFilterBtn-custom').classList.add('active');
-
-        const now = new Date();
-        const todayStr = now.toISOString().split('T')[0];
-        if (!document.getElementById('movementDateTo').value) document.getElementById('movementDateTo').value = todayStr;
-        if (!document.getElementById('movementDateFrom').value) {
-          const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-          document.getElementById('movementDateFrom').value = sevenDaysAgo.toISOString().split('T')[0];
-        }
-      } else {
-        customBox.classList.add('hidden');
-      }
-    }
-
-    function applyCustomDateFilter() {
-      const from = document.getElementById('movementDateFrom').value;
-      const to = document.getElementById('movementDateTo').value;
-      if (!from) return showToast('กรุณาเลือกวันที่เริ่มต้น');
-      movementDateFilter = 'custom';
-      movementCustomFrom = from;
-      movementCustomTo = to || from;
-      loadMovement(true);
-    }
-
-    function resetCustomDateFilter() {
-      document.getElementById('movementDateFrom').value = '';
-      document.getElementById('movementDateTo').value = '';
-      movementCustomFrom = null;
-      movementCustomTo = null;
-      setDateFilter('all');
-    }
-
-    function setTypeFilter(t) {
-      movementTypeFilter = t;
-      ['all', 'IN', 'OUT'].forEach(type => {
-        const el = document.getElementById('typeFilter-' + type);
-        if (el) {
-          if (type === t) {
-            el.classList.add('active');
-            el.style.fontWeight = '700';
-          } else {
-            el.classList.remove('active');
-            el.style.fontWeight = '500';
-          }
-        }
-      });
-      loadMovement(true);
-    }
-
-    function filterMovement(totalCount = null) {
+    
+    function filterMovement() {
       const q = document.getElementById('movementSearch').value.toLowerCase();
-      const filtered = allMovements.filter(m => {
-        const locId = String(m.location || '');
-
-        // กรองแผนก
-        if (currentDeptFilter !== 'all') {
-          const locObj = locationsData.find(l => l.id === locId);
-          const locDeptName = locObj ? (locObj.name || '').trim() : '';
-          if (locDeptName !== currentDeptFilter) {
-            return false;
-          }
-        }
-
-        // กรองคำค้นหา
-        if (q) {
-          return (
-            String(m.item_no).toLowerCase().includes(q) ||
-            String(m.description || '').toLowerCase().includes(q) ||
-            String(m.reason || '').toLowerCase().includes(q) ||
-            String(m.user_id || '').toLowerCase().includes(q) ||
-            locId.toLowerCase().includes(q)
-          );
-        }
-        return true;
-      });
-      renderMovements(filtered, totalCount);
+      const filtered = allMovements.filter(m => 
+        String(m.item_no).toLowerCase().includes(q) ||
+        String(m.description || '').toLowerCase().includes(q) ||
+        String(m.location || '').toLowerCase().includes(q)
+      );
+      renderMovements(filtered);
     }
-
-    function renderMovements(list, totalCount = null) {
+    
+    function renderMovements(list) {
       const container = document.getElementById('movementListContainer');
-      const countEl = document.getElementById('movementCountText');
-      const loadMoreArea = document.getElementById('movementLoadMoreArea');
-
-      if (countEl) {
-        if (totalCount !== null) {
-          countEl.textContent = `แสดง ${list.length} จากทั้งหมด ${totalCount.toLocaleString()} รายการ`;
-        } else {
-          countEl.textContent = `พบ ${list.length} รายการ`;
-        }
-      }
-
-      if (loadMoreArea) {
-        loadMoreArea.style.display = movementHasMore ? 'block' : 'none';
-      }
-
       if (!list.length) {
-        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);"><i class="fa-solid fa-clock-rotate-left" style="font-size:36px; color:var(--border); margin-bottom:8px;"></i><br/>ไม่พบประวัติทำรายการในช่วงนี้</div>';
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-light);">ไม่พบประวัติทำรายการ</div>';
         return;
       }
-
+      
       let html = '';
       list.forEach(m => {
         const d = new Date(m.created_at);
-        const timeStr = d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
-        const dateStr = d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
-
-        let typeColor, typeBg, typeBorder, typeIcon, typeText, qtySign;
-        if (m.type === 'IN') {
-          typeColor = '#16a34a';
-          typeBg = '#f0fdf4';
-          typeBorder = '#86efac';
-          typeIcon = 'fa-arrow-right-to-bracket';
-          typeText = 'รับเข้า';
-          qtySign = '+';
-        } else if (m.type === 'OUT') {
-          typeColor = '#dc2626';
-          typeBg = '#fef2f2';
-          typeBorder = '#fca5a5';
-          typeIcon = 'fa-arrow-right-from-bracket';
-          typeText = 'นำออก';
-          qtySign = '-';
-        } else {
-          typeColor = '#2563eb';
-          typeBg = '#eff6ff';
-          typeBorder = '#93c5fd';
-          typeIcon = 'fa-boxes-packing';
-          typeText = 'ย้าย Bay';
-          qtySign = '';
-        }
-
+        const timeStr = d.toLocaleTimeString('th-TH', {hour: '2-digit', minute:'2-digit'});
+        const dateStr = d.toLocaleDateString('th-TH', {day:'2-digit', month:'short'});
+        
+        let typeColor, typeIcon, typeText;
+        if (m.type === 'IN') { typeColor = 'var(--text-green)'; typeIcon = 'fa-arrow-right-to-bracket'; typeText = 'รับเข้า'; }
+        else if (m.type === 'OUT') { typeColor = 'var(--text-red)'; typeIcon = 'fa-arrow-right-from-bracket'; typeText = 'นำออก'; }
+        else { typeColor = 'var(--text-blue)'; typeIcon = 'fa-boxes-packing'; typeText = 'ย้าย/ปรับ'; }
+        
         html += `
-          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:18px; padding:16px; margin-bottom:12px; display:flex; gap:14px; align-items:stretch; box-shadow:0 2px 6px rgba(0,0,0,0.02);">
-            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:48px; border-right:1px dashed var(--border); padding-right:12px; text-align:center;">
+          <div style="background:var(--card-bg); border:1px solid var(--border); border-radius:16px; padding:16px; margin-bottom:12px; display:flex; gap:12px;">
+            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; min-width:45px; border-right:1px dashed var(--border); padding-right:12px;">
               <div style="font-size:12px; color:var(--text-light);">${dateStr}</div>
-              <div style="font-weight:800; font-size:16px; color:var(--text-dark); margin-top:2px;">${timeStr}</div>
+              <div style="font-weight:800; color:var(--text-dark);">${timeStr}</div>
             </div>
-            <div style="flex:1; min-width:0;">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:3px;">
-                <div style="font-weight:800; font-size:16px; color:var(--text-dark);">${m.item_no}</div>
-                <div style="font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; border:1px solid ${typeBorder}; background:${typeBg}; color:${typeColor}; display:inline-flex; align-items:center; gap:4px;">
-                  <i class="fa-solid ${typeIcon}"></i> ${typeText}
-                </div>
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">
+                <div style="font-weight:800; font-size:15px;">${m.item_no}</div>
+                <div style="font-size:11px; font-weight:800; padding:2px 8px; border-radius:12px; border:1px solid ${typeColor}; color:${typeColor};"><i class="fa-solid ${typeIcon}" style="margin-right:4px;"></i>${typeText}</div>
               </div>
-              <div style="font-size:13px; color:var(--text-light); margin-bottom:8px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${m.description || '-'}</div>
-              <div style="display:flex; justify-content:space-between; align-items:center;">
-                <div style="font-size:13px; font-weight:700; color:var(--text-blue); display:flex; align-items:center; gap:4px;">
-                  <i class="fa-solid fa-location-dot" style="color:var(--text-blue);"></i> ${m.location || '-'}
-                </div>
-                <div style="font-weight:800; font-size:16px; color:${typeColor};">${qtySign}${m.qty} <span style="font-size:13px; font-weight:600;">ชิ้น</span></div>
+              <div style="font-size:13px; color:var(--text-light); margin-bottom:6px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:200px;">${m.description || '-'}</div>
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+                <div style="color:var(--text-dark);"><i class="fa-solid fa-location-dot" style="margin-right:4px; color:var(--text-blue);"></i>${m.location || '-'}</div>
+                <div style="font-weight:800; font-size:14px; color:${typeColor};">${m.type==='IN'?'+':'-'}${m.qty} ชิ้น</div>
               </div>
-              ${m.reason ? `<div style="font-size:11px; margin-top:8px; color:var(--text-light); background:var(--bg-color); padding:4px 8px; border-radius:8px; border:1px solid var(--border); display:inline-block;">${m.reason}${m.user_id ? ` (${m.user_id})` : ''}</div>` : ''}
+              ${m.reason ? `<div style="font-size:12px; margin-top:6px; color:var(--text-light); background:var(--bg-light); padding:4px 8px; border-radius:6px;">${m.reason} (ผู้ทำรายการ: ${globalUserMap[m.user_id] || m.user_id})</div>` : ''}
             </div>
           </div>
         `;
       });
       container.innerHTML = html;
+    }
+
+    async function exportMovementPDF() {
+      if (!window.html2pdf) {
+        return showToast('ไลบรารี PDF กำลังโหลด กรุณารอสักครู่');
+      }
+      
+      const container = document.getElementById('movementListContainer');
+      if (!container || container.innerText.includes('ไม่พบประวัติทำรายการ') || container.innerHTML.trim() === '') {
+        return showToast('ไม่มีข้อมูลสำหรับ Export');
+      }
+
+      showLoader('กำลังสร้าง PDF...');
+
+      const pdfContainer = document.createElement('div');
+      pdfContainer.style.padding = '20px';
+      pdfContainer.style.background = '#fff';
+      pdfContainer.style.color = '#000';
+      pdfContainer.style.fontFamily = 'Kanit, sans-serif';
+      
+      pdfContainer.innerHTML = `
+        <h2 style="text-align:center; margin-bottom:10px; color:#0f172a;">ประวัติทำรายการ (Movement)</h2>
+        <div style="text-align:center; margin-bottom:20px; font-size:14px; color:#64748b;">
+          ข้อมูล ณ วันที่: ${new Date().toLocaleString('th-TH')}
+        </div>
+      `;
+      
+      const listClone = container.cloneNode(true);
+      listClone.querySelectorAll('> div').forEach(card => {
+        card.style.border = '1px solid #e2e8f0';
+        card.style.marginBottom = '8px';
+        card.style.breakInside = 'avoid';
+      });
+      
+      pdfContainer.appendChild(listClone);
+
+      const opt = {
+        margin:       10,
+        filename:     'Movement_Export.pdf',
+        image:        { type: 'jpeg', quality: 0.98 },
+        html2canvas:  { scale: 2, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      };
+
+      try {
+        await html2pdf().set(opt).from(pdfContainer).save();
+        showToast('Export PDF สำเร็จ', 'success');
+      } catch (err) {
+        showToast('Error Export PDF: ' + err.message);
+      }
+      hideLoader();
     }
 
   </script>
