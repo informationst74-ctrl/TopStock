@@ -1066,6 +1066,8 @@
           </div>
           <h2 class="subpage-title">ประวัติทำรายการ</h2>
           <div style="margin-left:auto; display:flex; gap:8px;">
+            <div class="btn-icon" onclick="exportMovementPDF()" title="Export PDF" style="background:var(--pastel-red); color:var(--text-red);"><i
+                class="fa-solid fa-file-pdf"></i></div>
             <div class="btn-icon" onclick="loadMovement(true)" title="รีเฟรชข้อมูล"><i
                 class="fa-solid fa-rotate-right"></i></div>
           </div>
@@ -1594,6 +1596,10 @@
     </div>
   </div>
 
+  <!-- jsPDF + AutoTable for PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+
   <!-- SweetAlert2 & HTML5-QRCode -->
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
@@ -1623,6 +1629,22 @@
     let itemToDelete = null;
     let isDarkMode = localStorage.getItem('theme') === 'dark';
     let currentDeptFilter = 'all';
+    let usersCache = new Map(); // cache user_id -> name
+
+    async function loadUsersCache() {
+      if (usersCache.size > 0) return; // already loaded
+      try {
+        const { data, error } = await db.from('users').select('user_id, name');
+        if (data && !error) {
+          data.forEach(u => usersCache.set(u.user_id, u.name || u.user_id));
+        }
+      } catch (e) { /* silently ignore */ }
+    }
+
+    function getUserName(userId) {
+      if (!userId) return '-';
+      return usersCache.get(userId) || userId;
+    }
 
     function filterByDept(dept) {
       currentDeptFilter = dept;
@@ -2453,7 +2475,15 @@
       const reader = new FileReader();
       reader.onload = async function (evt) {
         try {
-          const text = evt.target.result;
+          const buffer = evt.target.result;
+          let text = '';
+          try {
+            const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+            text = utf8Decoder.decode(buffer);
+          } catch (e) {
+            const win874Decoder = new TextDecoder('windows-874');
+            text = win874Decoder.decode(buffer);
+          }
           showLoader('กำลังตรวจสอบไฟล์ CSV...');
 
           const rows = parseCSVText(text);
@@ -2544,7 +2574,7 @@
           Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: err.message });
         }
       };
-      reader.readAsText(file, 'utf-8');
+      reader.readAsArrayBuffer(file);
     }
 
     async function handleUserCSVUpload(e) {
@@ -2555,7 +2585,15 @@
       const reader = new FileReader();
       reader.onload = async function (evt) {
         try {
-          const text = evt.target.result;
+          const buffer = evt.target.result;
+          let text = '';
+          try {
+            const utf8Decoder = new TextDecoder('utf-8', { fatal: true });
+            text = utf8Decoder.decode(buffer);
+          } catch (e) {
+            const win874Decoder = new TextDecoder('windows-874');
+            text = win874Decoder.decode(buffer);
+          }
           showLoader('กำลังอัปโหลด Users CSV...');
 
           const rows = parseCSVText(text);
@@ -2616,7 +2654,7 @@
           showToast('เกิดข้อผิดพลาด: ' + err.message);
         }
       };
-      reader.readAsText(file, 'utf-8');
+      reader.readAsArrayBuffer(file);
     }
 
     // ==== NEW FUNCTIONS (PHASE 2) ====
@@ -3150,18 +3188,41 @@
       const cls = document.getElementById('addMasterClass').value.trim();
       if (!itemNo || !desc) return showToast('กรุณากรอกรหัสสินค้าและชื่อสินค้า');
       showLoader('กำลังบันทึก...');
-      const { error } = await db.from('item_master').upsert({
-        item_no: itemNo,
-        barcode: barcode || null,
-        description: desc,
-        dept_no: dept || null,
-        class: cls || null
-      }, { onConflict: 'item_no' });
-      hideLoader();
-      if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
-      showToast('บันทึกสำเร็จ!', 'success');
-      closeModal('modal-add-master-item');
-      loadMasterItems(0, true);
+      try {
+        const payload = {
+          item_no: itemNo,
+          barcode: barcode || null,
+          description: desc,
+          dept_no: dept || null
+        };
+        payload['class'] = cls || null;
+
+        // Check if item already exists
+        const { data: existing } = await db.from('item_master')
+          .select('item_no')
+          .eq('item_no', itemNo)
+          .maybeSingle();
+
+        let error;
+        if (existing) {
+          // Update existing item
+          ({ error } = await db.from('item_master')
+            .update(payload)
+            .eq('item_no', itemNo));
+        } else {
+          // Insert new item
+          ({ error } = await db.from('item_master').insert(payload));
+        }
+
+        hideLoader();
+        if (error) return showToast('บันทึกผิดพลาด: ' + error.message);
+        showToast('บันทึกสำเร็จ!', 'success');
+        closeModal('modal-add-master-item');
+        loadMasterItems(0, true);
+      } catch (err) {
+        hideLoader();
+        showToast('เกิดข้อผิดพลาด: ' + err.message);
+      }
     }
 
     async function deleteMasterItem(itemNo) {
@@ -3563,6 +3624,8 @@
       if (locationsData.length === 0) {
         await loadLocations();
       }
+      // Load users cache for name lookup
+      await loadUsersCache();
 
       try {
         showLoader(reset ? 'กำลังโหลดประวัติ...' : 'กำลังโหลดเพิ่มเติม...');
@@ -3808,12 +3871,222 @@
                 </div>
                 <div style="font-weight:800; font-size:16px; color:${typeColor};">${qtySign}${m.qty} <span style="font-size:13px; font-weight:600;">ชิ้น</span></div>
               </div>
-              ${m.reason ? `<div style="font-size:11px; margin-top:8px; color:var(--text-light); background:var(--bg-color); padding:4px 8px; border-radius:8px; border:1px solid var(--border); display:inline-block;">${m.reason}${m.user_id ? ` (${m.user_id})` : ''}</div>` : ''}
+              ${m.reason ? `<div style="font-size:11px; margin-top:8px; color:var(--text-light); background:var(--bg-color); padding:4px 8px; border-radius:8px; border:1px solid var(--border); display:inline-block;">${m.reason}${m.user_id ? ` (${getUserName(m.user_id)})` : ''}</div>` : ''}
             </div>
           </div>
         `;
       });
       container.innerHTML = html;
+    }
+
+    // ===== EXPORT PDF (LANDSCAPE) =====
+    async function exportMovementPDF() {
+      // Ensure users cache is loaded
+      await loadUsersCache();
+
+      // Get current filtered data
+      const q = document.getElementById('movementSearch').value.toLowerCase();
+      const filtered = allMovements.filter(m => {
+        const locId = String(m.location || '');
+        if (currentDeptFilter !== 'all') {
+          const locObj = locationsData.find(l => l.id === locId);
+          const locDeptName = locObj ? (locObj.name || '').trim() : '';
+          if (locDeptName !== currentDeptFilter) return false;
+        }
+        if (q) {
+          return (
+            String(m.item_no).toLowerCase().includes(q) ||
+            String(m.description || '').toLowerCase().includes(q) ||
+            String(m.reason || '').toLowerCase().includes(q) ||
+            String(m.user_id || '').toLowerCase().includes(q) ||
+            locId.toLowerCase().includes(q)
+          );
+        }
+        return true;
+      });
+
+      if (filtered.length === 0) {
+        return showToast('ไม่มีข้อมูลสำหรับ Export');
+      }
+
+      showLoader('กำลังสร้าง PDF...');
+
+      try {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+
+        const pageW = doc.internal.pageSize.getWidth();
+        const pageH = doc.internal.pageSize.getHeight();
+        const margin = 14;
+
+        // === HEADER SECTION ===
+        doc.setFillColor(227, 0, 15); // Makro Red
+        doc.rect(0, 0, pageW, 18, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(16);
+        doc.setFont('Helvetica', 'bold');
+        doc.text('MAKRO TOP STOCK - Movement Report', margin, 12);
+
+        // Export info
+        const now = new Date();
+        const exportDateStr = now.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+        doc.setFontSize(9);
+        doc.text('Export: ' + exportDateStr, pageW - margin, 12, { align: 'right' });
+
+        // Filter info line
+        doc.setTextColor(80, 80, 80);
+        doc.setFontSize(9);
+        doc.setFont('Helvetica', 'normal');
+
+        let dateDesc = 'All';
+        if (movementDateFilter === 'today') dateDesc = 'Today';
+        else if (movementDateFilter === 'yesterday') dateDesc = 'Yesterday';
+        else if (movementDateFilter === '7days') dateDesc = 'Last 7 Days';
+        else if (movementDateFilter === '30days') dateDesc = 'Last 30 Days';
+        else if (movementDateFilter === 'custom') dateDesc = (movementCustomFrom || '') + ' to ' + (movementCustomTo || '');
+
+        let typeDesc = 'All';
+        if (movementTypeFilter === 'IN') typeDesc = 'IN (Receive)';
+        else if (movementTypeFilter === 'OUT') typeDesc = 'OUT (Remove)';
+
+        let deptDesc = currentDeptFilter === 'all' ? 'All' : currentDeptFilter;
+
+        const filterLine = `Date: ${dateDesc}  |  Dept: ${deptDesc}  |  Type: ${typeDesc}  |  Total: ${filtered.length} records`;
+        doc.text(filterLine, margin, 24);
+
+        // Thin separator line
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.3);
+        doc.line(margin, 26, pageW - margin, 26);
+
+        // === TABLE DATA ===
+        const tableHeaders = [['#', 'Date-Time', 'Item No', 'Description', 'Location', 'Type', 'Qty', 'Reason', 'Staff']];
+
+        const tableData = filtered.map((m, idx) => {
+          const d = new Date(m.created_at);
+          const dateTimeStr = d.toLocaleDateString('th-TH', { day: '2-digit', month: '2-digit', year: '2-digit' }) + ' ' + d.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+          const typeText = m.type === 'IN' ? 'IN' : m.type === 'OUT' ? 'OUT' : 'MOVE';
+          const qtySign = m.type === 'IN' ? '+' : m.type === 'OUT' ? '-' : '';
+          const staffName = getUserName(m.user_id);
+
+          return [
+            idx + 1,
+            dateTimeStr,
+            String(m.item_no || '-'),
+            String(m.description || '-').substring(0, 40),
+            String(m.location || '-'),
+            typeText,
+            qtySign + String(m.qty || 0),
+            String(m.reason || '-').substring(0, 30),
+            staffName
+          ];
+        });
+
+        doc.autoTable({
+          head: tableHeaders,
+          body: tableData,
+          startY: 29,
+          margin: { left: margin, right: margin },
+          styles: {
+            fontSize: 8,
+            cellPadding: 2.5,
+            lineColor: [220, 220, 220],
+            lineWidth: 0.2,
+            font: 'Helvetica',
+            textColor: [30, 30, 30],
+            overflow: 'linebreak'
+          },
+          headStyles: {
+            fillColor: [30, 41, 59],
+            textColor: [255, 255, 255],
+            fontStyle: 'bold',
+            fontSize: 8.5,
+            halign: 'center'
+          },
+          alternateRowStyles: {
+            fillColor: [248, 250, 252]
+          },
+          columnStyles: {
+            0: { halign: 'center', cellWidth: 10 },
+            1: { cellWidth: 30 },
+            2: { cellWidth: 22, halign: 'center' },
+            3: { cellWidth: 'auto' },
+            4: { cellWidth: 22, halign: 'center' },
+            5: { cellWidth: 15, halign: 'center' },
+            6: { cellWidth: 16, halign: 'center' },
+            7: { cellWidth: 'auto' },
+            8: { cellWidth: 30 }
+          },
+          didParseCell: function(data) {
+            if (data.section === 'body' && data.column.index === 5) {
+              const val = data.cell.raw;
+              if (val === 'IN') {
+                data.cell.styles.textColor = [22, 163, 74];
+                data.cell.styles.fontStyle = 'bold';
+              } else if (val === 'OUT') {
+                data.cell.styles.textColor = [220, 38, 38];
+                data.cell.styles.fontStyle = 'bold';
+              } else {
+                data.cell.styles.textColor = [37, 99, 235];
+                data.cell.styles.fontStyle = 'bold';
+              }
+            }
+            if (data.section === 'body' && data.column.index === 6) {
+              const val = String(data.cell.raw);
+              if (val.startsWith('+')) {
+                data.cell.styles.textColor = [22, 163, 74];
+                data.cell.styles.fontStyle = 'bold';
+              } else if (val.startsWith('-')) {
+                data.cell.styles.textColor = [220, 38, 38];
+                data.cell.styles.fontStyle = 'bold';
+              }
+            }
+          },
+          didDrawPage: function(data) {
+            const pageCount = doc.internal.getNumberOfPages();
+            doc.setFontSize(8);
+            doc.setTextColor(150, 150, 150);
+            doc.setFont('Helvetica', 'normal');
+
+            const footerY = pageH - 8;
+            doc.text(`Export by: ${currentUser ? (currentUser.name || currentUser.id) : '-'}  |  ${exportDateStr}`, margin, footerY);
+            doc.text(`Page ${data.pageNumber} / ${pageCount}`, pageW - margin, footerY, { align: 'right' });
+
+            if (data.pageNumber > 1) {
+              doc.setFillColor(227, 0, 15);
+              doc.rect(0, 0, pageW, 5, 'F');
+            }
+          }
+        });
+
+        // Summary after table
+        const finalY = doc.lastAutoTable.finalY || 29;
+        if (finalY + 15 < pageH) {
+          doc.setDrawColor(200, 200, 200);
+          doc.setLineWidth(0.3);
+          doc.line(margin, finalY + 4, pageW - margin, finalY + 4);
+
+          doc.setFontSize(9);
+          doc.setTextColor(80, 80, 80);
+          doc.setFont('Helvetica', 'bold');
+
+          const totalIN = filtered.filter(m => m.type === 'IN').reduce((s, m) => s + (m.qty || 0), 0);
+          const totalOUT = filtered.filter(m => m.type === 'OUT').reduce((s, m) => s + (m.qty || 0), 0);
+          doc.text(`Summary:  Total ${filtered.length} records  |  IN: +${totalIN}  |  OUT: -${totalOUT}`, margin, finalY + 10);
+        }
+
+        // Generate filename
+        const fileDate = now.toISOString().slice(0, 10).replace(/-/g, '');
+        const fileTime = now.toTimeString().slice(0, 5).replace(':', '');
+        doc.save(`Movement_Report_${fileDate}_${fileTime}.pdf`);
+
+        showToast('Export PDF สำเร็จ!');
+      } catch (err) {
+        console.error('PDF Export Error:', err);
+        showToast('Error: ' + err.message);
+      } finally {
+        hideLoader();
+      }
     }
 
   </script>
